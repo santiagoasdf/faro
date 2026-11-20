@@ -52,7 +52,7 @@ with sync_playwright() as p:
     for perfil, suf in ((DESKTOP, "desktop"), (MOBILE, "mobile")):
         ctx, page = nueva(browser, perfil)
         page.goto(BASE + "?mock")
-        page.wait_for_selector("text=Entrá al CRM")
+        page.wait_for_selector("text=Entrá a Faro")
         page.wait_for_timeout(900)
         if suf == "desktop":
             page.screenshot(path=str(RAIZ / "login.png"))

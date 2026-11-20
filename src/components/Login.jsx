@@ -97,7 +97,7 @@ export function Login({ aviso, onEntrar }) {
         <Wordmark />
         {paso === 'email' ? (
           <form class="login-form" onSubmit={pedirCodigo} noValidate>
-            <h1>Entrá al CRM</h1>
+            <h1>Entrá a Faro</h1>
             <p class="login-texto">Te mandamos un código de 6 números a tu mail. Sin contraseñas.</p>
             {aviso && <p class="aviso" role="alert">{aviso}</p>}
             <label class="campo">

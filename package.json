@@ -1,7 +1,7 @@
 {
   "name": "levelup-crm-web",
   "version": "1.0.0",
-  "description": "CRM web de LevelUp (sitio estático para GitHub Pages)",
+  "description": "Faro, CRM de LevelUp y Provaider (sitio estático para GitHub Pages)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

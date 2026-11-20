@@ -55,7 +55,7 @@ export function Wordmark() {
     <span class="wordmark">
       <Marca />
       <span class="wordmark-text">
-        LevelUp <span class="wordmark-crm">CRM</span>
+        Faro
       </span>
     </span>
   );

@@ -1,6 +1,6 @@
-# LevelUp CRM (web)
+# Faro
 
-CRM interno para que Santi actualice sus leads y Guido siga cómo avanzan. Sitio estático (Vite + Preact) para GitHub Pages; los datos se cargan en vivo desde Neon después del login.
+Faro es el CRM interno que engloba los seguimientos de LevelUp y Provaider: sirve para que Santi actualice sus leads y Guido siga cómo avanzan. Sitio estático (Vite + Preact) para GitHub Pages; los datos se cargan en vivo desde Neon después del login.
 
 ## Correr
 

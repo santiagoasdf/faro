@@ -1,4 +1,4 @@
-/* LevelUp CRM · estilos. Mobile first; desde 900px, escritorio. */
+/* Faro · estilos. Mobile first; desde 900px, escritorio. */
 
 :root {
   --bg: #f2f4f7;
@@ -420,10 +420,6 @@ input[aria-invalid='true'] {
   font-weight: 750;
   font-size: 1.0625rem;
   letter-spacing: -0.02em;
-}
-.wordmark-crm {
-  font-weight: 500;
-  color: var(--muted);
 }
 
 /* ---------- Login ---------- */

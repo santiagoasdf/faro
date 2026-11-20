@@ -308,7 +308,7 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
             <Dato label="Último contacto">
               {n.ultima_interaccion_at ? `${fecha(n.ultima_interaccion_at)} (${haceCuanto(n.ultima_interaccion_at)})` : null}
             </Dato>
-            <Dato label="En el CRM desde">{n.created_at ? fecha(n.created_at) : null}</Dato>
+            <Dato label="En Faro desde">{n.created_at ? fecha(n.created_at) : null}</Dato>
           </dl>
         </section>
       </div>

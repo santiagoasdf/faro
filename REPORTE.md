@@ -1,4 +1,4 @@
-# Reporte · CRM web de LevelUp
+# Reporte · Faro
 
 Fecha: 20/11/2026. Todo quedó en commits locales: no hubo push ni repo remoto.
 
@@ -6,7 +6,7 @@ Fecha: 20/11/2026. Todo quedó en commits locales: no hubo push ni repo remoto.
 
 Una web estática (Vite + Preact, unos 77 KB gzip de JS, casi todo del SDK de Neon) con build en `./docs` para GitHub Pages. Pantallas:
 
-- **Login con código por mail** (Neon Auth email OTP, sin contraseña): mail → código de 6 números → adentro. Maneja mail inválido, código incorrecto o vencido, demasiados intentos, sin conexión, y reenvío con espera de 30 s. Después del login llama a `crm_es_usuario()`; si da `false`, muestra "Tu cuenta no está habilitada para este CRM. Pedile acceso a Santi." y nada más.
+- **Login con código por mail** (Neon Auth email OTP, sin contraseña): mail → código de 6 números → adentro. Maneja mail inválido, código incorrecto o vencido, demasiados intentos, sin conexión, y reenvío con espera de 30 s. Después del login llama a `crm_es_usuario()`; si da `false`, muestra "Tu cuenta no está habilitada para Faro. Pedile acceso a Santi." y nada más.
 - **Inicio**: "Para hoy" (vencidos + agendados para hoy de las dos áreas, los vencidos primero y en rojo), la **escalera** del pipeline (cada etapa es un escalón con su cantidad y sus vencidos; tocás uno y te lleva a esa columna), el resumen del seguimiento por grupo y **Últimos movimientos**, que es lo que más le sirve a Guido para ver qué viene haciendo Santi.
 - **Pipeline**: kanban de 9 columnas. En escritorio, drag & drop; en todas las tarjetas, un select "Mover a…" (sirve en el celu y con teclado). Es optimista: si el PATCH falla, vuelve atrás y avisa. Buscador por nombre/rubro/barrio y filtro por nicho. En el celu se ve una columna por vez, con pestañas que se deslizan.
 - **Detalle del negocio** (panel lateral en escritorio, pantalla completa en el celu): etapa, links de contacto (WhatsApp, llamar, Instagram, mail, Maps, web; solo abren la app), próxima acción, fecha y notas, historial combinado de contactos y notas, "Registrar contacto" (canal + resultado + nota) y "Agregar nota". Cada uno puede borrar solo sus propias notas.
@@ -46,6 +46,19 @@ Publicar: subir el repo y en GitHub Pages elegir la rama principal, carpeta `/do
 - Lighthouse mobile sobre el build: **Performance 97, Accesibilidad 100, Best practices 100**. SEO 63 a propósito, por el `noindex`.
 - `grep -ri "postgres://\|password=\|sk_\|secret" docs/`: solo aparecen nombres internos del SDK de Better Auth (`BETTER_AUTH_SECRET` como nombre de variable de entorno, el endpoint `client/rotate-secret`). Ningún valor ni secreto.
 - `docs/index.html` tiene el `noindex` y `docs/robots.txt` bloquea todo.
+
+## Renombre a Faro
+
+20/11/2026. El producto pasa a llamarse **Faro** (engloba los seguimientos de LevelUp y Provaider), según `NOMBRE.md`. Solo cambió el nombre visible; la lógica, los datos y el diseño quedaron igual.
+
+- `<title>` → "Faro"; la meta description → "Faro: seguimientos de LevelUp y Provaider."; el `<noscript>` dice "para usar Faro".
+- Wordmark del header y del login: "Faro" (antes "LevelUp CRM"). Se borró la regla `.wordmark-crm`, que quedó sin uso.
+- Login: "Entrá a Faro" (antes "Entrá al CRM"). El pie "Uso interno de LevelUp." queda como subtítulo.
+- Otros textos: "Abriendo Faro…", "Tu cuenta no está habilitada para Faro.", "En Faro desde" (detalle del negocio).
+- README, este reporte, la `description` de `package.json` y el comentario de `styles.css`. El `name` del paquete (`levelup-crm-web`) no lo toqué, porque es el nombre del repo.
+- Favicon: es el ícono de la escalera, sin texto, así que no hubo que cambiarlo. No hay manifest.
+- Las claves internas (`crm:*` en localStorage, tablas `crm_*`) siguen igual: no se ven, y si las cambiaba se perdían los filtros guardados.
+- Rebuild en `./docs` y nuevas capturas con datos ficticios: `login.png` y todo `capturas/`. `login-prod-error-desktop.png` sale del build real contra Neon Auth con un mail inválido (no se mandó ningún código). `tools/capturas.py` ahora espera el texto "Entrá a Faro".
 
 ## Capturas (datos ficticios)
 

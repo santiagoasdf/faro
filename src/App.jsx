@@ -254,7 +254,7 @@ export function App() {
     return (
       <div class="pantalla-centro">
         <Marca size={40} />
-        <Cargando texto="Abriendo el CRM…" />
+        <Cargando texto="Abriendo Faro…" />
       </div>
     );
   }
@@ -271,7 +271,7 @@ export function App() {
       <div class="pantalla-centro">
         <Marca size={40} />
         <div class="no-habilitado">
-          <h1>Tu cuenta no está habilitada para este CRM.</h1>
+          <h1>Tu cuenta no está habilitada para Faro.</h1>
           <p>Pedile acceso a Santi.{yo?.email ? ` Entraste como ${yo.email}.` : ''}</p>
           <button class="btn btn-secundario" onClick={salir}>Salir</button>
         </div>
