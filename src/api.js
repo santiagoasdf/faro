@@ -97,19 +97,92 @@ async function alMenosUna(promesa) {
   return filas;
 }
 
+
+function esJwt(t) {
+  return typeof t === 'string' && t.startsWith('eyJ') && t.split('.').length === 3;
+}
+
+/** JWT de Data API (no el session_token opaco). */
+async function jwtDeSesion() {
+  try {
+    const t = await neon().auth.getJWTToken?.(false);
+    if (esJwt(t)) return t;
+  } catch {
+    /* getJWTToken puede fallar si todavía no hay cookie/sesión */
+  }
+  return null;
+}
+
+/** Espera (y refresca) hasta tener un JWT usable. */
+async function asegurarJwt() {
+  let jwt = await jwtDeSesion();
+  if (jwt) return jwt;
+  await neon().auth.getSession().catch(() => null);
+  jwt = await jwtDeSesion();
+  if (jwt) return jwt;
+  try {
+    const res = await neon().auth.token?.();
+    const t = res?.data?.token || res?.token;
+    if (esJwt(t)) return t;
+  } catch {
+    /* el endpoint /token también necesita la cookie de sesión */
+  }
+  return null;
+}
+
 const realApi = {
   // --- Sesión ---
   async getSession() {
     const data = await auth((a) => a.getSession());
     return data?.user ? { email: data.user.email, nombre: data.user.name } : null;
   },
-  signIn: (email, password) => auth((a) => a.signIn.email({ email, password })),
+  async signIn(email, password) {
+    const data = await auth((a) => a.signIn.email({ email, password }));
+    // El JWT viaja en el header set-auth-jwt de get-session, no en el sign-in.
+    await neon().auth.getSession().catch(() => null);
+    return data;
+  },
   changePassword: ({ currentPassword, newPassword, revokeOtherSessions = false }) =>
     auth((a) => a.changePassword({ currentPassword, newPassword, revokeOtherSessions })),
   signOut: () => auth((a) => a.signOut()).catch(() => null),
 
   // --- Permisos ---
-  esUsuario: () => q((c) => c.rpc('crm_es_usuario')),
+  /**
+   * true si el mail de la sesión está en crm_usuarios.
+   * Tira si no hay JWT válido o si el RPC falla: NUNCA hay que interpretar
+   * un error, un null o un 401 como "no habilitado".
+   */
+  async esUsuario() {
+    const consultar = () => q((c) => c.rpc('crm_es_usuario'));
+    if (!(await asegurarJwt())) {
+      const e = new Error('No pudimos abrir tu sesión. Probá de nuevo.');
+      e.code = 'SIN_JWT';
+      throw e;
+    }
+    let valor;
+    try {
+      valor = await consultar();
+    } catch (e) {
+      if (!esErrorDeAuth(e) && e?.name !== 'SesionVencida') throw e;
+      await neon().auth.getSession().catch(() => null);
+      if (!(await jwtDeSesion())) throw e;
+      valor = await consultar();
+    }
+    if (valor === true) return true;
+    // Un false o un valor raro puede ser una carrera justito después del login.
+    await neon().auth.getSession().catch(() => null);
+    if (!(await jwtDeSesion())) {
+      const e = new Error('No pudimos verificar tu acceso. Probá de nuevo.');
+      e.code = 'SIN_JWT';
+      throw e;
+    }
+    valor = await consultar();
+    if (valor === true) return true;
+    if (valor === false) return false;
+    const e = new Error('No pudimos verificar tu acceso. Probá de nuevo.');
+    e.code = 'RPC_INVALIDO';
+    throw e;
+  },
   usuarios: () => q((c) => c.from('crm_usuarios').select('email,nombre,rol,activo')),
 
   // --- Listas ---

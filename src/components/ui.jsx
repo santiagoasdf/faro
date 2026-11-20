@@ -201,5 +201,8 @@ export function mensajeError(e, accion = 'guardar') {
   if (e?.code === '42501' || e?.code === 'SIN_FILAS') {
     return `No tenés permiso para ${accion} esto.`;
   }
+  if (e?.code === 'SIN_JWT' || e?.code === 'RPC_INVALIDO') {
+    return e.message || 'No pudimos abrir tu sesión. Probá de nuevo.';
+  }
   return `No se pudo ${accion}. Probá de nuevo.`;
 }

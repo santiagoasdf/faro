@@ -55,9 +55,10 @@ function leerFiltros() {
 }
 
 export function App() {
-  // cargando | login | no-habilitado | listo
+  // cargando | login | no-habilitado | error-sesion | listo
   const [estado, setEstado] = useState('cargando');
   const [aviso, setAviso] = useState('');
+  const [errorSesion, setErrorSesion] = useState('');
   const [yo, setYo] = useState(null);
   const [usuarios, setUsuarios] = useState({});
   const [pipeline, setPipeline] = useState(null);
@@ -101,6 +102,7 @@ export function App() {
 
   const iniciar = useCallback(async () => {
     setEstado('cargando');
+    setErrorSesion('');
     try {
       const sesion = await api.getSession();
       if (!sesion) {
@@ -109,6 +111,7 @@ export function App() {
       }
       setYo(sesion);
       const habilitado = await api.esUsuario();
+      // Solo si el RPC respondió false con un JWT válido: el mail no está en la allowlist.
       if (habilitado !== true) {
         setEstado('no-habilitado');
         return;
@@ -117,9 +120,13 @@ export function App() {
       setAviso('');
       cargarDatos();
     } catch (e) {
-      if (e?.name === 'SesionVencida') return;
-      setAviso(mensajeError(e, 'verificar tu sesión'));
-      setEstado('login');
+      if (e?.name === 'SesionVencida') {
+        setAviso('Tu sesión venció. Entrá de nuevo.');
+        setEstado('login');
+        return;
+      }
+      setErrorSesion(mensajeError(e, 'verificar tu acceso'));
+      setEstado('error-sesion');
     }
   }, [cargarDatos]);
 
@@ -275,6 +282,21 @@ export function App() {
           <h1>Tu cuenta no está habilitada para Faro.</h1>
           <p>Pedile acceso a Santi.{yo?.email ? ` Entraste como ${yo.email}.` : ''}</p>
           <button class="btn btn-secundario" onClick={salir}>Salir</button>
+        </div>
+      </div>
+    );
+  }
+  if (estado === 'error-sesion') {
+    return (
+      <div class="pantalla-centro">
+        <Marca size={40} />
+        <div class="no-habilitado">
+          <h1>No pudimos abrir Faro.</h1>
+          <p>{errorSesion || 'Probá de nuevo en un momento.'}</p>
+          <div class="login-acciones" style={{ justifyContent: 'center', gap: '0.75rem' }}>
+            <button class="btn btn-primario" onClick={iniciar}>Reintentar</button>
+            <button class="btn btn-secundario" onClick={salir}>Salir</button>
+          </div>
         </div>
       </div>
     );
