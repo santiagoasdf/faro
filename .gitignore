@@ -1,0 +1,10 @@
+node_modules/
+# Datos de prueba locales: nunca al repo (es público)
+mock/
+*.local
+.env*
+# Archivos de trabajo locales
+_prompt.txt
+claude.log
+tools/__pycache__/
+.vite/
