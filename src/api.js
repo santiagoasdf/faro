@@ -98,36 +98,15 @@ async function alMenosUna(promesa) {
 }
 
 
-function esJwt(t) {
-  return typeof t === 'string' && t.startsWith('eyJ') && t.split('.').length === 3;
-}
-
-/** JWT de Data API (no el session_token opaco). */
-async function jwtDeSesion() {
-  try {
-    const t = await neon().auth.getJWTToken?.(false);
-    if (esJwt(t)) return t;
-  } catch {
-    /* getJWTToken puede fallar si todavía no hay cookie/sesión */
-  }
-  return null;
-}
-
-/** Espera (y refresca) hasta tener un JWT usable. */
-async function asegurarJwt() {
-  let jwt = await jwtDeSesion();
-  if (jwt) return jwt;
+/**
+ * El JWT lo inyecta el SDK en get-session (header set-auth-jwt) y lo usa
+ * internamente en las llamadas a Data API. neon().auth es el cliente de
+ * Better Auth: no expone getJWTToken (eso vive en un wrapper interno).
+ * Por eso no podemos exigir leer el JWT; sí podemos refrescar la sesión
+ * y reintentar el RPC.
+ */
+async function refrescarSesion() {
   await neon().auth.getSession().catch(() => null);
-  jwt = await jwtDeSesion();
-  if (jwt) return jwt;
-  try {
-    const res = await neon().auth.token?.();
-    const t = res?.data?.token || res?.token;
-    if (esJwt(t)) return t;
-  } catch {
-    /* el endpoint /token también necesita la cookie de sesión */
-  }
-  return null;
 }
 
 const realApi = {
@@ -154,28 +133,19 @@ const realApi = {
    */
   async esUsuario() {
     const consultar = () => q((c) => c.rpc('crm_es_usuario'));
-    if (!(await asegurarJwt())) {
-      const e = new Error('No pudimos abrir tu sesión. Probá de nuevo.');
-      e.code = 'SIN_JWT';
-      throw e;
-    }
+    await refrescarSesion();
     let valor;
     try {
       valor = await consultar();
     } catch (e) {
       if (!esErrorDeAuth(e) && e?.name !== 'SesionVencida') throw e;
-      await neon().auth.getSession().catch(() => null);
-      if (!(await jwtDeSesion())) throw e;
+      await refrescarSesion();
       valor = await consultar();
     }
     if (valor === true) return true;
-    // Un false o un valor raro puede ser una carrera justito después del login.
-    await neon().auth.getSession().catch(() => null);
-    if (!(await jwtDeSesion())) {
-      const e = new Error('No pudimos verificar tu acceso. Probá de nuevo.');
-      e.code = 'SIN_JWT';
-      throw e;
-    }
+    // Un false o un valor raro puede ser una carrera justito después del login
+    // (auth.user_id() todavía vacío ⇒ crm_es_usuario() da false y RLS devuelve 0 filas).
+    await refrescarSesion();
     valor = await consultar();
     if (valor === true) return true;
     if (valor === false) return false;
