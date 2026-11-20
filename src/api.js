@@ -167,6 +167,27 @@ const realApi = {
         .order('proxima_fecha', { ascending: true, nullsFirst: false })
         .order('empresa'),
     ),
+  /**
+   * Carga las tres listas. Si reintentarSiVacio y pipeline o seguimiento
+   * vienen vacíos (carrera típica: 200 con 0 filas porque el JWT todavía
+   * no estaba en esa request), espera un poco, refresca la sesión y
+   * reintenta una vez las que vinieron vacías.
+   * Llamar recién después de que esUsuario() dio true.
+   */
+  async cargarListas({ reintentarSiVacio = false } = {}) {
+    const leer = () => Promise.all([this.pipeline(), this.seguimiento(), this.usuarios()]);
+    let [pipeline, seguimiento, usuarios] = await leer();
+    const vacio = (x) => !Array.isArray(x) || x.length === 0;
+    if (reintentarSiVacio && (vacio(pipeline) || vacio(seguimiento))) {
+      await new Promise((r) => setTimeout(r, 400));
+      await refrescarSesion();
+      const otra = await leer();
+      if (vacio(pipeline)) pipeline = otra[0];
+      if (vacio(seguimiento)) seguimiento = otra[1];
+      if (vacio(usuarios)) usuarios = otra[2];
+    }
+    return { pipeline, seguimiento, usuarios };
+  },
   seguimientoFila: (id) =>
     q((c) => c.from('v_seguimiento').select('*').eq('id', id).maybeSingle()),
 

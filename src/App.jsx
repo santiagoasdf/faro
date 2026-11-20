@@ -81,11 +81,14 @@ export function App() {
   }, []);
 
   // ---------- Carga ----------
-  const cargarDatos = useCallback(async (silencioso = false) => {
+  const cargarDatos = useCallback(async (silencioso = false, { primera = false } = {}) => {
     if (!silencioso) setErrorCarga('');
     setActualizando(true);
     try {
-      const [p, s, u] = await Promise.all([api.pipeline(), api.seguimiento(), api.usuarios()]);
+      // Las lecturas van acá, nunca antes de que el caller haya visto esUsuario() === true.
+      const { pipeline: p, seguimiento: s, usuarios: u } = await api.cargarListas({
+        reintentarSiVacio: primera,
+      });
       setPipeline(p || []);
       setSeguimiento(s || []);
       setUsuarios(Object.fromEntries((u || []).map((x) => [x.email, x.nombre])));
@@ -116,9 +119,10 @@ export function App() {
         setEstado('no-habilitado');
         return;
       }
+      // Lecturas recién ahora, con reintento si alguna lista viene vacía por la carrera del JWT.
+      await cargarDatos(false, { primera: true });
       setEstado('listo');
       setAviso('');
-      cargarDatos();
     } catch (e) {
       if (e?.name === 'SesionVencida') {
         setAviso('Tu sesión venció. Entrá de nuevo.');
