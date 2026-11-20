@@ -8,11 +8,12 @@ import { Cabecera } from './components/Cabecera.jsx';
 import { Inicio } from './components/Inicio.jsx';
 import { Pipeline } from './components/Pipeline.jsx';
 import { Seguimiento } from './components/Seguimiento.jsx';
+import { Perfil } from './components/Perfil.jsx';
 import { DetalleNegocio } from './components/DetalleNegocio.jsx';
 import { DetalleLead } from './components/DetalleLead.jsx';
 import { Cargando, Marca, Panel, Toaster, mensajeError, toast } from './components/ui.jsx';
 
-const VISTAS = ['inicio', 'pipeline', 'seguimiento'];
+const VISTAS = ['inicio', 'pipeline', 'seguimiento', 'perfil'];
 
 /** '#/pipeline/n/<id>' -> { vista: 'pipeline', tipo: 'n', id } */
 function leerRuta() {
@@ -296,7 +297,14 @@ export function App() {
         actualizando={actualizando}
       />
       <main id="contenido" class={`contenido contenido-${ruta.vista}`} tabIndex={-1}>
-        {errorCarga ? (
+        {ruta.vista === 'perfil' ? (
+          // El perfil no depende de los datos del CRM: se ve aunque la carga falle o siga en curso.
+          <Perfil
+            yo={yo}
+            nombre={usuarios[yo?.email] || yo?.nombre || ''}
+            onSalir={salir}
+          />
+        ) : errorCarga ? (
           <div class="error-carga">
             <p>{errorCarga}</p>
             <button class="btn btn-primario" onClick={() => cargarDatos()}>Reintentar</button>

@@ -233,6 +233,7 @@ a {
 }
 input[type='text'],
 input[type='email'],
+input[type='password'],
 input[type='search'],
 input[type='date'],
 select,
@@ -271,6 +272,34 @@ textarea:focus-visible {
 }
 input[aria-invalid='true'] {
   border-color: var(--danger);
+}
+/* Contraseña con botón de mostrar/ocultar adentro del campo */
+.campo-clave {
+  position: relative;
+  display: block;
+}
+.campo-clave input {
+  padding-right: 48px;
+}
+.btn-ver-clave {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 0 var(--r-s) var(--r-s) 0;
+  background: transparent;
+  color: var(--muted);
+}
+.btn-ver-clave:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-ver-clave:hover { color: var(--ink); }
 }
 .check {
   display: inline-flex;
@@ -460,13 +489,6 @@ input[aria-invalid='true'] {
   color: var(--ink);
   word-break: break-all;
 }
-.input-codigo {
-  font-size: 1.5rem !important;
-  letter-spacing: 0.32em;
-  font-weight: 650;
-  text-align: center;
-  padding-left: calc(12px + 0.32em) !important;
-}
 .login-acciones {
   display: flex;
   justify-content: space-between;
@@ -545,7 +567,7 @@ input[aria-invalid='true'] {
   height: calc(var(--nav-h) + var(--safe-b));
   padding-bottom: var(--safe-b);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   background: var(--surface);
   border-top: 1px solid var(--line);
 }
@@ -570,6 +592,60 @@ input[aria-invalid='true'] {
 .contenido {
   padding: 16px 16px 28px;
   outline: none;
+}
+
+/* ---------- Perfil ---------- */
+.perfil {
+  display: grid;
+  gap: 14px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.perfil-datos {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+.perfil-datos div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.perfil-datos dt {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.perfil-datos dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.perfil-form {
+  display: grid;
+  gap: 14px;
+}
+.perfil-ayuda {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.perfil-ok {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--r-s);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.perfil-form .btn {
+  justify-self: start;
+}
+.perfil-salir p {
+  color: var(--ink-2);
+  margin-bottom: 12px;
 }
 
 /* ---------- Bloques compartidos ---------- */
@@ -617,10 +693,12 @@ input[aria-invalid='true'] {
   max-width: 1180px;
   margin: 0 auto;
 }
-.inicio-cabeza {
+.inicio-cabeza,
+.perfil-cabeza {
   padding: 4px 2px 2px;
 }
-.inicio-cabeza h1 {
+.inicio-cabeza h1,
+.perfil-cabeza h1 {
   font-size: 1.75rem;
   font-weight: 750;
   letter-spacing: -0.03em;
@@ -1679,6 +1757,7 @@ summary.grupo-cabeza {
   }
   input[type='text'],
   input[type='email'],
+  input[type='password'],
   input[type='search'],
   input[type='date'],
   select,

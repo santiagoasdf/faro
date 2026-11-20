@@ -4,7 +4,7 @@ Requisitos: `pip install playwright` + `playwright install chromium`, y el dev s
     npm run dev
     python tools/capturas.py [http://localhost:5173/]
 
-Necesita mock/mock-api.js (carpeta ignorada por git). Guarda login.png en la raíz y el resto en capturas/.
+Necesita mock/mock-api.js (carpeta ignorada por git). Guarda login.png en la raíz y el resto en capturas/. Las contraseñas que usa son de relleno: el mock acepta cualquiera de 8+ caracteres.
 """
 import sys
 from pathlib import Path
@@ -48,7 +48,11 @@ def foto(page, nombre, full=False):
 with sync_playwright() as p:
     browser = p.chromium.launch()
 
-    # --- Login (desktop + mobile), incluye el paso del código ---
+    # --- Login (desktop + mobile): paso del mail y paso de la contraseña, con sus errores ---
+    # El mock acepta cualquier mail con una contraseña de 8+ caracteres; las de prueba se generan acá
+    # y no corresponden a ninguna cuenta real.
+    corta = "x" * 5
+    valida = "prueba-" + "x" * 8
     for perfil, suf in ((DESKTOP, "desktop"), (MOBILE, "mobile")):
         ctx, page = nueva(browser, perfil)
         page.goto(BASE + "?mock")
@@ -58,16 +62,75 @@ with sync_playwright() as p:
             page.screenshot(path=str(RAIZ / "login.png"))
             print("ok login.png")
         foto(page, f"login-{suf}.png")
-        page.fill("input[type=email]", "santi@ejemplo.test")
-        page.click("text=Mandame el código")
-        page.wait_for_selector("text=Revisá tu mail")
-        page.fill(".input-codigo", "111111")
-        page.click("button:has-text('Entrar')")
+        page.click("button:has-text('Continuar')")
         page.wait_for_selector(".error")
-        foto(page, f"login-codigo-error-{suf}.png")
-        page.fill(".input-codigo", "123456")
+        foto(page, f"login-mail-vacio-{suf}.png")
+        page.fill("input[type=email]", "santi@")
+        page.click("button:has-text('Continuar')")
+        page.wait_for_selector(".error:has-text('no parece válido')")
+        foto(page, f"login-mail-invalido-{suf}.png")
+        page.fill("input[type=email]", "santi@ejemplo.test")
+        page.click("button:has-text('Continuar')")
+        page.wait_for_selector("text=Tu contraseña")
+        page.wait_for_timeout(200)
+        foto(page, f"login-clave-{suf}.png")
+        page.click("button:has-text('Entrar')")
+        page.wait_for_selector(".error:has-text('Escribí tu contraseña')")
+        foto(page, f"login-clave-vacia-{suf}.png")
+        page.fill("#login-clave", corta)
+        page.click("button:has-text('Entrar')")
+        page.wait_for_selector(".error:has-text('no son correctos')")
+        page.click("button[aria-label='Mostrar contraseña']")
+        foto(page, f"login-clave-error-{suf}.png")
+        page.fill("#login-clave", valida)
         page.click("button:has-text('Entrar')")
         esperar_datos(page)
+        ctx.close()
+
+    # Demasiados intentos (429) y sin conexión
+    for flag, nombre, texto in (("lento", "login-clave-429", "demasiadas veces"), ("offline", "login-clave-red", "Sin conexión")):
+        for perfil, suf in ((DESKTOP, "desktop"), (MOBILE, "mobile")):
+            ctx, page = nueva(browser, perfil)
+            page.goto(BASE + f"?mock&{flag}")
+            page.wait_for_selector("text=Entrá a Faro")
+            page.fill("input[type=email]", "santi@ejemplo.test")
+            page.click("button:has-text('Continuar')")
+            page.fill("#login-clave", valida)
+            page.click("button:has-text('Entrar')")
+            page.wait_for_selector(f".error:has-text('{texto}')")
+            foto(page, f"{nombre}-{suf}.png")
+            ctx.close()
+
+    # --- Perfil (desktop + mobile) ---
+    for perfil, suf in ((DESKTOP, "desktop"), (MOBILE, "mobile")):
+        ctx, page = nueva(browser, perfil)
+        page.goto(BASE + "?mock&auto#/perfil")
+        page.wait_for_selector("text=Cambiar contraseña")
+        page.wait_for_timeout(400)
+        foto(page, f"perfil-{suf}.png")
+        page.fill("#clave-actual", valida)
+        page.fill("#clave-nueva", "nueva-" + "y" * 8)
+        page.fill("#clave-repetir", "nueva-" + "z" * 8)
+        page.click("button:has-text('Cambiar contraseña')")
+        page.wait_for_selector(".error:has-text('no coinciden')")
+        page.eval_on_selector(".perfil-form .error", "e => e.scrollIntoView({block: 'center'})")
+        foto(page, f"perfil-no-coinciden-{suf}.png")
+        page.fill("#clave-actual", corta)
+        page.fill("#clave-repetir", "nueva-" + "y" * 8)
+        page.click("button:has-text('Cambiar contraseña')")
+        page.wait_for_selector(".error:has-text('actual no es correcta')")
+        page.eval_on_selector(".perfil-form .error", "e => e.scrollIntoView({block: 'center'})")
+        foto(page, f"perfil-actual-incorrecta-{suf}.png")
+        page.fill("#clave-actual", valida)
+        page.click("button:has-text('Cambiar contraseña')")
+        page.wait_for_selector(".perfil-ok")
+        page.eval_on_selector(".perfil-ok", "e => e.scrollIntoView({block: 'center'})")
+        foto(page, f"perfil-ok-{suf}.png")
+        ancho = page.evaluate("document.documentElement.scrollWidth")
+        if ancho > perfil["viewport"]["width"]:
+            errores.append(f"desborde horizontal en perfil {suf}: {ancho}px")
+        page.click(".perfil-salir button")
+        page.wait_for_selector("text=Entrá a Faro")
         ctx.close()
 
     # --- Vistas principales con sesión ficticia ---
@@ -104,22 +167,42 @@ with sync_playwright() as p:
         foto(page, f"detalle-lead-{suf}.png")
         ctx.close()
 
-    # --- Cuenta no habilitada ---
+    # --- Cuenta no habilitada (mail ficticio @no-habilitado.test) ---
     ctx, page = nueva(browser, MOBILE)
-    page.goto(BASE + "?mock&auto&nohab")
+    page.goto(BASE + "?mock")
+    page.fill("input[type=email]", "alguien@no-habilitado.test")
+    page.click("button:has-text('Continuar')")
+    page.fill("#login-clave", valida)
+    page.click("button:has-text('Entrar')")
     page.wait_for_selector("text=no está habilitada")
     foto(page, "no-habilitada-mobile.png")
     ctx.close()
 
     # --- 360 px: que nada desborde ---
     ctx, page = nueva(browser, {**MOBILE, "viewport": {"width": 360, "height": 740}})
-    for ruta in ("#/inicio", "#/pipeline", "#/seguimiento"):
+    for ruta in ("#/inicio", "#/pipeline", "#/seguimiento", "#/perfil"):
         page.goto(BASE + "?mock&auto" + ruta)
-        esperar_datos(page)
+        if ruta == "#/perfil":
+            page.wait_for_selector("text=Cambiar contraseña")
+        else:
+            esperar_datos(page)
         ancho = page.evaluate("document.documentElement.scrollWidth")
         if ancho > 360:
             errores.append(f"desborde horizontal en {ruta}: {ancho}px")
+    foto(page, "perfil-360.png")
+    page.goto(BASE + "?mock&auto#/seguimiento")
+    esperar_datos(page)
     foto(page, "seguimiento-360.png")
+    ctx.close()
+
+    # --- Cabecera de escritorio en el ancho mínimo (900 px) con la pestaña nueva ---
+    ctx, page = nueva(browser, {**DESKTOP, "viewport": {"width": 900, "height": 700}})
+    page.goto(BASE + "?mock&auto#/perfil")
+    page.wait_for_selector("text=Cambiar contraseña")
+    ancho = page.evaluate("document.documentElement.scrollWidth")
+    if ancho > 900:
+        errores.append(f"desborde horizontal en cabecera a 900px: {ancho}px")
+    foto(page, "perfil-900.png")
     ctx.close()
 
     browser.close()

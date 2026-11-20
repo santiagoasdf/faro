@@ -4,7 +4,7 @@ mock/
 *.local
 .env*
 # Archivos de trabajo locales
-_prompt.txt
-claude.log
+_prompt*.txt
+claude*.log
 tools/__pycache__/
 .vite/

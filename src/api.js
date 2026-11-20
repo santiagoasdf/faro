@@ -57,16 +57,20 @@ async function q(build) {
 /** Saca un código de error legible de lo que devuelva Better Auth (o un fetch fallido). */
 function errorDeAuth(e) {
   const err = new Error(e?.message || 'Error de autenticación');
-  // Preferimos el código crudo de Better Auth (INVALID_OTP, OTP_EXPIRED…) al normalizado del SDK.
+  // Preferimos el código crudo de Better Auth (INVALID_EMAIL_OR_PASSWORD, INVALID_PASSWORD…)
+  // al normalizado del SDK.
   err.code = e?.error?.code || e?.body?.code || e?.data?.code || e?.code;
   err.status = e?.status || e?.statusCode || e?.error?.status;
   const msg = `${e?.message || ''} ${e?.error?.message || ''}`;
   if (!/^[A-Z_]+$/.test(err.code || '')) {
-    if (/invalid email/i.test(msg)) err.code = 'INVALID_EMAIL';
-    else if (/expired/i.test(msg)) err.code = 'OTP_EXPIRED';
-    else if (/too many/i.test(msg)) err.code = 'TOO_MANY_ATTEMPTS';
-    else if (/invalid otp|invalid code/i.test(msg)) err.code = 'INVALID_OTP';
+    if (/invalid email or password|invalid credentials/i.test(msg)) err.code = 'INVALID_EMAIL_OR_PASSWORD';
+    else if (/invalid password/i.test(msg)) err.code = 'INVALID_PASSWORD';
+    else if (/invalid email/i.test(msg)) err.code = 'INVALID_EMAIL';
+    else if (/password too short/i.test(msg)) err.code = 'PASSWORD_TOO_SHORT';
+    else if (/password too long/i.test(msg)) err.code = 'PASSWORD_TOO_LONG';
+    else if (/too many/i.test(msg)) err.code = 'TOO_MANY_REQUESTS';
   }
+  if (err.status === 429) err.code = 'TOO_MANY_REQUESTS';
   if (e instanceof TypeError || /failed to fetch|network/i.test(e?.message || '')) err.code = 'NETWORK';
   return err;
 }
@@ -99,9 +103,9 @@ const realApi = {
     const data = await auth((a) => a.getSession());
     return data?.user ? { email: data.user.email, nombre: data.user.name } : null;
   },
-  sendOtp: (email) =>
-    auth((a) => a.emailOtp.sendVerificationOtp({ email, type: 'sign-in' })),
-  verifyOtp: (email, otp) => auth((a) => a.signIn.emailOtp({ email, otp })),
+  signIn: (email, password) => auth((a) => a.signIn.email({ email, password })),
+  changePassword: ({ currentPassword, newPassword, revokeOtherSessions = false }) =>
+    auth((a) => a.changePassword({ currentPassword, newPassword, revokeOtherSessions })),
   signOut: () => auth((a) => a.signOut()).catch(() => null),
 
   // --- Permisos ---

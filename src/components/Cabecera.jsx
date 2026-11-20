@@ -4,6 +4,7 @@ const NAV = [
   { key: 'inicio', label: 'Inicio' },
   { key: 'pipeline', label: 'Pipeline' },
   { key: 'seguimiento', label: 'Seguimiento' },
+  { key: 'perfil', label: 'Perfil' },
 ];
 
 export function Cabecera({ vista, nombre, ir, onSalir, onActualizar, actualizando }) {

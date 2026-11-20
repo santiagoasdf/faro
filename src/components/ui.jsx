@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import {
-  ArrowRight, Briefcase, Camera, Check, ChevronLeft, CircleAlert, Clock, ExternalLink, Flame, Globe,
-  House, ListChecks, LogOut, Mail, MapPin, MessageCircle, Phone, Plus, RefreshCw, Search,
+  ArrowRight, Briefcase, Camera, Check, ChevronLeft, CircleAlert, CircleUser, Clock, ExternalLink, Eye,
+  EyeOff, Flame, Globe, House, ListChecks, LogOut, Mail, MapPin, MessageCircle, Phone, Plus, RefreshCw, Search,
   SquareKanban, Star, StickyNote, Trash2, X,
 } from 'lucide';
 
@@ -10,7 +10,8 @@ const ICONOS = {
   alerta: CircleAlert, reloj: Clock, externo: ExternalLink, urgente: Flame, web: Globe, inicio: House,
   seguimiento: ListChecks, salir: LogOut, email: Mail, mapa: MapPin, whatsapp: MessageCircle,
   llamada: Phone, mas: Plus, actualizar: RefreshCw, buscar: Search, pipeline: SquareKanban,
-  estrella: Star, nota: StickyNote, borrar: Trash2, cerrar: X,
+  estrella: Star, nota: StickyNote, borrar: Trash2, cerrar: X, perfil: CircleUser, ver: Eye,
+  ocultar: EyeOff,
 };
 
 /** Ícono de lucide renderizado como SVG inline (trazo uniforme). */
@@ -58,6 +59,40 @@ export function Wordmark() {
         Faro
       </span>
     </span>
+  );
+}
+
+/**
+ * Campo de contraseña con botón para mostrarla u ocultarla.
+ * El resto de las props van directo al <input>.
+ */
+export function CampoClave({ label, inputRef, id, ...props }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <label class="campo">
+      <span class="campo-label">{label}</span>
+      <span class="campo-clave">
+        <input
+          ref={inputRef}
+          id={id}
+          type={visible ? 'text' : 'password'}
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellcheck={false}
+          {...props}
+        />
+        <button
+          type="button"
+          class="btn-ver-clave"
+          onClick={() => setVisible((v) => !v)}
+          aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+          aria-pressed={visible}
+          title={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+        >
+          <Icon name={visible ? 'ocultar' : 'ver'} size={18} />
+        </button>
+      </span>
+    </label>
   );
 }
 

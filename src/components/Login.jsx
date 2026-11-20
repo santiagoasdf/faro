@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { api } from '../api.js';
 import { COLUMNAS } from '../constants.js';
-import { Wordmark } from './ui.jsx';
+import { CampoClave, Wordmark } from './ui.jsx';
 
-const ESPERA_REENVIO = 30;
+const MAIL_VALIDO = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-function textoError(e, paso) {
+function textoError(e) {
   const code = e?.code || '';
   if (code === 'NETWORK' || !navigator.onLine) return 'Sin conexión. Revisá internet y probá de nuevo.';
+  if (code === 'TOO_MANY_REQUESTS' || e?.status === 429) {
+    return 'Probaste demasiadas veces seguidas. Esperá un minuto y volvé a intentar.';
+  }
   if (code === 'INVALID_EMAIL') return 'Ese mail no parece válido. Revisalo.';
-  if (code === 'OTP_EXPIRED') return 'El código venció. Pedí uno nuevo.';
-  if (code === 'TOO_MANY_ATTEMPTS') return 'Probaste demasiadas veces. Pedí un código nuevo.';
-  if (code === 'INVALID_OTP' || /otp/i.test(e?.message || '')) return 'El código no es correcto. Revisalo o pedí uno nuevo.';
-  if (e?.status === 429) return 'Demasiados intentos seguidos. Esperá un minuto y probá de nuevo.';
-  return paso === 'codigo'
-    ? 'No pudimos validar el código. Probá de nuevo.'
-    : 'No pudimos mandar el código. Probá de nuevo en un rato.';
+  if (['INVALID_EMAIL_OR_PASSWORD', 'INVALID_PASSWORD', 'CREDENTIAL_ACCOUNT_NOT_FOUND', 'USER_NOT_FOUND'].includes(code) ||
+    e?.status === 401) {
+    return 'El mail o la contraseña no son correctos. Revisalos y probá de nuevo.';
+  }
+  return 'No pudimos hacerte entrar. Probá de nuevo en un rato.';
 }
 
 /** Escalera decorativa con los colores de las etapas del pipeline. */
@@ -31,63 +32,52 @@ function Escalera() {
 }
 
 export function Login({ aviso, onEntrar }) {
-  const [paso, setPaso] = useState('email'); // email | codigo
+  const [paso, setPaso] = useState('email'); // email | clave
   const [email, setEmail] = useState(() => localStorage.getItem('crm:email') || '');
-  const [codigo, setCodigo] = useState('');
+  const [clave, setClave] = useState('');
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState('');
-  const [espera, setEspera] = useState(0);
-  const codigoRef = useRef(null);
+  const claveRef = useRef(null);
   const emailRef = useRef(null);
 
   useEffect(() => {
-    if (espera <= 0) return;
-    const t = setTimeout(() => setEspera(espera - 1), 1000);
-    return () => clearTimeout(t);
-  }, [espera]);
-
-  useEffect(() => {
-    (paso === 'codigo' ? codigoRef : emailRef).current?.focus();
+    (paso === 'clave' ? claveRef : emailRef).current?.focus();
   }, [paso]);
 
-  async function pedirCodigo(e) {
+  function continuar(e) {
     e?.preventDefault();
     const limpio = email.trim().toLowerCase();
     if (!limpio) {
       setError('Escribí tu mail.');
       return;
     }
-    setOcupado(true);
-    setError('');
-    try {
-      await api.sendOtp(limpio);
-      localStorage.setItem('crm:email', limpio);
-      setEmail(limpio);
-      setCodigo('');
-      setPaso('codigo');
-      setEspera(ESPERA_REENVIO);
-    } catch (err) {
-      setError(textoError(err, 'email'));
-    } finally {
-      setOcupado(false);
+    if (!MAIL_VALIDO.test(limpio)) {
+      setError('Ese mail no parece válido. Revisalo.');
+      return;
     }
+    localStorage.setItem('crm:email', limpio);
+    setEmail(limpio);
+    setClave('');
+    setError('');
+    setPaso('clave');
   }
 
   async function entrar(e) {
     e?.preventDefault();
-    const otp = codigo.replace(/\D/g, '');
-    if (otp.length !== 6) {
-      setError('El código tiene 6 números.');
+    if (!clave) {
+      setError('Escribí tu contraseña.');
       return;
     }
     setOcupado(true);
     setError('');
     try {
-      await api.verifyOtp(email, otp);
+      await api.signIn(email, clave);
+      setClave('');
       await onEntrar();
     } catch (err) {
-      setError(textoError(err, 'codigo'));
+      setError(textoError(err));
       setOcupado(false);
+      claveRef.current?.select();
     }
   }
 
@@ -96,9 +86,9 @@ export function Login({ aviso, onEntrar }) {
       <div class="login-col">
         <Wordmark />
         {paso === 'email' ? (
-          <form class="login-form" onSubmit={pedirCodigo} noValidate>
+          <form class="login-form" onSubmit={continuar} noValidate>
             <h1>Entrá a Faro</h1>
-            <p class="login-texto">Te mandamos un código de 6 números a tu mail. Sin contraseñas.</p>
+            <p class="login-texto">Empezá con tu mail de trabajo. En el próximo paso te pedimos la contraseña.</p>
             {aviso && <p class="aviso" role="alert">{aviso}</p>}
             <label class="campo">
               <span class="campo-label">Tu mail</span>
@@ -106,7 +96,7 @@ export function Login({ aviso, onEntrar }) {
                 ref={emailRef}
                 type="email"
                 inputMode="email"
-                autoComplete="email"
+                autoComplete="username"
                 autoCapitalize="none"
                 spellcheck={false}
                 placeholder="nombre@levelup.cloud"
@@ -118,48 +108,40 @@ export function Login({ aviso, onEntrar }) {
               />
             </label>
             {error && <p id="login-error" class="error" role="alert">{error}</p>}
-            <button class="btn btn-primario btn-bloque" type="submit" disabled={ocupado}>
-              {ocupado ? 'Mandando…' : 'Mandame el código'}
+            <button class="btn btn-primario btn-bloque" type="submit">
+              Continuar
             </button>
           </form>
         ) : (
           <form class="login-form" onSubmit={entrar} noValidate>
-            <h1>Revisá tu mail</h1>
+            <h1>Tu contraseña</h1>
             <p class="login-texto">
-              Mandamos el código a <strong class="login-mail">{email}</strong>. Puede tardar un minuto;
-              si no aparece, mirá en spam.
+              Entrás como <strong class="login-mail">{email}</strong>.
             </p>
-            <label class="campo">
-              <span class="campo-label">Código</span>
-              <input
-                ref={codigoRef}
-                class="input-codigo"
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                pattern="[0-9]*"
-                maxLength={6}
-                placeholder="000000"
-                value={codigo}
-                onInput={(e) => {
-                  const v = e.currentTarget.value.replace(/\D/g, '').slice(0, 6);
-                  setCodigo(v);
-                  e.currentTarget.value = v;
-                }}
-                aria-invalid={!!error}
-                aria-describedby={error ? 'login-error' : undefined}
-              />
-            </label>
+            {/* Para que el gestor de contraseñas asocie la clave con el mail. */}
+            <input type="email" name="username" autoComplete="username" value={email} hidden readOnly />
+            <CampoClave
+              label="Contraseña"
+              id="login-clave"
+              inputRef={claveRef}
+              autoComplete="current-password"
+              value={clave}
+              onInput={(e) => setClave(e.currentTarget.value)}
+              aria-invalid={!!error}
+              aria-describedby={error ? 'login-error' : undefined}
+            />
             {error && <p id="login-error" class="error" role="alert">{error}</p>}
             <button class="btn btn-primario btn-bloque" type="submit" disabled={ocupado}>
               {ocupado ? 'Entrando…' : 'Entrar'}
             </button>
             <div class="login-acciones">
-              <button type="button" class="btn-link" onClick={() => { setPaso('email'); setError(''); }}>
+              <button
+                type="button"
+                class="btn-link"
+                disabled={ocupado}
+                onClick={() => { setPaso('email'); setClave(''); setError(''); }}
+              >
                 Usar otro mail
-              </button>
-              <button type="button" class="btn-link" onClick={pedirCodigo} disabled={espera > 0 || ocupado}>
-                {espera > 0 ? `Reenviar en ${espera} s` : 'Reenviar código'}
               </button>
             </div>
           </form>
