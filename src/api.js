@@ -54,6 +54,21 @@ async function q(build) {
   return res.data;
 }
 
+/** Recorre la Data API de a TAM_PAGINA filas para no cortar en el tope por defecto (~100–1000). */
+const TAM_PAGINA = 100;
+async function todas(armar) {
+  const out = [];
+  let offset = 0;
+  for (;;) {
+    const filas = await q((c) => armar(c).range(offset, offset + TAM_PAGINA - 1));
+    if (!Array.isArray(filas) || filas.length === 0) break;
+    out.push(...filas);
+    if (filas.length < TAM_PAGINA) break;
+    offset += TAM_PAGINA;
+  }
+  return out;
+}
+
 /** Saca un código de error legible de lo que devuelva Better Auth (o un fetch fallido). */
 function errorDeAuth(e) {
   const err = new Error(e?.message || 'Error de autenticación');
@@ -157,11 +172,11 @@ const realApi = {
 
   // --- Listas ---
   pipeline: () =>
-    q((c) => c.from('v_pipeline').select('*').order('columna_orden').order('nombre')),
+    todas((c) => c.from('v_pipeline').select('*').order('columna_orden').order('nombre')),
   pipelineFila: (id) =>
     q((c) => c.from('v_pipeline').select('*').eq('id', id).maybeSingle()),
   seguimiento: () =>
-    q((c) =>
+    todas((c) =>
       c.from('v_seguimiento').select('*')
         .order('grupo_orden')
         .order('proxima_fecha', { ascending: true, nullsFirst: false })
@@ -225,7 +240,7 @@ const realApi = {
    */
   async calendario({ desde, hasta, estado, tipo, perfil } = {}) {
     try {
-      return await q((c) => {
+      return await todas((c) => {
         let consulta = c.from('v_calendario').select('*');
         if (desde) consulta = consulta.gte('fecha_local', desde);
         if (hasta) consulta = consulta.lte('fecha_local', hasta);

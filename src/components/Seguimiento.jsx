@@ -1,8 +1,8 @@
-import { useMemo } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 import { GRUPOS } from '../constants.js';
 import { cuando, fechaHoraCorta, norm, numero } from '../format.js';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
-import { Icon, Vacio } from './ui.jsx';
+import { BotonMas, Icon, PAGINA, Vacio } from './ui.jsx';
 
 /** Aplica los filtros de Seguimiento. `perfil: ''` = todos. */
 export function filtrarSeguimiento(lista, f) {
@@ -53,6 +53,7 @@ function FilaLead({ l, abrir }) {
 export function Seguimiento({ ctx }) {
   const { seguimiento, filtrosSeg: f, setFiltrosSeg, abrir } = ctx;
   const set = (k, v) => setFiltrosSeg((prev) => ({ ...prev, [k]: v }));
+  const [visibles, setVisibles] = useState({});
 
   const perfiles = useMemo(
     () => [...new Set(seguimiento.map((l) => l.perfil).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')),
@@ -131,10 +132,18 @@ export function Seguimiento({ ctx }) {
         <div class="grupos-lista">
           {grupos.map(([g, items]) => {
             const orden = GRUPOS.find((x) => x.key === g)?.orden ?? 5;
+            const n = visibles[g] || PAGINA;
             const contenido = (
-              <ul class="leads">
-                {items.map((l) => <FilaLead key={l.id} l={l} abrir={abrir} />)}
-              </ul>
+              <>
+                <ul class="leads">
+                  {items.slice(0, n).map((l) => <FilaLead key={l.id} l={l} abrir={abrir} />)}
+                </ul>
+                <BotonMas
+                  vistos={n}
+                  total={items.length}
+                  onMas={() => setVisibles((v) => ({ ...v, [g]: n + PAGINA }))}
+                />
+              </>
             );
             const cabeza = (
               <>

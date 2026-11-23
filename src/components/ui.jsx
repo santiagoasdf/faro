@@ -206,3 +206,15 @@ export function mensajeError(e, accion = 'guardar') {
   }
   return `No se pudo ${accion}. Probá de nuevo.`;
 }
+
+export const PAGINA = 10;
+
+/** Carga 10 ítems más en una columna o lista larga. */
+export function BotonMas({ vistos, total, onMas, pagina = PAGINA }) {
+  if (vistos >= total) return null;
+  return (
+    <button type="button" class="columna-mas" onClick={onMas}>
+      + {Math.min(pagina, total - vistos)} más
+    </button>
+  );
+}

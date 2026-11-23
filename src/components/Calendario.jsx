@@ -8,7 +8,7 @@ import {
 import { cuando, fechaCorta, hoyBA } from '../format.js';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { ChipResponsable } from './Responsable.jsx';
-import { Icon, Vacio } from './ui.jsx';
+import { BotonMas, Icon, PAGINA, Vacio } from './ui.jsx';
 
 const VISTAS = [
   { key: 'lista', label: 'Lista', icono: 'lista' },
@@ -55,11 +55,13 @@ function ListaBaldes({ grupos, abrir }) {
   const [abierto, setAbierto] = useState(() => Object.fromEntries(
     BALDES.map((b) => [b.key, !b.colapsado]),
   ));
+  const [visibles, setVisibles] = useState({});
   return (
     <div class="cal-listas">
       {BALDES.map((b) => {
         const items = grupos[b.key] || [];
         const exp = abierto[b.key];
+        const n = visibles[b.key] || PAGINA;
         return (
           <section key={b.key} class={`cal-grupo tono-${b.tono}${b.colapsado ? ' es-colapsable' : ''}`}>
             <button
@@ -74,9 +76,16 @@ function ListaBaldes({ grupos, abrir }) {
             </button>
             {exp && (
               items.length ? (
-                <ul class="cal-grupo-lista">
-                  {items.map((t) => <TarjetaTarea key={t.tipo + t.id} t={t} abrir={abrir} />)}
-                </ul>
+                <>
+                  <ul class="cal-grupo-lista">
+                    {items.slice(0, n).map((t) => <TarjetaTarea key={t.tipo + t.id} t={t} abrir={abrir} />)}
+                  </ul>
+                  <BotonMas
+                    vistos={n}
+                    total={items.length}
+                    onMas={() => setVisibles((v) => ({ ...v, [b.key]: n + PAGINA }))}
+                  />
+                </>
               ) : (
                 <p class="cal-vacio">Nada en este balde.</p>
               )
@@ -90,14 +99,18 @@ function ListaBaldes({ grupos, abrir }) {
 
 function KanbanBaldes({ grupos, abrir }) {
   const [sinFecha, setSinFecha] = useState(false);
+  const [visiblesN, setVisiblesN] = useState({});
   const visibles = BALDES.filter((b) => !b.colapsado);
   const sf = BALDES.find((b) => b.key === 'sin_fecha');
   const itemsSf = grupos.sin_fecha || [];
+  const nDe = (key) => visiblesN[key] || PAGINA;
+  const mas = (key, n) => setVisiblesN((v) => ({ ...v, [key]: n + PAGINA }));
   return (
     <div class="cal-kanban-wrap">
       <div class="cal-kanban tablero">
         {visibles.map((b) => {
           const items = grupos[b.key] || [];
+          const n = nDe(b.key);
           return (
             <section key={b.key} class={`columna cal-col tono-${b.tono}`} aria-labelledby={`balde-${b.key}`}>
               <header class="columna-cabeza">
@@ -107,9 +120,12 @@ function KanbanBaldes({ grupos, abrir }) {
               {items.length === 0 ? (
                 <p class="columna-vacia">Sin tarjetas.</p>
               ) : (
-                <ul class="columna-lista">
-                  {items.map((t) => <TarjetaTarea key={t.tipo + t.id} t={t} abrir={abrir} />)}
-                </ul>
+                <>
+                  <ul class="columna-lista">
+                    {items.slice(0, n).map((t) => <TarjetaTarea key={t.tipo + t.id} t={t} abrir={abrir} />)}
+                  </ul>
+                  <BotonMas vistos={n} total={items.length} onMas={() => mas(b.key, n)} />
+                </>
               )}
             </section>
           );
@@ -124,9 +140,16 @@ function KanbanBaldes({ grupos, abrir }) {
           </button>
           {sinFecha && (
             itemsSf.length ? (
-              <ul class="cal-grupo-lista cal-sin-lista">
-                {itemsSf.map((t) => <TarjetaTarea key={t.tipo + t.id} t={t} abrir={abrir} />)}
-              </ul>
+              <>
+                <ul class="cal-grupo-lista cal-sin-lista">
+                  {itemsSf.slice(0, nDe('sin_fecha')).map((t) => <TarjetaTarea key={t.tipo + t.id} t={t} abrir={abrir} />)}
+                </ul>
+                <BotonMas
+                  vistos={nDe('sin_fecha')}
+                  total={itemsSf.length}
+                  onMas={() => mas('sin_fecha', nDe('sin_fecha'))}
+                />
+              </>
             ) : (
               <p class="cal-vacio">Todos los leads activos tienen fecha.</p>
             )

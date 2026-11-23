@@ -564,10 +564,14 @@ input[aria-invalid='true'] {
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
   height: calc(var(--nav-h) + var(--safe-b));
   padding-bottom: var(--safe-b);
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   background: var(--surface);
   border-top: 1px solid var(--line);
 }
@@ -576,13 +580,23 @@ input[aria-invalid='true'] {
   justify-items: center;
   align-content: center;
   gap: 3px;
-  font-size: 0.625rem;
+  min-width: 0;
+  width: 100%;
+  font-size: 0.6rem;
   font-weight: 600;
   color: var(--muted);
-  padding: 0 1px;
+  padding: 0 2px;
   overflow: hidden;
   text-decoration: none;
   user-select: none;
+}
+.nav-abajo-link span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: -0.02em;
 }
 .nav-abajo-link[aria-current='page'] {
   color: var(--accent);
