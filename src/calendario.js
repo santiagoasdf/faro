@@ -279,10 +279,11 @@ export function relatoCelebe(l) {
   }
 
   let agendar;
-  if (l.proxima_accion && l.proxima_fecha) {
+  const paso = (l.proxima_accion || '').replace(/\.$/, '');
+  if (paso && l.proxima_fecha) {
     agendar = l.vencido
-      ? `Había que hacer esto ${cuando(l.proxima_fecha)} y sigue pendiente: ${l.proxima_accion}.`
-      : `Agendar: ${l.proxima_accion} — ${cuando(l.proxima_fecha)}.`;
+      ? `Había que hacer esto ${cuando(l.proxima_fecha)} y sigue pendiente: ${paso}.`
+      : `Agendar: ${paso} — ${cuando(l.proxima_fecha)}.`;
   } else if (l.proxima_accion) {
     agendar = `Próximo paso, todavía sin fecha: ${l.proxima_accion}.`;
   } else {
