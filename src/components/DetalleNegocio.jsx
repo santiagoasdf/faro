@@ -5,7 +5,10 @@ import {
   cuando, fecha, fechaHora, haceCuanto, linkInstagram, linkTel, linkUrl, linkWhatsapp,
 } from '../format.js';
 import { FormNota, Historial } from './Historial.jsx';
+import { emailCanónico } from '../calendario.js';
+import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Rating, SelectEtapa } from './Pipeline.jsx';
+import { SelectResponsable } from './Responsable.jsx';
 import { Cargando, Icon, mensajeError, toast } from './ui.jsx';
 
 function Contactos({ n }) {
@@ -109,8 +112,10 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
   const [detalle, setDetalle] = useState(null);
   const [error, setError] = useState('');
   const [form, setForm] = useState(null); // 'contacto' | 'nota' | null
+  const puedeResp = Object.prototype.hasOwnProperty.call(n, 'responsable_email');
   const [seg, setSeg] = useState({
     proxima_accion: n.proxima_accion || '', proxima_fecha: n.proxima_fecha || '', notas: n.notas || '',
+    ...(puedeResp ? { responsable_email: n.responsable_email || '' } : {}),
   });
   const [guardando, setGuardando] = useState(false);
 
@@ -120,7 +125,10 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
   };
   useEffect(cargar, [n.id]);
 
-  const original = { proxima_accion: n.proxima_accion || '', proxima_fecha: n.proxima_fecha || '', notas: n.notas || '' };
+  const original = {
+    proxima_accion: n.proxima_accion || '', proxima_fecha: n.proxima_fecha || '', notas: n.notas || '',
+    ...(puedeResp ? { responsable_email: n.responsable_email || '' } : {}),
+  };
   const cambios = Object.fromEntries(
     Object.entries(seg).filter(([k, v]) => v !== original[k]).map(([k, v]) => [k, v === '' ? null : v]),
   );
@@ -189,6 +197,7 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
             {[n.rubro, n.barrio].filter(Boolean).join(', ')}
             {n.rating_google != null && <Rating valor={n.rating_google} resenas={n.resenas_google} />}
           </p>
+          <EnlacesFaro item={n} class="enlaces-detalle" />
         </div>
       </header>
 
@@ -225,6 +234,14 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
                   onInput={(e) => setSeg({ ...seg, proxima_fecha: e.currentTarget.value })} />
               </label>
             </div>
+            {puedeResp ? (
+              <SelectResponsable
+                valor={seg.responsable_email}
+                onCambiar={(email) => setSeg({ ...seg, responsable_email: emailCanónico(email) || '' })}
+              />
+            ) : (
+              <SelectResponsable valor="" onCambiar={() => {}} disabled />
+            )}
             <label class="campo">
               <span class="campo-label">Notas del negocio</span>
               <textarea rows={3} value={seg.notas} onInput={(e) => setSeg({ ...seg, notas: e.currentTarget.value })} />

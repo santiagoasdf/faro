@@ -1,27 +1,55 @@
 import { useEffect, useState } from 'preact/hooks';
 import { api } from '../api.js';
 import { GRUPOS } from '../constants.js';
-import { cuando, fecha, fechaHora } from '../format.js';
+import { emailCanónico } from '../calendario.js';
+import { relatoCelebe } from '../calendario.js';
+import { cuando, fechaHora } from '../format.js';
+import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { FormNota, Historial } from './Historial.jsx';
+import { SelectResponsable } from './Responsable.jsx';
 import { Cargando, Icon, mensajeError, toast } from './ui.jsx';
 
-function Dato({ label, children }) {
-  if (children === null || children === undefined || children === '') return null;
+function RelatoCele({ lead: l }) {
+  const r = relatoCelebe(l);
+  if (r.vacio) {
+    return <p class="relato-vacio">Todavía no hay un relevamiento de cele.be para este lead.</p>;
+  }
   return (
-    <div class="dato">
-      <dt>{label}</dt>
-      <dd>{children}</dd>
+    <div class={`relato${r.vencido ? ' es-vencido' : ''}`}>
+      {r.pasaron.length > 0 && (
+        <div class="relato-bloque">
+          <h4>Qué pasó</h4>
+          {r.pasaron.map((p) => <p key={p}>{p}</p>)}
+        </div>
+      )}
+      <div class="relato-bloque">
+        <h4>Qué falta / qué agendar</h4>
+        <p class={r.vencido ? 'relato-agendar es-vencido' : 'relato-agendar'}>
+          {r.vencido && <Icon name="alerta" size={16} />}
+          {r.agendar}
+        </p>
+      </div>
+      {r.contexto.length > 0 && <p class="relato-meta">{r.contexto.join(' · ')}</p>}
+      {r.tomado && <p class="relato-meta">{r.tomado}</p>}
     </div>
   );
 }
 
-const valoresDe = (l) => ({
-  grupo: l.grupo || '',
-  proxima_accion: l.proxima_accion || '',
-  proxima_fecha: l.proxima_fecha || '',
-  notas_equipo: l.notas_equipo || '',
-  activo: !!l.activo,
-});
+const valoresDe = (l) => {
+  const v = {
+    grupo: l.grupo || '',
+    proxima_accion: l.proxima_accion || '',
+    proxima_fecha: l.proxima_fecha || '',
+    notas_equipo: l.notas_equipo || '',
+    activo: !!l.activo,
+  };
+  if (Object.prototype.hasOwnProperty.call(l, 'responsable_email')) {
+    v.responsable_email = l.responsable_email || '';
+  }
+  return v;
+};
+
+const puedeResponsable = (row) => Object.prototype.hasOwnProperty.call(row, 'responsable_email');
 
 export function DetalleLead({ lead: l, ctx, onCerrar }) {
   const [v, setV] = useState(() => valoresDe(l));
@@ -86,6 +114,7 @@ export function DetalleLead({ lead: l, ctx, onCerrar }) {
             {l.urgente && <span class="chip chip-urgente"><Icon name="urgente" size={12} />Urgente</span>}
           </h2>
           <p class="detalle-sub">{[l.contacto, l.pais].filter(Boolean).join(', ')}</p>
+          <EnlacesFaro item={l} class="enlaces-detalle" />
         </div>
       </header>
 
@@ -128,6 +157,14 @@ export function DetalleLead({ lead: l, ctx, onCerrar }) {
                   onInput={(e) => setV({ ...v, proxima_fecha: e.currentTarget.value })} />
               </label>
             </div>
+            {puedeResponsable(l) ? (
+              <SelectResponsable
+                valor={v.responsable_email}
+                onCambiar={(email) => setV({ ...v, responsable_email: emailCanónico(email) || '' })}
+              />
+            ) : (
+              <SelectResponsable valor="" onCambiar={() => {}} disabled />
+            )}
             <label class="campo">
               <span class="campo-label">Notas del equipo</span>
               <textarea rows={3} value={v.notas_equipo}
@@ -153,22 +190,9 @@ export function DetalleLead({ lead: l, ctx, onCerrar }) {
           </form>
         </section>
 
-        <section class="detalle-sec" aria-labelledby="sec-lead-cele">
+        <section class="detalle-sec relato-cele" aria-labelledby="sec-lead-cele">
           <h3 id="sec-lead-cele">Lo último en cele.be</h3>
-          <dl class="datos">
-            <Dato label="Última acción">
-              {l.ultima_accion ? `${l.ultima_accion}${l.ultima_fecha ? ` (${fecha(l.ultima_fecha)})` : ''}` : null}
-            </Dato>
-            <Dato label="Último comentario">{l.ultimo_comentario}</Dato>
-            <Dato label="Nota del relevamiento">{l.nota_snapshot}</Dato>
-            <Dato label="Etapa en cele.be">{l.etapa_crm}</Dato>
-            <Dato label="Campaña">{l.campana}</Dato>
-            <Dato label="Perfil">{l.perfil}</Dato>
-            <Dato label="Área">{l.area}</Dato>
-            <Dato label="Dato tomado">
-              {l.fecha_snapshot ? `${fechaHora(l.fecha_snapshot)}${l.fuente ? `, de ${l.fuente}` : ''}` : null}
-            </Dato>
-          </dl>
+          <RelatoCele lead={l} />
         </section>
 
         <section class="detalle-sec" aria-labelledby="sec-lead-notas">

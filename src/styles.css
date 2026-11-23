@@ -567,7 +567,7 @@ input[aria-invalid='true'] {
   height: calc(var(--nav-h) + var(--safe-b));
   padding-bottom: var(--safe-b);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   background: var(--surface);
   border-top: 1px solid var(--line);
 }
@@ -576,9 +576,10 @@ input[aria-invalid='true'] {
   justify-items: center;
   align-content: center;
   gap: 3px;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: var(--muted);
+  padding: 0 2px;
   text-decoration: none;
   user-select: none;
 }
@@ -2016,4 +2017,271 @@ summary.grupo-cabeza {
       transform: none;
     }
   }
+}
+
+
+/* ---------- Pipeline: cargar de a 10 ---------- */
+.columna-mas {
+  margin: 4px 8px 12px;
+  width: calc(100% - 16px);
+  height: 36px;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-s);
+  background: transparent;
+  color: var(--ink-2);
+  font-weight: 650;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.columna-mas:hover {
+  background: var(--surface-2);
+  border-color: var(--muted);
+}
+
+/* ---------- Enlaces cele.be / LinkedIn ---------- */
+.enlaces-faro {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.enlace-faro {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.enlace-faro:hover { background: var(--accent-soft); color: var(--accent); }
+.enlaces-detalle { margin-top: 8px; }
+.enlaces-en-lead { margin-top: 6px; }
+.chip-persona {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+.chip-persona.es-santi { background: #e8eefc; color: #2a4aa0; }
+.chip-persona.es-guido { background: var(--accent-soft); color: var(--accent); }
+
+/* ---------- Relato cele.be ---------- */
+.relato { display: grid; gap: 14px; }
+.relato-bloque h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.relato-bloque p { color: var(--ink); }
+.relato-bloque p + p { margin-top: 6px; }
+.relato-agendar {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r-m);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+.relato-agendar.es-vencido,
+.relato.es-vencido .relato-agendar {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.relato-meta { font-size: 0.8125rem; color: var(--muted); }
+.relato-vacio { color: var(--muted); }
+
+/* ---------- Calendario ---------- */
+.calendario { display: grid; gap: 16px; }
+.barra-cal { flex-wrap: wrap; }
+.cal-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+.cal-vistas, .cal-filtro-pers {
+  display: inline-flex;
+  flex-wrap: wrap;
+  background: var(--surface-2);
+  border-radius: var(--r-s);
+  padding: 3px;
+  gap: 2px;
+}
+.cal-vistas button, .cal-filtro-pers button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font-weight: 650;
+  font-size: 0.8125rem;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.cal-vistas button.es-activa, .cal-filtro-pers button.es-activa {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--sh-1);
+}
+.cal-nav-periodo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cal-periodo { font-size: 1.05rem; font-weight: 700; flex: 1; text-align: center; }
+
+.cal-listas { display: grid; gap: 10px; }
+.cal-grupo, .cal-sin-fecha {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+}
+.cal-grupo.tono-vencido { border-color: #f0c7c3; }
+.cal-grupo.tono-hoy { border-color: #c9e6d8; }
+.cal-grupo-cabeza {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.cal-grupo-cabeza h2 { font-size: 0.95rem; font-weight: 700; }
+.cal-grupo-n {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.75rem;
+}
+.cal-grupo-chev { color: var(--muted); transform: rotate(90deg); transition: transform 150ms var(--ease-out); }
+.cal-grupo-chev.es-abierto { transform: rotate(-90deg); }
+.cal-grupo-lista { padding: 0 10px 10px; display: grid; gap: 8px; }
+.cal-vacio { padding: 4px 14px 14px; color: var(--muted); font-size: 0.875rem; }
+.cal-sin-ayuda { color: var(--muted); font-size: 0.8rem; font-weight: 500; }
+
+.cal-card {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  background: var(--bg);
+  cursor: pointer;
+}
+.cal-card.es-vencido { border-color: #f0c7c3; background: var(--danger-soft); }
+.cal-card-cabeza { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.cal-card-titulo { font-weight: 700; }
+.cal-card-sub, .cal-card-area { font-size: 0.8125rem; color: var(--muted); }
+.cal-card-prox { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.cal-card-fecha { display: inline-flex; align-items: center; gap: 4px; font-size: 0.8125rem; font-weight: 650; color: var(--ink-2); }
+.cal-card-fecha.es-vencido { color: var(--danger); }
+.cal-card-accion { font-size: 0.875rem; }
+.cal-card-pie { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.cal-kanban-wrap { display: grid; gap: 14px; }
+.cal-kanban { align-items: start; }
+.cal-col.tono-vencido .columna-cabeza h2 { color: var(--danger); }
+.cal-col.tono-hoy .columna-cabeza h2 { color: var(--accent); }
+.cal-sin-lista { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 0 10px 10px; }
+
+.cal-mes { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-m); overflow: hidden; }
+.cal-mes-dow, .cal-mes-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-mes-dow { background: var(--surface-2); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.cal-mes-dow span { padding: 8px 4px; text-align: center; }
+.cal-dia {
+  min-height: 88px;
+  padding: 6px;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+.cal-dia:nth-child(7n) { border-right: 0; }
+.cal-dia.es-otro { background: #f7f8fa; color: var(--muted); }
+.cal-dia.es-hoy { background: var(--accent-soft); }
+.cal-dia-n { font-size: 0.75rem; font-weight: 700; }
+.cal-dia-evs { display: grid; gap: 3px; }
+.cal-dia-mas { font-size: 0.7rem; color: var(--muted); font-weight: 650; }
+
+.cal-ev { display: flex; align-items: flex-start; gap: 4px; }
+.cal-ev > button {
+  appearance: none;
+  border: 0;
+  background: #e8eefc;
+  color: #2a4aa0;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  display: grid;
+  gap: 1px;
+}
+.cal-ev.es-reunion > button { background: #f3e8fc; color: #6b21a8; }
+.cal-ev.es-derivado > button { background: var(--surface-2); color: var(--ink-2); }
+.cal-ev.es-vencido > button { background: var(--danger-soft); color: var(--danger); }
+.cal-ev-hora { font-variant-numeric: tabular-nums; }
+.cal-ev-origen { font-weight: 500; opacity: 0.8; font-size: 0.65rem; }
+.cal-ev-meet {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 3px 4px;
+}
+
+.cal-semana {
+  display: grid;
+  gap: 8px;
+}
+.cal-sem-col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  min-height: 120px;
+  padding: 10px;
+}
+.cal-sem-col.es-hoy { border-color: var(--accent); background: #f4faf7; }
+.cal-sem-cabeza { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.cal-sem-dow { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+.cal-sem-n { font-weight: 700; }
+.cal-sem-lista { display: grid; gap: 6px; }
+
+@media (min-width: 900px) {
+  .cal-toolbar { width: auto; margin-left: auto; }
+  .cal-semana { grid-template-columns: repeat(7, 1fr); }
+  .cal-sin-lista { grid-template-columns: repeat(2, 1fr); }
+  .cal-dia { min-height: 110px; }
+}
+@media (min-width: 1200px) {
+  .cal-sin-lista { grid-template-columns: repeat(3, 1fr); }
 }

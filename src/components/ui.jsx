@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import {
-  ArrowRight, Briefcase, Camera, Check, ChevronLeft, CircleAlert, CircleUser, Clock, ExternalLink, Eye,
-  EyeOff, Flame, Globe, House, ListChecks, LogOut, Mail, MapPin, MessageCircle, Phone, Plus, RefreshCw, Search,
-  SquareKanban, Star, StickyNote, Trash2, X,
+  ArrowRight, Briefcase, CalendarDays, Camera, Check, ChevronLeft, ChevronRight, CircleAlert, CircleUser, Clock,
+  Columns3, ExternalLink, Eye, EyeOff, Flame, Globe, House, List, ListChecks, LogOut, Mail, MapPin,
+  MessageCircle, Phone, Plus, RefreshCw, Search, SquareKanban, Star, StickyNote, Trash2, X,
 } from 'lucide';
 
 const ICONOS = {
   flecha: ArrowRight, linkedin: Briefcase, instagram: Camera, ok: Check, volver: ChevronLeft,
-  alerta: CircleAlert, reloj: Clock, externo: ExternalLink, urgente: Flame, web: Globe, inicio: House,
-  seguimiento: ListChecks, salir: LogOut, email: Mail, mapa: MapPin, whatsapp: MessageCircle,
-  llamada: Phone, mas: Plus, actualizar: RefreshCw, buscar: Search, pipeline: SquareKanban,
-  estrella: Star, nota: StickyNote, borrar: Trash2, cerrar: X, perfil: CircleUser, ver: Eye,
-  ocultar: EyeOff,
+  adelante: ChevronRight, alerta: CircleAlert, reloj: Clock, externo: ExternalLink, urgente: Flame,
+  web: Globe, inicio: House, seguimiento: ListChecks, salir: LogOut, email: Mail, mapa: MapPin,
+  whatsapp: MessageCircle, llamada: Phone, mas: Plus, actualizar: RefreshCw, buscar: Search,
+  pipeline: SquareKanban, estrella: Star, nota: StickyNote, borrar: Trash2, cerrar: X,
+  perfil: CircleUser, ver: Eye, ocultar: EyeOff, calendario: CalendarDays, lista: List, kanban: Columns3,
 };
 
 /** Ícono de lucide renderizado como SVG inline (trazo uniforme). */

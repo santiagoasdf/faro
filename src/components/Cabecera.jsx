@@ -4,6 +4,7 @@ const NAV = [
   { key: 'inicio', label: 'Inicio' },
   { key: 'pipeline', label: 'Pipeline' },
   { key: 'seguimiento', label: 'Seguimiento' },
+  { key: 'calendario', label: 'Calendario' },
   { key: 'perfil', label: 'Perfil' },
 ];
 

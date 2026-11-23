@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { COLUMNAS, CANAL_LABEL } from '../constants.js';
 import { cuando, haceCuanto, norm, numero, rating } from '../format.js';
+import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Icon, Vacio } from './ui.jsx';
 
 export function SelectEtapa({ valor, onCambiar, etiqueta = 'Mover a…', id, compacto }) {
@@ -72,6 +73,7 @@ function Tarjeta({ n, ctx, onArrastrar }) {
               {n.vencido ? `Vencido ${cuando(n.proxima_fecha)}` : cuando(n.proxima_fecha)}
             </span>
           )}
+          <EnlacesFaro item={n} />
         </span>
       </button>
       <SelectEtapa valor={n.columna} onCambiar={(etapa) => ctx.moverNegocio(n.id, etapa)} compacto />
@@ -85,7 +87,9 @@ export function Pipeline({ ctx }) {
   const [nicho, setNicho] = useState('');
   const [arrastrando, setArrastrando] = useState(null);
   const [sobre, setSobre] = useState(null);
+  const [visibles, setVisibles] = useState({});
   const tabsRef = useRef(null);
+  const PAGINA = 10;
 
   const nichos = useMemo(
     () => [...new Set(pipeline.map((n) => n.nicho).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')),
@@ -187,9 +191,22 @@ export function Pipeline({ ctx }) {
                   {texto || nicho ? 'Ningún negocio coincide.' : 'Sin negocios en esta etapa.'}
                 </p>
               ) : (
-                <ul class="columna-lista">
-                  {items.map((n) => <Tarjeta key={n.id} n={n} ctx={ctx} onArrastrar={setArrastrando} />)}
-                </ul>
+                <>
+                  <ul class="columna-lista">
+                    {items.slice(0, visibles[c.key] || PAGINA).map((n) => (
+                      <Tarjeta key={n.id} n={n} ctx={ctx} onArrastrar={setArrastrando} />
+                    ))}
+                  </ul>
+                  {(visibles[c.key] || PAGINA) < items.length && (
+                    <button
+                      type="button"
+                      class="columna-mas"
+                      onClick={() => setVisibles((v) => ({ ...v, [c.key]: (v[c.key] || PAGINA) + PAGINA }))}
+                    >
+                      + {Math.min(PAGINA, items.length - (visibles[c.key] || PAGINA))} más
+                    </button>
+                  )}
+                </>
               )}
             </section>
           );

@@ -217,7 +217,31 @@ const realApi = {
   agregarNota: (fila) =>
     q((c) => c.from('crm_notas').insert(fila).select('id,texto,autor_email,created_at').single()),
   borrarNota: (id) => alMenosUna(q((c) => c.from('crm_notas').delete().eq('id', id).select('id'))),
+
+  /**
+   * Eventos de v_calendario (SELECT only).
+   * GET .../v_calendario?select=*&order=fecha_local,inicia_en.nullsfirst
+   * Devuelve [] si la vista está vacía; null si no se pudo leer (la UI usa un preview derivado).
+   */
+  async calendario({ desde, hasta, estado, tipo, perfil } = {}) {
+    try {
+      return await q((c) => {
+        let consulta = c.from('v_calendario').select('*');
+        if (desde) consulta = consulta.gte('fecha_local', desde);
+        if (hasta) consulta = consulta.lte('fecha_local', hasta);
+        if (estado) consulta = consulta.eq('estado', estado);
+        if (tipo) consulta = consulta.eq('tipo', tipo);
+        if (perfil) consulta = consulta.eq('perfil', perfil);
+        return consulta
+          .order('fecha_local')
+          .order('inicia_en', { ascending: true, nullsFirst: true });
+      });
+    } catch {
+      return null;
+    }
+  },
 };
+
 
 // Objeto mutable para que el modo mock (solo en dev) pueda reemplazar la implementación.
 export const api = { ...realApi };

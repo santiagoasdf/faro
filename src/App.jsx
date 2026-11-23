@@ -9,11 +9,12 @@ import { Inicio } from './components/Inicio.jsx';
 import { Pipeline } from './components/Pipeline.jsx';
 import { Seguimiento } from './components/Seguimiento.jsx';
 import { Perfil } from './components/Perfil.jsx';
+import { Calendario } from './components/Calendario.jsx';
 import { DetalleNegocio } from './components/DetalleNegocio.jsx';
 import { DetalleLead } from './components/DetalleLead.jsx';
 import { Cargando, Marca, Panel, Toaster, mensajeError, toast } from './components/ui.jsx';
 
-const VISTAS = ['inicio', 'pipeline', 'seguimiento', 'perfil'];
+const VISTAS = ['inicio', 'pipeline', 'seguimiento', 'calendario', 'perfil'];
 
 /** '#/pipeline/n/<id>' -> { vista: 'pipeline', tipo: 'n', id } */
 function leerRuta() {
@@ -341,6 +342,8 @@ export function App() {
           <Pipeline ctx={ctx} />
         ) : ruta.vista === 'seguimiento' ? (
           <Seguimiento ctx={ctx} />
+        ) : ruta.vista === 'calendario' ? (
+          <Calendario ctx={ctx} />
         ) : (
           <Inicio ctx={ctx} />
         )}

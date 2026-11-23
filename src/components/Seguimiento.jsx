@@ -1,6 +1,7 @@
 import { useMemo } from 'preact/hooks';
 import { GRUPOS } from '../constants.js';
 import { cuando, fechaHoraCorta, norm, numero } from '../format.js';
+import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Icon, Vacio } from './ui.jsx';
 
 /** Aplica los filtros de Seguimiento. `perfil: ''` = todos. */
@@ -43,6 +44,7 @@ function FilaLead({ l, abrir }) {
             {l.dias_sin_movimiento != null && <> ({l.dias_sin_movimiento <= 0 ? 'hoy' : l.dias_sin_movimiento === 1 ? 'ayer' : `hace ${l.dias_sin_movimiento} días`})</>}
           </span>
         )}
+        <EnlacesFaro item={l} class="enlaces-en-lead" />
       </button>
     </li>
   );
