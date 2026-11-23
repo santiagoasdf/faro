@@ -1069,6 +1069,7 @@ input[aria-invalid='true'] {
   border-radius: var(--r-m);
   box-shadow: var(--sh-1);
   overflow: hidden;
+  min-height: min-content;
 }
 .tarjeta.es-vencido {
   border-color: #f0b7b2;
@@ -1084,16 +1085,22 @@ input[aria-invalid='true'] {
 }
 .tarjeta-nombre {
   font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.25;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  font-size: 1rem; /* ≥14px even with body a 15px */
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.tarjeta-nombre .chip {
+  display: inline-flex;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 .tarjeta-sub {
   color: var(--ink-2);
-  font-size: 0.875rem;
+  font-size: 0.8125rem; /* ~13px */
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 .tarjeta-chips {
   display: flex;
@@ -1124,9 +1131,11 @@ input[aria-invalid='true'] {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 2px 8px;
-  font-size: 0.8125rem;
+  font-size: 0.8125rem; /* ~13px */
+  line-height: 1.35;
   color: var(--muted);
   margin-top: 2px;
+  overflow-wrap: anywhere;
 }
 .tarjeta-prox {
   display: inline-flex;
@@ -1886,10 +1895,14 @@ summary.grupo-cabeza {
     overflow-x: auto;
     margin: 0 -24px;
     padding: 2px 24px 16px;
+    scrollbar-width: thin;
   }
   .columna,
   .columna.activa {
-    flex: 0 0 284px;
+    flex: 0 0 300px;
+    flex-shrink: 0;
+    min-width: 300px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -1931,9 +1944,11 @@ summary.grupo-cabeza {
   }
   .columna-lista {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     padding: 0 8px 10px;
     align-content: start;
+    grid-auto-rows: min-content;
   }
   .columna-vacia {
     margin: 0 8px 10px;
@@ -1950,9 +1965,6 @@ summary.grupo-cabeza {
   }
   .tarjeta:hover {
     box-shadow: var(--sh-2);
-  }
-  .tarjeta-nombre {
-    font-size: 0.9375rem;
   }
   .select-etapa.es-compacto select {
     min-height: 34px;
@@ -1997,7 +2009,9 @@ summary.grupo-cabeza {
 @media (min-width: 1400px) {
   .columna,
   .columna.activa {
-    flex-basis: 300px;
+    flex: 0 0 300px;
+    min-width: 300px;
+    width: 300px;
   }
 }
 
@@ -2212,15 +2226,66 @@ summary.grupo-cabeza {
 }
 .cal-card.es-vencido { border-color: #f0c7c3; background: var(--danger-soft); }
 .cal-card-cabeza { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.cal-card-titulo { font-weight: 700; }
-.cal-card-sub, .cal-card-area { font-size: 0.8125rem; color: var(--muted); }
+.cal-card-titulo {
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.cal-card-sub, .cal-card-area { font-size: 0.8125rem; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
 .cal-card-prox { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
 .cal-card-fecha { display: inline-flex; align-items: center; gap: 4px; font-size: 0.8125rem; font-weight: 650; color: var(--ink-2); }
 .cal-card-fecha.es-vencido { color: var(--danger); }
-.cal-card-accion { font-size: 0.875rem; }
+.cal-card-accion { font-size: 0.875rem; overflow-wrap: anywhere; }
 .cal-card-pie { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 
 .cal-kanban-wrap { display: grid; gap: 14px; }
+/* El tablero del Calendario no usa pestañas por columna: hay que mostrarlas
+   también en mobile (si no, .columna { display:none } las apaga). */
+.cal-kanban.tablero {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  align-items: start;
+  margin: 0 -16px;
+  padding: 2px 16px 12px;
+  scrollbar-width: thin;
+}
+.cal-kanban .columna,
+.cal-kanban .columna.activa {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 280px;
+  flex-shrink: 0;
+  min-width: 280px;
+  width: 280px;
+  background: #e9edf2;
+  border-radius: var(--r-l);
+  min-height: 0;
+}
+.cal-kanban .columna-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 10px;
+}
+.cal-kanban .columna-cabeza h2 {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+}
+.cal-kanban .columna-n {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.cal-kanban .columna-lista {
+  padding: 0 8px 10px;
+  align-content: start;
+  grid-auto-rows: min-content;
+}
 .cal-kanban { align-items: start; }
 .cal-col.tono-vencido .columna-cabeza h2 { color: var(--danger); }
 .cal-col.tono-hoy .columna-cabeza h2 { color: var(--accent); }
@@ -2299,4 +2364,17 @@ summary.grupo-cabeza {
 }
 @media (min-width: 1200px) {
   .cal-sin-lista { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .cal-kanban.tablero {
+    margin: 0 -24px;
+    padding: 2px 24px 16px;
+  }
+  .cal-kanban .columna,
+  .cal-kanban .columna.activa {
+    flex: 0 0 300px;
+    min-width: 300px;
+    width: 300px;
+  }
 }
