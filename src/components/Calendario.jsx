@@ -26,11 +26,11 @@ function TarjetaTarea({ t, abrir }) {
         onClick={() => abrir(t.tipo, t.id)}
       >
         <span class="cal-card-cabeza">
-          <span class="cal-card-titulo">{t.titulo}</span>
+          <span class="cal-card-titulo" title={t.titulo}>{t.titulo}</span>
           {t.urgente && <span class="chip chip-urgente"><Icon name="urgente" size={12} />Urgente</span>}
           <ChipResponsable email={t.responsable_email} />
         </span>
-        {t.sub && <span class="cal-card-sub">{t.sub}</span>}
+        {t.sub && <span class="cal-card-sub" title={t.sub}>{t.sub}</span>}
         <span class="cal-card-prox">
           {t.fecha && (
             <span class={`cal-card-fecha${t.vencido ? ' es-vencido' : ''}`}>
@@ -38,7 +38,7 @@ function TarjetaTarea({ t, abrir }) {
               {t.vencido ? `Vencido ${cuando(t.fecha)}` : cuando(t.fecha)}
             </span>
           )}
-          <span class="cal-card-accion">{t.accion || 'Sin próxima acción'}</span>
+          <span class="cal-card-accion" title={t.accion || 'Sin próxima acción'}>{t.accion || 'Sin próxima acción'}</span>
         </span>
         {(t.area || t.celebe_url || t.linkedin_url) && (
           <span class="cal-card-pie">

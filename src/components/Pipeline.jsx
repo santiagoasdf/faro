@@ -42,6 +42,7 @@ function Tarjeta({ n, ctx, onArrastrar }) {
   const ultimo = n.ultima_interaccion_at
     ? `${CANAL_LABEL[n.ultima_interaccion_canal] || 'Contacto'} ${haceCuanto(n.ultima_interaccion_at)}`
     : 'Sin contactos';
+  const sub = [n.rubro, n.barrio].filter(Boolean).join(', ');
   return (
     <li
       class={`tarjeta${n.vencido ? ' es-vencido' : ''}`}
@@ -55,18 +56,18 @@ function Tarjeta({ n, ctx, onArrastrar }) {
     >
       <button class="tarjeta-abrir" onClick={() => ctx.abrir('n', n.id)}>
         <span class="tarjeta-nombre">
-          {n.nombre}
+          <span class="tarjeta-nombre-texto" title={n.nombre}>{n.nombre}</span>
           {n.etapa_legado && <span class="chip chip-legado" title={`Etapa original: ${n.etapa}`}>legado</span>}
         </span>
-        {(n.rubro || n.barrio) && (
-          <span class="tarjeta-sub">{[n.rubro, n.barrio].filter(Boolean).join(', ')}</span>
+        {sub && (
+          <span class="tarjeta-sub" title={sub}>{sub}</span>
         )}
         <span class="tarjeta-chips">
           <Rating valor={n.rating_google} resenas={n.resenas_google} />
           {n.demo_id && <span class="chip chip-demo">Demo{n.demo_estado ? `: ${n.demo_estado}` : ''}</span>}
         </span>
         <span class="tarjeta-pie">
-          <span class="tarjeta-ultimo">{ultimo}</span>
+          <span class="tarjeta-ultimo" title={ultimo}>{ultimo}</span>
           {n.proxima_fecha && (
             <span class={`tarjeta-prox${n.vencido ? ' es-vencido' : ''}`}>
               {n.vencido ? <Icon name="alerta" size={13} /> : <Icon name="reloj" size={13} />}
