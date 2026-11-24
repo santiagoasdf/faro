@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kinesio Urquiza · Osteopatía, RPG y kinesiología deportiva en Villa Urquiza</title>
+<meta name="description" content="Consultorio de osteopatía, RPG y kinesiología deportiva en Villa Urquiza. Mendoza 5617, 6°B. Turnos por WhatsApp.">
+<meta name="theme-color" content="#F5F3EE">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/consultorio.webp" as="image" fetchpriority="high">
+<style>
+@font-face{font-family:"Fraunces";src:url(assets/fonts/fraunces.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;font-optical-sizing:auto}
+@font-face{font-family:"Fraunces";src:url(assets/fonts/fraunces-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;font-optical-sizing:auto}
+@font-face{font-family:"Source Sans 3";src:url(assets/fonts/source-sans-3.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+
+:root{
+  --azul:#2C3094;
+  --papel:#F5F3EE;
+  --blanco:#FBFBF9;
+  --tinta:#1B1C1F;
+  --muted:#5C5E66;
+  --spine:#8E8E94;
+  --linea:#D8D6D0;
+  --camilla:#16171A;
+  --wa:#1f8f4e;
+  --wa-osc:#18763f;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,sans-serif;
+  --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:var(--body);color:var(--tinta);background:var(--papel);font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+.skip{position:absolute;left:-999px;top:0;background:var(--azul);color:#fff;padding:8px 16px;z-index:40}
+.skip:focus{left:12px;top:12px}
+:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--papel);border-bottom:1px solid var(--linea)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:40px;height:40px}
+.brand b{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.02em;line-height:1}
+.top nav{display:flex;align-items:center;gap:26px;font-size:16px}
+.top nav a{text-decoration:none;color:var(--tinta)}
+.top nav a:hover{color:var(--azul)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-weight:600;border-radius:3px;transition:background .15s,color .15s,transform .15s;line-height:1.2}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:20px;height:20px;fill:currentColor;flex:none}
+.btn-wa{background:var(--wa);color:#fff;padding:12px 16px}
+.btn-wa:hover{background:var(--wa-osc)}
+.top .btn-wa{padding:8px 14px;font-size:15px}
+.btn-xl{font-size:18px;padding:16px 22px}
+.btn-tel{border:2px solid var(--azul);color:var(--azul);background:transparent;padding:14px 20px;font-size:18px}
+.btn-tel:hover{background:var(--azul);color:#fff}
+.hero .btn-tel{border-color:var(--tinta);color:var(--tinta)}
+.hero .btn-tel:hover{background:var(--tinta);color:var(--papel)}
+
+/* hero */
+.hero{background:var(--papel);padding:0}
+.hero-grid{display:grid;grid-template-columns:minmax(0,0.92fr) minmax(0,1.18fr);max-width:1440px;margin:0 auto;min-height:calc(100svh - 68px)}
+.hero-txt{position:relative;padding:56px 48px 64px max(28px,calc((100vw - var(--max))/2 + 28px));display:flex;flex-direction:column;justify-content:center}
+.hero-txt .logo-mark{width:84px;height:84px;margin-bottom:28px}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(44px,6.2vw,84px);line-height:.95;letter-spacing:-.03em;max-width:10ch}
+.hero .sub{margin-top:22px;font-size:clamp(18px,1.6vw,22px);color:var(--muted);max-width:28ch}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin:32px 0 26px}
+.rating{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:16px;color:var(--muted)}
+.rating .stars{color:var(--azul);letter-spacing:2px;font-size:18px}
+.rating b{color:var(--tinta);font-weight:700}
+.rating a{color:var(--muted)}
+.hero-foto{position:relative;min-height:520px;background:#cfc9bf}
+.hero-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 58%}
+.hero-foto figcaption{position:absolute;left:0;right:0;bottom:0;background:rgba(27,28,31,.78);color:#fff;font-size:13px;padding:8px 14px}
+
+/* spine motif */
+.spine{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;position:absolute;right:18px;top:50%;transform:translateY(-50%);z-index:2}
+.spine i{display:block;border-radius:50%;background:var(--azul);flex:none}
+.spine i:nth-child(1),.spine i:nth-child(7){width:7px;height:7px}
+.spine i:nth-child(2),.spine i:nth-child(6){width:10px;height:10px}
+.spine i:nth-child(3),.spine i:nth-child(5){width:13px;height:13px}
+.spine i:nth-child(4){width:16px;height:16px}
+@media (prefers-reduced-motion:no-preference){
+  .spine i{transform:scale(0);animation:vertebra .55s cubic-bezier(.2,.7,.2,1) forwards}
+  .spine i:nth-child(7){animation-delay:.02s}
+  .spine i:nth-child(6){animation-delay:.1s}
+  .spine i:nth-child(5){animation-delay:.18s}
+  .spine i:nth-child(4){animation-delay:.26s}
+  .spine i:nth-child(3){animation-delay:.34s}
+  .spine i:nth-child(2){animation-delay:.42s}
+  .spine i:nth-child(1){animation-delay:.5s}
+}
+@keyframes vertebra{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+.spine-rule{display:flex;flex-direction:column;align-items:center;gap:7px;margin:0 0 28px}
+.spine-rule i{display:block;border-radius:50%;background:var(--azul);flex:none}
+.spine-rule i:nth-child(1),.spine-rule i:nth-child(7){width:6px;height:6px}
+.spine-rule i:nth-child(2),.spine-rule i:nth-child(6){width:8px;height:8px}
+.spine-rule i:nth-child(3),.spine-rule i:nth-child(5){width:10px;height:10px}
+.spine-rule i:nth-child(4){width:12px;height:12px}
+.spine-rule.horiz{flex-direction:row;margin:0 0 36px}
+
+/* sections */
+section{padding:96px 0}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(36px,5vw,60px);line-height:1.05;letter-spacing:-.03em}
+.lede{color:var(--muted);max-width:46ch;margin-top:14px}
+
+/* tratamientos: typographic index, not cards */
+.trat-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:end}
+.trat-lista{list-style:none;margin-top:28px}
+.trat-lista li{font-family:var(--display);font-weight:600;font-size:clamp(32px,4.2vw,52px);line-height:1.15;letter-spacing:-.03em;padding:16px 0;border-bottom:1px solid var(--linea)}
+.trat-lista li:first-child{border-top:1px solid var(--tinta)}
+.trat-nota{margin-top:28px;color:var(--muted);font-size:17px;max-width:42ch}
+.trat-foto{position:relative;background:#ddd}
+.trat-foto img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/5;object-position:center 40%}
+.trat-foto figcaption{position:absolute;left:0;right:0;bottom:0;background:rgba(27,28,31,.78);color:#fff;font-size:13px;padding:8px 12px}
+
+/* consultorio */
+.consultorio{background:var(--blanco)}
+.con-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.con-datos{list-style:none;margin-top:36px}
+.con-datos li{padding:18px 0;border-top:1px solid var(--linea)}
+.con-datos li:last-child{border-bottom:1px solid var(--linea)}
+.con-datos b{display:block;font-weight:700;margin-bottom:4px}
+.con-datos span{color:var(--muted)}
+.con-foto img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 70%;background:#ddd}
+.con-foto figcaption{color:var(--muted);font-size:13px;margin-top:10px}
+
+/* reseñas */
+.res-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:28px 48px;margin-top:48px}
+.res{border-top:2px solid var(--tinta);padding-top:20px}
+.res .stars{color:var(--azul);letter-spacing:2px;font-size:16px}
+.res blockquote{margin:14px 0 18px;font-family:var(--display);font-style:italic;font-weight:500;font-size:clamp(20px,1.8vw,24px);line-height:1.4;letter-spacing:-.015em}
+.res.grande{grid-row:span 2}
+.res.grande blockquote{font-size:clamp(24px,2.3vw,34px);line-height:1.32}
+.res cite{font-style:normal;font-weight:700;font-size:16px;font-family:var(--body)}
+.res cite small{font-weight:400;color:var(--muted)}
+.ver{display:inline-block;margin-top:40px;font-weight:700;color:var(--azul);text-underline-offset:4px}
+
+/* fotos */
+.fotos{background:#EDEAE3}
+.galeria{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:auto auto;gap:12px;margin-top:44px}
+.galeria figure{position:relative;overflow:hidden;background:#ccc}
+.galeria img{width:100%;height:100%;object-fit:cover}
+.galeria .g1{grid-row:span 2;aspect-ratio:4/4.4}
+.galeria .g2,.galeria .g3{aspect-ratio:4/3}
+.galeria .g2 img{object-position:center 40%}
+.galeria .g3 img{object-position:center 75%}
+.galeria figcaption{position:absolute;left:0;right:0;bottom:0;background:rgba(27,28,31,.78);color:#fff;font-size:13px;padding:7px 12px}
+
+/* contacto */
+.contacto{background:var(--camilla);color:#fff}
+.contacto h2{color:#fff}
+.contacto .lede{color:#b8b8bc}
+.ct-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:stretch;margin-top:40px}
+.datos{list-style:none}
+.datos li{display:grid;grid-template-columns:128px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid #2c2c30}
+.datos li:first-child{border-top:1px solid #2c2c30}
+.datos span{color:#a4a4aa;font-weight:600;font-size:15px}
+.datos a{color:#fff}
+.contacto .ctas{margin:28px 0 0}
+.contacto .btn-tel{border-color:#fff;color:#fff}
+.contacto .btn-tel:hover{background:#fff;color:var(--camilla)}
+.mapa{position:relative;min-height:420px;background:#232327;border:1px solid #2c2c30}
+.mapa .fb{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;text-align:center;padding:24px;color:#ddd}
+.mapa .fb a{color:#fff;font-weight:700}
+.mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+footer{background:#0e0e10;color:#9a9aa0;font-size:14px;padding:28px 0 32px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:baseline}
+footer b{color:#fff;font-family:var(--display);font-weight:600;font-size:20px}
+
+.float{display:none}
+
+@media (max-width:960px){
+  .hero-grid{grid-template-columns:1fr;min-height:0}
+  .hero-txt{padding:40px 22px 48px}
+  .hero-foto{min-height:0;aspect-ratio:4/3.3}
+  .spine{display:none}
+  .trat-grid,.con-grid,.res-grid,.ct-grid{grid-template-columns:1fr;gap:36px}
+  .res.grande{grid-row:auto}
+  .galeria{grid-template-columns:1fr}
+  .galeria .g1{grid-row:auto;aspect-ratio:4/3.2}
+  .top nav a:not(.btn){display:none}
+}
+@media (max-width:640px){
+  body{font-size:17px}
+  section{padding:64px 0}
+  .wrap{padding:0 20px}
+  .hero h1{font-size:48px}
+  .hero .sub{font-size:18px}
+  .ctas .btn{width:100%}
+  .datos li{grid-template-columns:1fr;gap:2px}
+  .mapa{min-height:320px}
+  .top .btn-wa span{display:none}
+  .top .wrap{height:60px}
+  .brand b{font-size:17px}
+  .brand img{width:34px;height:34px}
+  .hero-txt .logo-mark{width:68px;height:68px}
+  .float{display:flex;position:fixed;right:16px;bottom:16px;z-index:30;width:60px;height:60px;border-radius:50%;background:var(--wa);color:#fff;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+  .float svg{width:32px;height:32px;fill:#fff}
+  footer{padding-bottom:96px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#inicio">Saltar al contenido</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa" viewBox="0 0 32 32"><path d="M16.04 3C8.86 3 3.03 8.82 3.03 16c0 2.3.6 4.53 1.74 6.5L3 29l6.68-1.75A12.98 12.98 0 0 0 16.04 29C23.2 29 29 23.18 29 16S23.2 3 16.04 3zm0 23.8c-2.05 0-4.06-.55-5.8-1.6l-.42-.25-3.96 1.04 1.06-3.86-.27-.4A10.77 10.77 0 0 1 5.23 16c0-5.96 4.85-10.8 10.81-10.8 5.95 0 10.78 4.84 10.78 10.8 0 5.96-4.83 10.8-10.78 10.8zm5.92-8.08c-.32-.16-1.92-.95-2.22-1.06-.3-.1-.51-.16-.73.17-.21.32-.84 1.05-1.03 1.27-.19.21-.38.24-.7.08-.33-.16-1.38-.5-2.62-1.6-.97-.87-1.62-1.93-1.81-2.26-.19-.32-.02-.5.14-.66.15-.14.33-.38.49-.57.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.57-.08-.16-.72-1.75-.99-2.4-.26-.62-.53-.54-.73-.55h-.62c-.21 0-.56.08-.86.4-.3.33-1.13 1.1-1.13 2.7 0 1.58 1.16 3.12 1.32 3.33.16.22 2.28 3.48 5.52 4.88.77.33 1.37.53 1.84.68.77.25 1.48.21 2.04.13.62-.09 1.92-.79 2.19-1.55.27-.75.27-1.4.19-1.54-.08-.13-.29-.21-.62-.37z"/></symbol><symbol id="tel" viewBox="0 0 24 24"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></symbol></svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio">
+      <img src="assets/logo.webp" width="40" height="40" alt="">
+      <b>Kinesio Urquiza</b>
+    </a>
+    <nav aria-label="Secciones">
+      <a href="#tratamientos">Tratamientos</a>
+      <a href="#consultorio">El consultorio</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn btn-wa" href="https://wa.me/5491140352002?text=Hola%2C%20les%20escribo%20desde%20la%20p%C3%A1gina%20de%20Kinesio%20Urquiza.%20Quisiera%20consultar%20por%20un%20turno." target="_blank" rel="noopener" aria-label="WhatsApp: escribinos"><svg aria-hidden="true"><use href="#wa"/></svg><span>WhatsApp</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-txt">
+      <div class="spine" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <img class="logo-mark" src="assets/logo.webp" width="84" height="84" alt="Logo de Kinesio Urquiza: dos manos sosteniendo una columna">
+      <h1>Kinesio Urquiza</h1>
+      <p class="sub">Osteopatía, RPG y kinesiología deportiva en Villa Urquiza.</p>
+      <div class="ctas">
+        <a class="btn btn-wa btn-xl" href="https://wa.me/5491140352002?text=Hola%2C%20les%20escribo%20desde%20la%20p%C3%A1gina%20de%20Kinesio%20Urquiza.%20Quisiera%20consultar%20por%20un%20turno." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#wa"/></svg>Escribinos por WhatsApp</a>
+        <a class="btn btn-tel" href="tel:+541140352002"><svg aria-hidden="true"><use href="#tel"/></svg>Llamar al 11 4035-2002</a>
+      </div>
+      <p class="rating">
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <b>5,0 en Google</b>
+        <span>·</span>
+        <a href="https://www.google.com/maps/place/?q=place_id:ChIJm6fMdsa3vJUR0OhBUSd5hCs" target="_blank" rel="noopener">105 reseñas</a>
+      </p>
+    </div>
+    <figure class="hero-foto">
+      <img src="assets/consultorio.webp" width="1200" height="900" alt="Consultorio de Kinesio Urquiza: camilla, mesa de trabajo y ventanal con balcón." fetchpriority="high">
+    </figure>
+  </div>
+</section>
+
+<section id="tratamientos">
+  <div class="wrap trat-grid">
+    <div>
+      <div class="spine-rule horiz" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>Qué trabajan</h2>
+      <ul class="trat-lista">
+        <li>Osteopatía</li>
+        <li>RPG</li>
+        <li>Kinesiología deportiva</li>
+        <li>Kinesiología</li>
+        <li>Rehabilitación</li>
+      </ul>
+      <p class="trat-nota">En su Instagram también figuran ATM y MEP. Los turnos se coordinan por WhatsApp.</p>
+    </div>
+    <figure class="trat-foto">
+      <img src="assets/sala-camilla.webp" width="631" height="788" alt="Sala de atención con camilla, piso de madera y ventana con cortinas." loading="lazy">
+      <figcaption>Sala de atención.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="consultorio" id="consultorio">
+  <div class="wrap con-grid">
+    <div>
+      <div class="spine-rule horiz" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>El consultorio</h2>
+      <p class="lede">Un piso en Villa Urquiza. Particular, con factura para reintegro.</p>
+      <ul class="con-datos">
+        <li>
+          <b>5,0 en Google · 105 reseñas</b>
+          <span>Calificación pública de su ficha en Google Maps.</span>
+        </li>
+        <li>
+          <b>Lic. Franco Menzaghi</b>
+          <span>Lic. en Terapia Física (USAL), MN 15965, osteópata. Responsable del consultorio.</span>
+        </li>
+        <li>
+          <b>Atención particular</b>
+          <span>No trabajan con obras sociales ni prepagas. Dan factura para reintegro.</span>
+        </li>
+        <li>
+          <b>Mendoza 5617, 6°B</b>
+          <span>C1431, Villa Urquiza, Ciudad Autónoma de Buenos Aires.</span>
+        </li>
+      </ul>
+    </div>
+    <figure class="con-foto">
+      <img src="assets/consultorio-cortinas.webp" width="567" height="788" alt="Espacio del consultorio con camilla negra, escritorio blanco y cortinas grises." loading="lazy">
+      <figcaption>El espacio de trabajo, sobre Mendoza.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="resenas">
+  <div class="wrap">
+    <div class="spine-rule horiz" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h2>Lo que dicen en Google</h2>
+    <p class="lede">Reseñas literales, publicadas en su ficha de Google Maps.</p>
+    <div class="res-grid">
+      <article class="res grande">
+        <p class="stars" aria-label="5 estrellas">★★★★★</p>
+        <blockquote>«Excelente la atención con Nuria. Salí con mucha mejor postura y con toda la data para mantenerla y evitar contracturas. Las sesiones muy completas y útiles, y el trato espectacular.»</blockquote>
+        <cite>Erinxon V. <small>· hace 6 meses · Google</small></cite>
+      </article>
+      <article class="res">
+        <p class="stars" aria-label="5 estrellas">★★★★★</p>
+        <blockquote>«Excelente!! Profesional! Me atendí con Nuria y es muy muy buena!! Calidez y profesionalismo!»</blockquote>
+        <cite>Laura S. <small>· hace 2 meses · Google</small></cite>
+      </article>
+      <article class="res">
+        <p class="stars" aria-label="5 estrellas">★★★★★</p>
+        <blockquote>«Excelentes profesionales, no solo en el tratamiento, también en la contención. El espacio de consultorio es amplio y muy agradable. Lo recomiendo, a mi me ayudó mucho con los diversos tratamientos con enfoque multidisciplinar.»</blockquote>
+        <cite>Gabriela M. <small>· hace 6 meses · Google</small></cite>
+      </article>
+    </div>
+    <a class="ver" href="https://www.google.com/maps/place/?q=place_id:ChIJm6fMdsa3vJUR0OhBUSd5hCs" target="_blank" rel="noopener">Ver las 105 reseñas en Google</a>
+  </div>
+</section>
+
+<section class="fotos" id="espacio">
+  <div class="wrap">
+    <div class="spine-rule horiz" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h2>El espacio</h2>
+    <p class="lede">Fotos del consultorio, tomadas de su ficha de Google.</p>
+    <div class="galeria">
+      <figure class="g1">
+        <img src="assets/consultorio.webp" width="1200" height="900" alt="Vista general del consultorio, con camilla, mesa blanca y ventanal al balcón." loading="lazy">
+        <figcaption>Consultorio, Mendoza 5617.</figcaption>
+      </figure>
+      <figure class="g2">
+        <img src="assets/sala-camilla.webp" width="631" height="788" alt="Sala de atención con camilla y diplomas en la pared." loading="lazy">
+        <figcaption>Sala de atención.</figcaption>
+      </figure>
+      <figure class="g3">
+        <img src="assets/consultorio-cortinas.webp" width="567" height="788" alt="Camilla negra y zona de trabajo del consultorio." loading="lazy">
+        <figcaption>Espacio de trabajo.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="contacto" id="contacto">
+  <div class="wrap">
+    <h2>Pedí un turno</h2>
+    <p class="lede">Escribinos por WhatsApp o llamá. El consultorio está en Mendoza 5617, 6°B, Villa Urquiza.</p>
+    <div class="ct-grid">
+      <div>
+        <ul class="datos">
+          <li><span>Dirección</span><a href="https://www.google.com/maps/place/?q=place_id:ChIJm6fMdsa3vJUR0OhBUSd5hCs" target="_blank" rel="noopener">Mendoza 5617, 6°B, C1431, Villa Urquiza, CABA</a></li>
+          <li><span>WhatsApp</span><a href="https://wa.me/5491140352002?text=Hola%2C%20les%20escribo%20desde%20la%20p%C3%A1gina%20de%20Kinesio%20Urquiza.%20Quisiera%20consultar%20por%20un%20turno." target="_blank" rel="noopener">11 4035-2002</a></li>
+          <li><span>Teléfono</span><a href="tel:+541140352002">011 4035-2002</a></li>
+          <li><span>Instagram</span><a href="https://www.instagram.com/kinesiourquiza/" target="_blank" rel="noopener">@kinesiourquiza</a></li>
+          <li><span>Modalidad</span><span style="color:#fff;font-weight:400">Particular. No trabajan con obras sociales ni prepagas; dan factura para reintegro.</span></li>
+        </ul>
+        <div class="ctas">
+          <a class="btn btn-wa btn-xl" href="https://wa.me/5491140352002?text=Hola%2C%20les%20escribo%20desde%20la%20p%C3%A1gina%20de%20Kinesio%20Urquiza.%20Quisiera%20consultar%20por%20un%20turno." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#wa"/></svg>Escribinos por WhatsApp</a>
+          <a class="btn btn-tel" href="tel:+541140352002"><svg aria-hidden="true"><use href="#tel"/></svg>Llamar</a>
+        </div>
+      </div>
+      <div class="mapa">
+        <div class="fb">
+          <p>Mapa de Mendoza 5617, Villa Urquiza.</p>
+          <a href="https://www.google.com/maps/place/?q=place_id:ChIJm6fMdsa3vJUR0OhBUSd5hCs" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+        <iframe title="Mapa: Mendoza 5617, 6°B, Villa Urquiza, CABA" src="https://www.google.com/maps?q=Mendoza+5617,+Villa+Urquiza,+CABA&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Kinesio Urquiza</b> · Lic. Franco Menzaghi, MN 15965</p>
+    <p>Mendoza 5617 6°B, Villa Urquiza</p>
+  </div>
+</footer>
+
+<a class="float" href="https://wa.me/5491140352002?text=Hola%2C%20les%20escribo%20desde%20la%20p%C3%A1gina%20de%20Kinesio%20Urquiza.%20Quisiera%20consultar%20por%20un%20turno." target="_blank" rel="noopener" aria-label="Escribir por WhatsApp a Kinesio Urquiza"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+</body>
+</html>
