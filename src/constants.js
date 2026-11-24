@@ -44,3 +44,16 @@ export const ESTADO_INTERACCION = {
   borrador: 'Borrador',
   aprobado: 'Aprobado',
 };
+
+/** URLs de demos publicadas, por slug. Preferimos demos.url_publicada (demo_url en v_pipeline). */
+export const DEMO_URLS = {
+  'kinesio-urquiza': 'https://santiagoasdf.github.io/faro/demos/kinesio-urquiza/',
+  'ahl-service-tecnico': 'https://santiagoasdf.github.io/ahl-service-tecnico/',
+};
+
+export function urlDemo(n) {
+  if (!n) return null;
+  const directa = String(n.demo_url || '').trim();
+  if (directa) return /^https?:\/\//i.test(directa) ? directa : `https://${directa}`;
+  return (n.slug && DEMO_URLS[n.slug]) || null;
+}

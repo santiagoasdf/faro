@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { COLUMNAS, CANAL_LABEL } from '../constants.js';
-import { cuando, haceCuanto, norm, numero, rating } from '../format.js';
+import { COLUMNAS, CANAL_LABEL, urlDemo } from '../constants.js';
+import { cuando, haceCuanto, linkUrl, norm, numero, rating } from '../format.js';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Icon, Vacio } from './ui.jsx';
 
@@ -64,6 +64,19 @@ function Tarjeta({ n, ctx, onArrastrar }) {
         <span class="tarjeta-chips">
           <Rating valor={n.rating_google} resenas={n.resenas_google} />
           {n.demo_id && <span class="chip chip-demo">Demo{n.demo_estado ? `: ${n.demo_estado}` : ''}</span>}
+          {urlDemo(n) && (
+            <a
+              class="enlace-demo"
+              href={linkUrl(urlDemo(n))}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Abrir la demo en una pestaña nueva"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Icon name="externo" size={13} />
+              Ver demo
+            </a>
+          )}
         </span>
         <span class="tarjeta-pie">
           <span class="tarjeta-ultimo">{ultimo}</span>

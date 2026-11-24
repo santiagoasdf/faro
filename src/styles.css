@@ -2073,6 +2073,19 @@ summary.grupo-cabeza {
   text-decoration: none;
 }
 .enlace-faro:hover { background: var(--accent-soft); color: var(--accent); }
+.enlace-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.enlace-demo:hover { filter: brightness(0.96); }
 .enlaces-detalle { margin-top: 8px; }
 .enlaces-en-lead { margin-top: 6px; }
 .chip-persona {

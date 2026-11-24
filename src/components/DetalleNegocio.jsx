@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { api } from '../api.js';
-import { CANALES, COLUMNA, RESULTADOS } from '../constants.js';
+import { CANALES, COLUMNA, RESULTADOS, urlDemo } from '../constants.js';
 import {
   cuando, fecha, fechaHora, haceCuanto, linkInstagram, linkTel, linkUrl, linkWhatsapp,
 } from '../format.js';
@@ -303,11 +303,11 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
               <Dato key={d.id} label="Otro contacto">{`${d.nombre}${d.cargo ? `, ${d.cargo}` : ''}`}</Dato>
             ))}
             <Dato label="Demo">
-              {n.demo_id || demo ? (
+              {n.demo_id || demo || urlDemo(n) ? (
                 <span class="dato-demo">
                   {n.demo_estado || demo?.estado || 'Sin estado'}
-                  {n.demo_url && (
-                    <a href={linkUrl(n.demo_url)} target="_blank" rel="noopener noreferrer" class="link-ext">
+                  {urlDemo(n) && (
+                    <a href={linkUrl(urlDemo(n))} target="_blank" rel="noopener noreferrer" class="link-ext">
                       Ver demo <Icon name="externo" size={14} />
                     </a>
                   )}
