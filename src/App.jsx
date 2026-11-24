@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { api } from './api.js';
 import { PERFIL_DEFAULT } from './config.js';
+import { filaLead, filaNegocio } from './alta.js';
 import { COLUMNA, ETAPAS_CERRADAS, grupoOrden } from './constants.js';
 import { hoyBA, primerNombre } from './format.js';
 import { Login } from './components/Login.jsx';
@@ -250,6 +251,48 @@ export function App() {
     }
   }, [seguimiento, refrescarLead]);
 
+  const crearNegocio = useCallback(async (form) => {
+    const fila = filaNegocio(form, {
+      slugs: (pipeline || []).map((n) => n.slug),
+      email: yo?.email,
+    });
+    try {
+      const creado = await api.crearNegocio(fila);
+      const row = derivarNegocio(creado);
+      setPipeline((lista) => [row, ...(lista || []).filter((n) => n.id !== row.id)]);
+      setColActiva(row.columna || fila.etapa || 'candidato');
+      toast('Negocio creado');
+      return row;
+    } catch (e) {
+      toast(mensajeError(e, 'crear el negocio'), 'error');
+      return null;
+    }
+  }, [pipeline, yo]);
+
+  const crearLead = useCallback(async (form) => {
+    const fila = filaLead(form, {
+      claves: (seguimiento || []).map((l) => l.clave),
+      email: yo?.email,
+    });
+    try {
+      const creado = await api.crearLead(fila);
+      const row = derivarLead(creado);
+      setSeguimiento((lista) => [row, ...(lista || []).filter((l) => l.id !== row.id)]);
+      setFiltrosSeg((f) => {
+        const next = { ...f, texto: '', soloVencidos: false };
+        if (row.activo === false) next.verInactivos = true;
+        if (next.perfil && row.perfil && next.perfil !== row.perfil) next.perfil = row.perfil;
+        if (next.area && row.area && next.area !== row.area) next.area = row.area;
+        return next;
+      });
+      toast('Lead creado');
+      return row;
+    } catch (e) {
+      toast(mensajeError(e, 'crear el lead'), 'error');
+      return null;
+    }
+  }, [seguimiento, yo, setFiltrosSeg]);
+
   const nombreDe = useCallback(
     (email) => (email ? primerNombre(usuarios[email], email) : ''),
     [usuarios],
@@ -258,9 +301,9 @@ export function App() {
   const ctx = useMemo(() => ({
     yo, usuarios, nombreDe, pipeline, seguimiento, filtrosSeg, setFiltrosSeg,
     colActiva, setColActiva, ir, abrir, moverNegocio, editarNegocio, refrescarNegocio,
-    editarLead, refrescarLead,
+    editarLead, refrescarLead, crearNegocio, crearLead,
   }), [yo, usuarios, nombreDe, pipeline, seguimiento, filtrosSeg, setFiltrosSeg, colActiva, ir, abrir,
-    moverNegocio, editarNegocio, refrescarNegocio, editarLead, refrescarLead]);
+    moverNegocio, editarNegocio, refrescarNegocio, editarLead, refrescarLead, crearNegocio, crearLead]);
 
   // ---------- Render ----------
   if (estado === 'cargando') {

@@ -2313,3 +2313,125 @@ summary.grupo-cabeza {
 @media (min-width: 1200px) {
   .cal-sin-lista { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ---------- Alta manual de leads ---------- */
+.barra-titulos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.barra-titulo-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.barra-titulos .btn {
+  flex: 0 0 auto;
+}
+
+.campo-error {
+  font-size: 0.8125rem;
+  color: var(--danger);
+}
+input[aria-invalid='true'],
+textarea[aria-invalid='true'],
+select[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.alta-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(560px, calc(100vw - 24px));
+  max-width: none;
+  height: auto;
+  max-height: min(90dvh, 760px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r, 16px);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 16px 48px rgb(20 32 51 / 0.22);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.alta-dialog:not([open]) { display: none; }
+.alta-dialog::backdrop {
+  background: rgb(20 32 51 / 0.4);
+}
+.alta-hoja {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: inherit;
+  overflow: hidden;
+}
+.alta-cabeza {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px 10px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.alta-cabeza h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+.alta-campos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.alta-campos .campo:has(textarea) {
+  grid-column: 1 / -1;
+}
+.alta-aviso {
+  margin: 0 20px 4px;
+  padding: 10px 12px;
+  border-radius: var(--r-s);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface-2, #f3f5f8));
+  color: var(--ink);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.alta-aviso.es-error {
+  background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+  color: var(--danger);
+}
+.alta-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+@media (min-width: 560px) {
+  .alta-campos {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 559px) {
+  .alta-dialog[open] {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+    align-self: end;
+  }
+  .alta-acciones { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+}

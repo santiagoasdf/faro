@@ -227,6 +227,16 @@ const realApi = {
     alMenosUna(q((c) => c.from('negocios').update(patch).eq('id', id).select('id'))),
   editarLead: (id, patch) =>
     alMenosUna(q((c) => c.from('seguimiento_leads').update(patch).eq('id', id).select('id'))),
+  async crearNegocio(fila) {
+    const row = await q((c) => c.from('negocios').insert(fila).select('id').single());
+    const vista = await this.pipelineFila(row.id);
+    return vista || { ...fila, id: row.id, columna: fila.etapa, created_at: new Date().toISOString() };
+  },
+  async crearLead(fila) {
+    const row = await q((c) => c.from('seguimiento_leads').insert(fila).select('id').single());
+    const vista = await this.seguimientoFila(row.id);
+    return vista || { ...fila, id: row.id, created_at: new Date().toISOString() };
+  },
   registrarContacto: (fila) =>
     q((c) => c.from('interacciones').insert(fila).select('id,canal,mensaje,estado,fecha,notas,autor_email,decisor_id').single()),
   agregarNota: (fila) =>

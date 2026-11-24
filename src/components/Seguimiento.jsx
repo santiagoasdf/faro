@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
 import { GRUPOS } from '../constants.js';
 import { cuando, fechaHoraCorta, norm, numero } from '../format.js';
+import { FormularioNuevoLead } from './FormularioNuevoLead.jsx';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { BotonMas, Icon, PAGINA, Vacio } from './ui.jsx';
 
@@ -54,6 +55,7 @@ export function Seguimiento({ ctx }) {
   const { seguimiento, filtrosSeg: f, setFiltrosSeg, abrir } = ctx;
   const set = (k, v) => setFiltrosSeg((prev) => ({ ...prev, [k]: v }));
   const [visibles, setVisibles] = useState({});
+  const [alta, setAlta] = useState(false);
 
   const perfiles = useMemo(
     () => [...new Set(seguimiento.map((l) => l.perfil).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')),
@@ -85,7 +87,13 @@ export function Seguimiento({ ctx }) {
     <div class="seguimiento">
       <div class="barra barra-seg">
         <div class="barra-titulos">
-          <h1 class="barra-titulo">Seguimiento</h1>
+          <div class="barra-titulo-fila">
+            <h1 class="barra-titulo">Seguimiento</h1>
+            <button type="button" class="btn btn-primario btn-chico" onClick={() => setAlta(true)}>
+              <Icon name="mas" size={16} />
+              Nuevo lead
+            </button>
+          </div>
           {snapshot && <p class="barra-nota">Datos de cele.be al {fechaHoraCorta(snapshot)}</p>}
         </div>
         <label class="buscador">
@@ -166,6 +174,13 @@ export function Seguimiento({ ctx }) {
           })}
         </div>
       )}
+      <FormularioNuevoLead
+        tipo="seguimiento"
+        abierto={alta}
+        onCerrar={() => setAlta(false)}
+        onGuardar={ctx.crearLead}
+        ctx={ctx}
+      />
     </div>
   );
 }

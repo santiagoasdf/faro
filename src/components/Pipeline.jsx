@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { COLUMNAS, CANAL_LABEL, urlDemo } from '../constants.js';
 import { cuando, haceCuanto, linkUrl, norm, numero, rating } from '../format.js';
+import { FormularioNuevoLead } from './FormularioNuevoLead.jsx';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Icon, Vacio } from './ui.jsx';
 
@@ -101,6 +102,7 @@ export function Pipeline({ ctx }) {
   const [arrastrando, setArrastrando] = useState(null);
   const [sobre, setSobre] = useState(null);
   const [visibles, setVisibles] = useState({});
+  const [alta, setAlta] = useState(false);
   const tabsRef = useRef(null);
   const PAGINA = 10;
 
@@ -131,7 +133,13 @@ export function Pipeline({ ctx }) {
   return (
     <div class="pipeline">
       <div class="barra">
-        <h1 class="barra-titulo">Pipeline</h1>
+        <div class="barra-titulo-fila">
+          <h1 class="barra-titulo">Pipeline</h1>
+          <button type="button" class="btn btn-primario btn-chico" onClick={() => setAlta(true)}>
+            <Icon name="mas" size={16} />
+            Nuevo lead
+          </button>
+        </div>
         <label class="buscador">
           <Icon name="buscar" size={16} />
           <span class="sr-only">Buscar negocio</span>
@@ -228,6 +236,13 @@ export function Pipeline({ ctx }) {
       {pipeline.length === 0 && (
         <Vacio titulo="Todavía no hay negocios en el pipeline.">Cuando Mapin cargue candidatos, aparecen acá.</Vacio>
       )}
+      <FormularioNuevoLead
+        tipo="pipeline"
+        abierto={alta}
+        onCerrar={() => setAlta(false)}
+        onGuardar={ctx.crearNegocio}
+        ctx={ctx}
+      />
     </div>
   );
 }
