@@ -51,11 +51,12 @@ export const DEMO_URLS = {
   'decor-arte-cortinas': 'https://santiagoasdf.github.io/faro/demos/decor-arte-cortinas/',
   'afinador-pianos-morita': 'https://santiagoasdf.github.io/faro/demos/afinador-pianos-morita/',
   'leonardo-gonzalez-reparaciones': 'https://santiagoasdf.github.io/faro/demos/leonardo-gonzalez-reparaciones/',
+  'podologa-rosalia-olszak': 'https://santiagoasdf.github.io/faro/demos/podologa-rosalia-olszak/',
   'ahl-service-tecnico': 'https://santiagoasdf.github.io/ahl-service-tecnico/',
 };
 
 /** Demos alojadas en Faro que tienen PDF (web 1440 y mobile 390): <slug>/<slug>-desktop.pdf y -mobile.pdf. */
-export const DEMOS_CON_PDF = ['kinesio-urquiza', 'decor-arte-cortinas', 'afinador-pianos-morita', 'leonardo-gonzalez-reparaciones'];
+export const DEMOS_CON_PDF = ['kinesio-urquiza', 'decor-arte-cortinas', 'afinador-pianos-morita', 'leonardo-gonzalez-reparaciones', 'podologa-rosalia-olszak'];
 const BASE_DEMOS = 'https://santiagoasdf.github.io/faro/demos';
 export function urlsPdf(n) {
   const s = n?.slug;
