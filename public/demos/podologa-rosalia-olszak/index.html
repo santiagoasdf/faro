@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/nunito.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/bodegon-planta.webp" as="image" fetchpriority="high">
 <style>
 @font-face{font-family:"Newsreader";src:url(assets/fonts/newsreader-latin-ext.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;font-optical-sizing:auto;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:"Newsreader";src:url(assets/fonts/newsreader.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;font-optical-sizing:auto;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -33,7 +34,13 @@
   --header:64px;
   --display:"Newsreader",Georgia,"Times New Roman",serif;
   --body:"Nunito Sans",system-ui,sans-serif;
-  --max:1120px;
+  --max:1180px;
+  --lino:url(assets/lino-textura.webp);
+  --granito:
+    radial-gradient(circle at 18% 32%, rgba(232,208,200,.85) 1.1px, transparent 1.3px),
+    radial-gradient(circle at 72% 64%, rgba(74,52,46,.28) .9px, transparent 1.15px),
+    radial-gradient(circle at 48% 78%, rgba(10,100,86,.28) .8px, transparent 1.05px),
+    radial-gradient(circle at 88% 22%, rgba(232,208,200,.55) .7px, transparent .95px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--buybar) + var(--header) + 10px)}
@@ -44,6 +51,13 @@ a{color:inherit}
 .skip{position:absolute;left:-999px;top:0;background:var(--tinta);color:var(--papel);padding:8px 16px;z-index:80}
 .skip:focus{left:12px;top:calc(var(--buybar) + 8px)}
 :focus-visible{outline:3px solid var(--esmeralda);outline-offset:3px}
+
+.campo-lino{
+  background-color:var(--papel);
+  background-image:var(--lino), var(--granito);
+  background-size:720px auto, 26px 26px, 34px 34px, 22px 22px, 40px 40px;
+  background-blend-mode:soft-light, normal, normal, normal, normal;
+}
 
 /* LevelUp buy bar: uppercase is an explicit exception */
 .buybar{
@@ -75,13 +89,18 @@ a{color:inherit}
 .top .btn-wa{display:inline-flex;align-items:center;gap:8px;background:var(--esmeralda);color:var(--hoja);text-decoration:none;font-weight:700;font-size:14px;padding:9px 14px;border-radius:6px}
 .top .btn-wa:hover{background:var(--esmeralda-oscura)}
 
-.hero{padding:48px 0 24px}
+.hero{position:relative}
+.hero-grid{
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  min-height:min(78vh,760px);align-items:stretch;
+}
+.hero-col{display:flex;align-items:center;justify-content:center;padding:56px 28px 56px 6vw}
 .tarjeta{
   display:grid;grid-template-columns:72px 1fr;
-  max-width:860px;margin:0 auto;
+  width:100%;max-width:620px;
   background:var(--hoja);
   border:1px solid var(--linea);
-  box-shadow:0 18px 40px rgba(26,25,22,.08), 0 1px 0 rgba(255,255,255,.8) inset;
+  box-shadow:0 22px 50px rgba(26,25,22,.12), 0 1px 0 rgba(255,255,255,.85) inset;
   animation:asiento .6s ease-out both;
 }
 @keyframes asiento{
@@ -111,14 +130,13 @@ a{color:inherit}
   text-align:center;
 }
 .talon strong{display:block;font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:0;line-height:1;margin-bottom:6px}
-
-.tarjeta-cuerpo{padding:36px 44px 40px}
+.tarjeta-cuerpo{padding:36px 40px 40px}
 .kicker{font-size:14px;font-weight:700;color:var(--esmeralda);margin:0 0 10px;letter-spacing:.02em}
 .tarjeta-cuerpo h1{
-  font-family:var(--display);font-weight:600;font-size:clamp(42px,7vw,76px);
+  font-family:var(--display);font-weight:600;font-size:clamp(40px,5.6vw,68px);
   line-height:.95;letter-spacing:-.03em;margin:0 0 18px;
 }
-.lead{font-size:19px;color:var(--muted);max-width:34em;margin:0 0 28px}
+.lead{font-size:18px;color:var(--muted);max-width:34em;margin:0 0 28px}
 .hero-cta{display:flex;flex-wrap:wrap;gap:12px}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -130,59 +148,101 @@ a{color:inherit}
 .btn-primary:hover{background:var(--esmeralda-oscura);border-color:var(--esmeralda-oscura)}
 .btn-ghost{background:transparent;color:var(--tinta);border-color:var(--madera)}
 .btn-ghost:hover{background:var(--rosa)}
+.hero-bodegon{margin:0;min-height:100%;overflow:hidden}
+.hero-bodegon img{width:100%;height:100%;object-fit:cover;object-position:68% 82%;min-height:100%}
 
-.confianza{padding:10px 0 56px}
-.confianza ul{
-  list-style:none;display:grid;grid-template-columns:repeat(4,1fr);
-  gap:0;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);
-}
-.confianza li{padding:22px 20px;border-right:1px solid var(--linea)}
-.confianza li:first-child{padding-left:0}
-.confianza li:last-child{border-right:0;padding-right:0}
-.confianza strong{display:block;font-family:var(--display);font-size:32px;font-weight:600;line-height:1;letter-spacing:-.03em}
-.confianza span{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:600}
+.confianza{background:var(--esmeralda);color:var(--hoja);padding:48px 0 52px;position:relative;overflow:hidden}
+.confianza .hoja-deco{position:absolute;right:-20px;bottom:-30px;width:220px;height:220px;opacity:.14;pointer-events:none}
+.folio{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:end}
+.folio-marca{font-size:13px;font-weight:700;letter-spacing:.08em;opacity:.8;margin:0 0 8px}
+.folio-num{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.folio-num strong{font-family:var(--display);font-weight:600;font-size:clamp(64px,8vw,96px);line-height:.85;letter-spacing:-.04em}
+.folio-num span{font-size:20px;font-weight:600}
+.folio-meta{font-size:16px;font-weight:600;opacity:.9;padding-bottom:8px}
 
-.servicios{padding:24px 0 80px}
+.servicios{padding:80px 0}
+.servicios-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:56px;align-items:end}
 .servicios h2,.reseñas h2,.consultorio h2,.contacto h2{
-  font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);
+  font-family:var(--display);font-weight:600;font-size:clamp(30px,4.2vw,46px);
   letter-spacing:-.03em;line-height:1.1;margin:0 0 8px;
 }
 .intro{color:var(--muted);margin:0 0 32px;max-width:36em}
-.menu{
-  list-style:none;border-top:1px solid var(--linea);
-}
-.menu li{
-  display:grid;grid-template-columns:minmax(200px,.9fr) 1.4fr;
-  gap:28px;align-items:baseline;
-  padding:26px 0;border-bottom:1px solid var(--linea);
-}
-.menu h3{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-.02em;line-height:1.15}
+.menu{list-style:none;border-top:1px solid var(--linea)}
+.menu li{padding:26px 0;border-bottom:1px solid var(--linea)}
+.menu h3{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-.02em;line-height:1.15;margin:0 0 8px}
 .menu p{color:var(--muted);margin:0;max-width:38em}
+.foto-toallas{margin:0}
+.foto-toallas img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center;border:1px solid var(--linea)}
+.foto-toallas figcaption,.archivo{font-size:13px;color:var(--muted);margin-top:10px}
 
-.consultorio{padding:0 0 80px}
-.consultorio .banda{margin:28px 0 0}
-.consultorio .banda img{width:100%;height:auto;aspect-ratio:1200/820;object-fit:cover;object-position:center 30%}
-.consultorio figcaption{
-  max-width:var(--max);margin:14px auto 0;padding:0 28px;
-  font-size:14px;color:var(--muted);
+.franja-euca{margin:0;position:relative;line-height:0}
+.franja-euca img{width:100%;height:min(46vh,420px);object-fit:cover;object-position:center 55%}
+.franja-euca figcaption{
+  position:absolute;left:28px;bottom:14px;
+  font-size:12px;color:rgba(251,248,245,.85);text-shadow:0 1px 2px rgba(0,0,0,.35);
+  line-height:1.3;
 }
 
-.reseñas{padding:0 0 80px}
-.res-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;
-}
-blockquote{
-  background:var(--hoja);border:1px solid var(--linea);padding:24px 24px 22px;
-}
-blockquote p{
+.reseñas{padding:80px 0 0}
+.reseñas .wrap.cab{margin-bottom:36px}
+.cita-destacada{background:var(--esmeralda-oscura);color:var(--hoja);margin:0 0 36px}
+.cita-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:0;align-items:stretch;padding:0}
+.cita-destacada blockquote{padding:56px 8px 56px 0;margin:0;border:0;background:transparent}
+.cita-destacada blockquote p{
   font-family:var(--display);font-style:italic;font-weight:400;
-  font-size:20px;line-height:1.45;letter-spacing:-.01em;
+  font-size:clamp(22px,2.4vw,30px);line-height:1.4;letter-spacing:-.015em;
 }
-blockquote footer{margin-top:16px;font-style:normal;font-size:14px;font-weight:700;color:var(--muted);font-family:var(--body)}
+.cita-destacada footer{margin-top:22px;font-style:normal;font-size:14px;font-weight:700;color:rgba(251,248,245,.8);font-family:var(--body)}
+.cita-destacada .estrellas{color:#E8D0C8;letter-spacing:.12em;margin-right:8px}
+.cita-foto{margin:0;min-height:100%;overflow:hidden}
+.cita-foto img{width:100%;height:100%;object-fit:cover;object-position:center;min-height:280px}
+
+.fichas{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:80px}
+.ficha{
+  display:grid;grid-template-columns:18px 1fr;
+  background:var(--hoja);border:1px solid var(--linea);
+  box-shadow:0 10px 24px rgba(26,25,22,.05);
+}
+.ficha .taloncito{background:var(--esmeralda);position:relative}
+.ficha .taloncito::after{
+  content:"";position:absolute;right:-5px;top:0;bottom:0;width:10px;
+  background:radial-gradient(circle,var(--papel) 3.5px,transparent 4px);
+  background-size:10px 14px;background-repeat:repeat-y;
+  pointer-events:none;
+}
+.ficha .cuerpo{padding:22px 22px 20px}
+.ficha p{
+  font-family:var(--display);font-style:italic;font-weight:400;
+  font-size:17px;line-height:1.45;letter-spacing:-.01em;
+}
+.ficha footer{margin-top:16px;font-style:normal;font-size:13px;font-weight:700;color:var(--muted);font-family:var(--body)}
 .estrellas{color:var(--esmeralda);letter-spacing:.12em;margin-right:8px;font-style:normal}
 
-.contacto{padding:0 0 80px}
-.ct-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:40px;align-items:start}
+.consultorio{padding:0 0 0}
+.consultorio-banda{margin:0;position:relative;line-height:0}
+.consultorio-banda img{width:100%;height:min(78vh,720px);object-fit:cover;object-position:center 30%}
+.consultorio-banda figcaption{
+  position:absolute;left:0;right:0;bottom:0;
+  background:linear-gradient(to top,rgba(26,25,22,.78) 0%,rgba(26,25,22,.35) 55%,rgba(26,25,22,0) 100%);
+  color:var(--hoja);padding:88px 28px 28px;line-height:1.3;
+}
+.consultorio-banda h2,.consultorio-banda p{text-shadow:0 1px 8px rgba(26,25,22,.45)}
+.consultorio-banda .placa{max-width:var(--max);margin:0 auto}
+.consultorio-banda h2{color:var(--hoja);margin:0 0 6px;font-size:clamp(30px,4vw,46px)}
+.consultorio-banda p{margin:0;font-size:16px;font-weight:600;color:rgba(251,248,245,.9)}
+
+.contacto{padding:80px 0}
+.ct-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:stretch}
+.tarjeta-visita{
+  background:var(--hoja);
+  border:1px solid var(--linea);
+  box-shadow:0 18px 40px rgba(26,25,22,.08);
+  padding:36px 36px 28px;
+  position:relative;
+}
+.tarjeta-visita::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--esmeralda);
+}
 .datos{list-style:none}
 .datos > div{padding:14px 0;border-top:1px solid var(--linea)}
 .datos > div:last-child{border-bottom:1px solid var(--linea)}
@@ -190,31 +250,38 @@ blockquote footer{margin-top:16px;font-style:normal;font-size:14px;font-weight:7
 .datos dd{margin:0}
 .datos a{color:var(--esmeralda);font-weight:700;text-decoration:none}
 .datos a:hover{text-decoration:underline}
-.mapa{
-  position:relative;min-height:380px;background:var(--rosa);
+.mapa-mat{
+  background:var(--hoja);
   border:1px solid var(--linea);
+  padding:12px;
+  box-shadow:0 18px 40px rgba(26,25,22,.08);
+  display:flex;flex-direction:column;
 }
+.mapa-mat .marco{flex:1;position:relative;min-height:380px;border:1px solid var(--madera);background:var(--rosa)}
 .mapa-fallback{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:24px;text-decoration:none;font-weight:700;color:var(--madera);
 }
-.mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mapa-mat iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mapa-mat p{font-size:13px;color:var(--muted);margin:10px 4px 2px}
 
-.site-foot{border-top:1px solid var(--linea);padding:28px 0 36px;font-size:14px;color:var(--muted)}
+.site-foot{border-top:1px solid var(--linea);padding:28px 0 36px;font-size:14px;color:var(--muted);background:var(--papel)}
 .site-foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:baseline}
 .site-foot b{color:var(--tinta);font-family:var(--display);font-weight:600;font-size:18px}
 
 .float{display:none}
 
-@media (max-width:900px){
-  .confianza ul{grid-template-columns:1fr 1fr}
-  .confianza li{border-bottom:1px solid var(--linea)}
-  .confianza li:nth-child(2n){border-right:0}
-  .confianza li:nth-child(3),.confianza li:nth-child(4){border-bottom:0}
-  .confianza li:first-child,.confianza li:nth-child(3){padding-left:0}
-  .menu li{grid-template-columns:1fr;gap:8px}
-  .ct-grid{grid-template-columns:1fr;gap:28px}
-  .res-grid{grid-template-columns:1fr}
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;min-height:0}
+  .hero-col{padding:36px 24px 40px;order:2}
+  .hero-bodegon{order:1;min-height:0;height:auto}
+  .hero-bodegon img{min-height:0;height:auto;aspect-ratio:16/9;object-position:50% 90%}
+  .folio{grid-template-columns:1fr;gap:8px}
+  .servicios-grid,.cita-grid,.ct-grid{grid-template-columns:1fr;gap:28px}
+  .fichas{grid-template-columns:1fr}
+  .cita-destacada blockquote{padding:36px 0 12px}
+  .cita-foto img{min-height:0;aspect-ratio:16/8}
+  .hero-cta .btn{width:auto}
 }
 
 @media (max-width:720px){
@@ -224,8 +291,10 @@ blockquote footer{margin-top:16px;font-style:normal;font-size:14px;font-weight:7
   .top .btn-wa span.label{display:none}
   body{font-size:17px}
   .wrap{padding:0 20px}
-  .hero{padding:28px 0 16px}
-  .tarjeta{grid-template-columns:1fr}
+  .hero-col{padding:20px 16px 88px}
+  .hero-bodegon img{aspect-ratio:16/9}
+  .confianza .hoja-deco{width:140px;height:140px;right:-10px;bottom:-24px}
+  .tarjeta{grid-template-columns:1fr;max-width:none}
   .talon{flex-direction:row;justify-content:center;gap:28px;padding:12px 16px}
   .talon p{writing-mode:horizontal-tb;transform:none;font-size:13px;display:flex;align-items:baseline;gap:8px}
   .talon strong{display:inline;font-size:22px;margin:0}
@@ -236,11 +305,16 @@ blockquote footer{margin-top:16px;font-style:normal;font-size:14px;font-weight:7
   }
   .tarjeta-cuerpo{padding:28px 22px 32px}
   .hero-cta .btn{width:100%}
-  .confianza{padding-bottom:40px}
-  .confianza li:first-child{padding-left:0}
-  .servicios,.consultorio,.reseñas,.contacto{padding-bottom:64px}
-  .consultorio figcaption{padding:0 20px}
-  .mapa{min-height:320px}
+  .servicios,.reseñas,.contacto{padding-top:64px}
+  .fichas{padding-bottom:64px}
+  .confianza{padding:36px 0 40px}
+  .folio-num strong{font-size:72px}
+  .franja-euca img{height:220px}
+  .franja-euca figcaption{left:20px}
+  .consultorio-banda img{height:420px}
+  .consultorio-banda figcaption{padding:64px 20px 22px}
+  .tarjeta-visita{padding:28px 22px 22px 28px}
+  .mapa-mat .marco{min-height:320px}
   .float{
     display:flex;position:fixed;right:16px;bottom:16px;z-index:30;
     width:60px;height:60px;border-radius:50%;
@@ -280,102 +354,137 @@ blockquote footer{margin-top:16px;font-style:normal;font-size:14px;font-weight:7
 </header>
 
 <main id="inicio">
-  <section class="hero" aria-labelledby="titular">
-    <div class="wrap">
-      <article class="tarjeta">
-        <div class="talon">
-          <p><strong>4,9</strong> en Google</p>
-          <p>380 reseñas</p>
-        </div>
-        <div class="tarjeta-cuerpo">
-          <p class="kicker">Podóloga UBA · Caballito</p>
-          <h1 id="titular">Rosalía Olszak</h1>
-          <p class="lead">Consultorio en José Bonifacio 1633. Tratamiento de uña encarnada con seguimiento, y atención de adultos y de chicos.</p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="https://wa.me/5491165041006?text=Hola%20Rosal%C3%ADa%2C%20te%20escribo%20para%20consultar%20por%20un%20turno.">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 3.2 16.4L2 22l5.7-1.5A9.9 9.9 0 0 0 19.1 4.9zM12 20.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.4.9.9-3.3-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.7 6.7 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.3 0-.4.1-.5l.3-.4.1-.2c0-.1 0-.3 0-.4s-.5-1.3-.7-1.8-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.2.9 2.3a8.9 8.9 0 0 0 3.2 2.8c.4.2.7.3 1 .4a2.4 2.4 0 0 0 1.1.1c.3 0 1.1-.5 1.3-1s.2-.9.1-1-.2-.2-.4-.3z"/></svg>
-              Escribime por WhatsApp
-            </a>
-            <a class="btn btn-ghost" href="tel:+5491165041006">Llamar al 011 6504-1006</a>
+  <section class="hero campo-lino" aria-labelledby="titular">
+    <div class="hero-grid">
+      <div class="hero-col">
+        <article class="tarjeta">
+          <div class="talon">
+            <p><strong>4,9</strong> en Google</p>
+            <p>380 reseñas</p>
           </div>
-        </div>
-      </article>
+          <div class="tarjeta-cuerpo">
+            <p class="kicker">Podóloga UBA · Caballito</p>
+            <h1 id="titular">Rosalía Olszak</h1>
+            <p class="lead">Consultorio en José Bonifacio 1633. Tratamiento de uña encarnada con seguimiento, y atención de adultos y de chicos.</p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="https://wa.me/5491165041006?text=Hola%20Rosal%C3%ADa%2C%20te%20escribo%20para%20consultar%20por%20un%20turno.">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 3.2 16.4L2 22l5.7-1.5A9.9 9.9 0 0 0 19.1 4.9zM12 20.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.4.9.9-3.3-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.7 6.7 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.3 0-.4.1-.5l.3-.4.1-.2c0-.1 0-.3 0-.4s-.5-1.3-.7-1.8-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.2.9 2.3a8.9 8.9 0 0 0 3.2 2.8c.4.2.7.3 1 .4a2.4 2.4 0 0 0 1.1.1c.3 0 1.1-.5 1.3-1s.2-.9.1-1-.2-.2-.4-.3z"/></svg>
+                Escribime por WhatsApp
+              </a>
+              <a class="btn btn-ghost" href="tel:+5491165041006">Llamar al 011 6504-1006</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <figure class="hero-bodegon">
+        <img src="assets/bodegon-planta.webp" width="1481" height="1600" alt="Bodegón de lino, un jarrón de cerámica y una rama. Foto de archivo, no es el consultorio." fetchpriority="high">
+      </figure>
     </div>
   </section>
 
   <section class="confianza" aria-label="Datos de la ficha de Google">
+    <svg class="hoja-deco" viewBox="0 0 120 120" aria-hidden="true">
+      <path fill="currentColor" d="M62 10c8 18 6 36-2 50 14 2 28-6 40-18-2 22-16 40-36 48 10 10 14 24 12 36-16-10-28-28-30-48-18 8-28 24-32 42-6-20 0-42 16-58C18 52 10 34 12 16c16 8 32 10 50-6z"/>
+    </svg>
     <div class="wrap">
-      <ul>
-        <li><strong>4,9</strong><span>en Google</span></li>
-        <li><strong>380</strong><span>reseñas</span></li>
-        <li><strong>UBA</strong><span>Podóloga</span></li>
-        <li><strong>CABA</strong><span>Caballito</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="servicios" id="servicios">
-    <div class="wrap">
-      <h2>La consulta</h2>
-      <p class="intro">En el consultorio de Caballito: el cuidado de una podóloga UBA, el tratamiento de uña encarnada con seguimiento, y la atención de adultos y de chicos.</p>
-      <ul class="menu">
-        <li>
-          <h3>Podóloga UBA</h3>
-          <p>Podóloga UBA en Caballito, como se presenta en su ficha de Google y en Facebook.</p>
-        </li>
-        <li>
-          <h3>Uña encarnada, con seguimiento</h3>
-          <p>Tratamiento de uña encarnada, con seguimiento.</p>
-        </li>
-        <li>
-          <h3>Adultos y chicos</h3>
-          <p>Atención de adultos y también de chicos, en el mismo consultorio de José Bonifacio 1633.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="reseñas" id="reseñas">
-    <div class="wrap">
-      <h2>Lo que cuentan en Google</h2>
-      <p class="intro">4,9 sobre 5, con 380 reseñas. Estas cuatro son de 5 estrellas, copiadas al pie de la letra.</p>
-      <div class="res-grid">
-        <blockquote>
-          <p>la recomiendo muchísimo! Tenía una uña encarnada hacía años y no me animaba a atenderme con nadie porque siempre me hacían doler. Con ella fue totalmente distinto: súper cuidadosa, profesional y no me hizo doler nada. Si están dudando en ir, no lo duden porque es buenísima. 100% recomendable!</p>
-          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Avril M.</footer>
-        </blockquote>
-        <blockquote>
-          <p>Gracias ♥️ Rosa por existir, como te dije hoy no te jubiles por favor!!! Gracias por curarle el dedito a mi bebe y sin dolor. Lamentablemente heredó mis uñitas 😭 pero por suerte estas vos 💕🙌✨️ Dios bendiga tus manos ✋️ 🙏</p>
-          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Nelva J.</footer>
-        </blockquote>
-        <blockquote>
-          <p>Fui con el dedo a la miseria. Me atendí con Rosalía con pocas esperanzas de recuperarme de forma rápida. En 3 días, gracias a su tratamiento, dejé de tener dolor y reparó el daño de la uña encarnada. Recomiendo altamente a ella como profesional, ya que su seguimiento genera que no vuelvas a recaer en este problema crónico</p>
-          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Emiliano C.</footer>
-        </blockquote>
-        <blockquote>
-          <p>Hace unos meses que la visito a Rosalía y realmente me cambió la forma de las uñas. Hace 18 años que iba sistemáticamente a la podóloga y resulta que no había encontrado el tratamiento adecuado aún. Realmente sabe muchísimo! Destaco la paciencia y el buen trato. Recomiendo!!</p>
-          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Tamara K.</footer>
-        </blockquote>
+      <p class="folio-marca">En Google</p>
+      <div class="folio">
+        <p class="folio-num"><strong>4,9</strong> <span>con 380 reseñas</span></p>
+        <p class="folio-meta">Podóloga UBA · Caballito</p>
       </div>
     </div>
   </section>
 
-  <section class="consultorio" id="consultorio">
-    <div class="wrap">
-      <h2>El consultorio</h2>
-      <p class="intro">José Bonifacio 1633, C1406GXK, Caballito.</p>
+  <section class="servicios campo-lino" id="servicios">
+    <div class="wrap servicios-grid">
+      <div>
+        <h2>La consulta</h2>
+        <p class="intro">En el consultorio de Caballito: el cuidado de una podóloga UBA, el tratamiento de uña encarnada con seguimiento, y la atención de adultos y de chicos.</p>
+        <ul class="menu">
+          <li>
+            <h3>Podóloga UBA</h3>
+            <p>Podóloga UBA en Caballito, como se presenta en su ficha de Google y en Facebook.</p>
+          </li>
+          <li>
+            <h3>Uña encarnada, con seguimiento</h3>
+            <p>Tratamiento de uña encarnada, con seguimiento.</p>
+          </li>
+          <li>
+            <h3>Adultos y chicos</h3>
+            <p>Atención de adultos y también de chicos, en el mismo consultorio de José Bonifacio 1633.</p>
+          </li>
+        </ul>
+      </div>
+      <figure class="foto-toallas">
+        <img src="assets/toallas.webp" width="1269" height="1600" alt="Pila de toallas blancas dobladas. Foto de archivo, no es el consultorio." loading="lazy">
+        <figcaption>Una textura de cuidado atento. Foto de archivo.</figcaption>
+      </figure>
     </div>
-    <figure class="banda">
+  </section>
+
+  <figure class="franja-euca">
+    <img src="assets/eucalipto-campo.webp" width="1600" height="1200" alt="Hojas de eucalipto al aire libre. Foto de archivo, no es el consultorio." loading="lazy">
+    <figcaption>Foto de archivo.</figcaption>
+  </figure>
+
+  <section class="reseñas campo-lino" id="reseñas">
+    <div class="wrap cab">
+      <h2>Lo que cuentan en Google</h2>
+      <p class="intro">4,9 sobre 5, con 380 reseñas. Estas cuatro son de 5 estrellas, copiadas al pie de la letra.</p>
+    </div>
+    <div class="cita-destacada">
+      <div class="wrap cita-grid">
+        <blockquote>
+          <p>la recomiendo muchísimo! Tenía una uña encarnada hacía años y no me animaba a atenderme con nadie porque siempre me hacían doler. Con ella fue totalmente distinto: súper cuidadosa, profesional y no me hizo doler nada. Si están dudando en ir, no lo duden porque es buenísima. 100% recomendable!</p>
+          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Avril M.</footer>
+        </blockquote>
+        <figure class="cita-foto">
+          <img src="assets/eucalipto.webp" width="1600" height="1067" alt="Rama de eucalipto. Foto de archivo, no es el consultorio." loading="lazy">
+        </figure>
+      </div>
+    </div>
+    <div class="wrap fichas">
+      <blockquote class="ficha">
+        <div class="taloncito" aria-hidden="true"></div>
+        <div class="cuerpo">
+          <p>Gracias ♥️ Rosa por existir, como te dije hoy no te jubiles por favor!!! Gracias por curarle el dedito a mi bebe y sin dolor. Lamentablemente heredó mis uñitas 😭 pero por suerte estas vos 💕🙌✨️ Dios bendiga tus manos ✋️ 🙏</p>
+          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Nelva J.</footer>
+        </div>
+      </blockquote>
+      <blockquote class="ficha">
+        <div class="taloncito" aria-hidden="true"></div>
+        <div class="cuerpo">
+          <p>Fui con el dedo a la miseria. Me atendí con Rosalía con pocas esperanzas de recuperarme de forma rápida. En 3 días, gracias a su tratamiento, dejé de tener dolor y reparó el daño de la uña encarnada. Recomiendo altamente a ella como profesional, ya que su seguimiento genera que no vuelvas a recaer en este problema crónico</p>
+          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Emiliano C.</footer>
+        </div>
+      </blockquote>
+      <blockquote class="ficha">
+        <div class="taloncito" aria-hidden="true"></div>
+        <div class="cuerpo">
+          <p>Hace unos meses que la visito a Rosalía y realmente me cambió la forma de las uñas. Hace 18 años que iba sistemáticamente a la podóloga y resulta que no había encontrado el tratamiento adecuado aún. Realmente sabe muchísimo! Destaco la paciencia y el buen trato. Recomiendo!!</p>
+          <footer><span class="estrellas" aria-label="5 estrellas">★★★★★</span>Tamara K.</footer>
+        </div>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="consultorio" id="consultorio">
+    <figure class="consultorio-banda">
       <img src="assets/sala.webp" width="1200" height="820" alt="Sala de espera del consultorio de Rosalía Olszak en Caballito, con una biblioteca de madera y una planta." loading="lazy">
-      <figcaption>La sala del consultorio, en José Bonifacio 1633.</figcaption>
+      <figcaption>
+        <div class="placa">
+          <h2>El consultorio</h2>
+          <p>José Bonifacio 1633, C1406GXK, Caballito.</p>
+        </div>
+      </figcaption>
     </figure>
   </section>
 
-  <section class="contacto" id="contacto">
-    <div class="wrap">
-      <h2>Para un turno</h2>
-      <p class="intro">Escribime por WhatsApp o llamame. El consultorio está en José Bonifacio 1633, Caballito.</p>
-      <div class="ct-grid">
+  <section class="contacto campo-lino" id="contacto">
+    <div class="wrap ct-grid">
+      <div class="tarjeta-visita">
+        <h2>Para un turno</h2>
+        <p class="intro">Escribime por WhatsApp o llamame. El consultorio está en José Bonifacio 1633, Caballito.</p>
         <dl class="datos">
           <div>
             <dt>WhatsApp</dt>
@@ -398,10 +507,13 @@ blockquote footer{margin-top:16px;font-style:normal;font-size:14px;font-weight:7
             <dd><a href="https://www.google.com/maps/place/?q=place_id:ChIJ3wVFzTHKvJURCNHbnm17Bys" target="_blank" rel="noopener">4,9 · 380 reseñas · ver ficha</a></dd>
           </div>
         </dl>
-        <div class="mapa">
+      </div>
+      <div class="mapa-mat">
+        <div class="marco">
           <a class="mapa-fallback" href="https://www.google.com/maps/place/?q=place_id:ChIJ3wVFzTHKvJURCNHbnm17Bys" target="_blank" rel="noopener">José Bonifacio 1633, Caballito<br>Abrir en Google Maps</a>
           <iframe title="Mapa: José Bonifacio 1633, Caballito, CABA" src="https://www.google.com/maps?q=Jos%C3%A9+Bonifacio+1633,+C1406GXK+CABA&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
+        <p>José Bonifacio 1633, Caballito, CABA</p>
       </div>
     </div>
   </section>
