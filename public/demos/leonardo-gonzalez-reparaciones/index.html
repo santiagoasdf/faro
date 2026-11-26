@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Leonardo González Reparaciones · Aire acondicionado, persianas y electricidad en Villa Urquiza</title>
+<meta name="description" content="Reparación e instalación de aires acondicionados, reparación de cortinas y persianas e instalaciones eléctricas. Más de 35 años de oficio. Villa Urquiza, CABA y GBA norte.">
+<meta name="theme-color" content="#23272a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2216%22 fill=%22%2323272a%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-size=%2214%22 font-family=%22sans-serif%22 font-weight=%22700%22 fill=%22%23fafaf8%22 text-anchor=%22middle%22%3ELG%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
+<!-- DEMO interna (borrador). No publicar sin OK de Santiago. Datos: CRM LevelUp (Neon), relevamiento de Mapin 19/11/2026 y web leogonzalez1977.wixsite.com/reparaciones (leída 19/11/2026). Fotos: ficha de Google Maps del negocio. -->
+<link rel="preload" href="assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bricolage Grotesque";src:url(assets/fonts/bricolage.woff2) format("woff2");font-weight:600 800;font-display:swap}
+@font-face{font-family:"Figtree";src:url(assets/fonts/figtree.woff2) format("woff2");font-weight:300 900;font-display:swap}
+:root{
+  /* paleta tomada de sus fotos: aluminio de las persianas, grafito, ladrillo de las fachadas */
+  --alu:#e8eae7; --cal:#fafaf8; --ink:#23272a; --muted:#5a6063; --line:#d3d6d2;
+  --brick:#b4472c;               /* único acento */
+  --t-aire:#dce7ec; --t-pers:#e2e0da; --t-elec:#f1e5c9;   /* tintes por oficio */
+  --wa:#157a43; --wa-d:#0f6235;
+  --display:"Bricolage Grotesque",Georgia,serif; --body:"Figtree",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background:var(--alu);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:1.02}
+h2{font-size:clamp(34px,4.4vw,56px)}
+.wa-ico{width:1.35em;height:1.35em;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;font-weight:700;border-radius:12px}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-wa:hover{background:var(--wa-d)}
+.btn-xl{font-size:19px;padding:19px 28px}
+.btn-line{border:2px solid var(--ink);padding:17px 24px;font-size:17px}
+.btn-line:hover{background:var(--ink);color:var(--cal)}
+a:focus-visible,.btn:focus-visible{outline:3px solid var(--brick);outline-offset:3px}
+
+/* barra superior */
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.mono{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700}
+.mono i{font-style:normal;font-family:var(--display);font-weight:800;font-size:17px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--cal);display:grid;place-items:center;letter-spacing:-.04em}
+.top .tel{font-weight:700;text-decoration:none;font-size:15px;white-space:nowrap}
+
+/* hero: hoja de contactos */
+.hero{padding:60px 0 84px;overflow:hidden}
+.hero .grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(52px,6.6vw,96px);line-height:.95;margin-bottom:24px}
+.hero h1 span{display:block}
+.prop{font-family:var(--display);font-weight:600;font-size:clamp(22px,2.2vw,28px);line-height:1.25;letter-spacing:-.01em;max-width:560px;margin-bottom:14px}
+.lead{font-size:17.5px;max-width:540px;color:#3f4548;margin-bottom:32px}
+.cta{display:flex;flex-wrap:wrap;gap:14px}
+.rating{display:flex;align-items:center;gap:10px;margin-top:26px;font-size:15px;color:var(--muted);text-decoration:none}
+.rating b{color:var(--ink);font-size:16px}
+.rating .st{color:#c98a12;letter-spacing:2px}
+.sheet{position:relative;height:620px}
+.pol{position:absolute;background:#fff;padding:12px 12px 42px;box-shadow:0 30px 50px -28px rgba(35,39,42,.55),0 2px 6px rgba(35,39,42,.12)}
+.pol img{width:100%;height:100%;object-fit:cover}
+.pol figcaption{position:absolute;left:14px;right:14px;bottom:12px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.pol.a{width:66%;height:500px;right:2%;top:0;transform:rotate(3deg)}
+.pol.a figcaption{text-align:right}
+.pol.a img{object-position:center 40%}
+.pol.b{width:60%;height:250px;left:0;bottom:0;transform:rotate(-4deg);z-index:2}
+.tape{position:absolute;top:-14px;left:50%;width:110px;height:28px;transform:translateX(-50%) rotate(-3deg);background:rgba(180,71,44,.35)}
+
+/* oficios */
+.oficios{background:var(--cal);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:92px 0}
+.oficios .intro{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap;margin-bottom:48px}
+.oficios .intro h2{max-width:13ch}
+.oficios .intro p{max-width:440px;color:var(--muted)}
+.oficio{border-radius:24px;overflow:hidden;margin-bottom:26px;position:relative}
+.oficio h3{font-size:clamp(32px,3.2vw,46px);margin-bottom:14px}
+.oficio p{color:#3f4548;margin-bottom:10px;max-width:46ch}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;list-style:none}
+.tags li{background:rgba(255,255,255,.7);border-radius:999px;padding:4px 13px;font-size:14.5px;font-weight:600}
+.motif{display:block;color:var(--ink)}
+/* aire: panel frío, foto a la derecha, motivo de flujo de aire */
+.o-aire{background:var(--t-aire);display:grid;grid-template-columns:1fr 1fr}
+.o-aire .txt{padding:52px 48px}
+.o-aire .motif{width:150px;height:44px;margin-bottom:22px}
+.o-aire figure{position:relative;min-height:400px}
+.o-aire figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+/* persianas: foto a la izquierda enmarcada con tablillas */
+.o-pers{background:var(--t-pers);display:grid;grid-template-columns:.9fr 1.1fr;align-items:stretch}
+.o-pers figure{position:relative;padding:22px;background:repeating-linear-gradient(180deg,#cfccc4 0 10px,#e2e0da 10px 14px)}
+.o-pers figure img{width:100%;height:100%;min-height:340px;object-fit:cover;object-position:center 35%;border-radius:10px}
+.o-pers .txt{padding:52px 48px;align-self:center}
+.o-pers .motif{width:64px;height:60px;margin-bottom:22px}
+/* electricidad: sin foto, tipográfico, con cable en zigzag */
+.o-elec{background:var(--t-elec);padding:52px 48px 46px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.o-elec .big{font-family:var(--display);font-weight:800;font-size:clamp(28px,3vw,40px);line-height:1.1;letter-spacing:-.02em}
+.o-elec .big small{display:block;font-family:var(--body);font-size:15px;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:10px}
+.o-elec .wire{grid-column:1/-1;width:100%;height:46px;color:var(--ink)}
+
+/* por qué */
+.porque{padding:96px 0}
+.porque .head{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-bottom:56px}
+.porque h2{max-width:17ch}
+.nota{text-align:right}
+.nota b{font-family:var(--display);font-size:80px;line-height:1;display:block}
+.nota .st{color:#c98a12;font-size:22px;letter-spacing:3px}
+.nota span{display:block;color:var(--muted);font-size:15px}
+.line{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative}
+.line::before{content:"";position:absolute;left:0;right:0;top:11px;height:2px;background:repeating-linear-gradient(90deg,var(--ink) 0 10px,transparent 10px 18px)}
+.hito{position:relative;padding-top:42px}
+.hito::before{content:"";position:absolute;top:0;left:0;width:24px;height:24px;border-radius:50%;background:var(--ink);border:4px solid var(--alu)}
+.hito:first-child::before{background:var(--brick)}
+.hito b{font-family:var(--display);font-size:25px;display:block;margin-bottom:8px;letter-spacing:-.02em}
+.hito p{color:#3f4548;font-size:16px}
+.fuente{margin-top:44px;font-size:14.5px;color:var(--muted)}
+
+/* reseñas */
+.resenas{background:var(--ink);color:var(--cal);padding:96px 0}
+.resenas h2{margin-bottom:46px;max-width:18ch}
+.wall{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
+.destacada{background:var(--cal);color:var(--ink);border-radius:22px;padding:40px}
+.destacada::before{content:"“";font-family:var(--display);font-size:140px;line-height:.7;color:var(--brick);display:block;height:58px}
+.destacada p{font-family:var(--display);font-weight:600;font-size:25px;line-height:1.32;letter-spacing:-.01em}
+.who{margin-top:20px;font-size:14.5px;color:var(--muted)}
+.who strong{color:var(--ink)}
+.st{color:#e6a92a;letter-spacing:2px}
+.stack{display:grid;gap:0}
+.nota-r{border-top:1px solid #3d4246;padding:24px 0}
+.nota-r:last-child{border-bottom:1px solid #3d4246}
+.nota-r p{margin:6px 0 10px;color:#e9ebe8;font-size:16.5px}
+.nota-r .who{color:#a9b0b4}.nota-r .who strong{color:#fff}
+.more{margin-top:34px;color:#a9b0b4;font-size:15px}
+.more a{color:#f0c46a;font-weight:700}
+
+/* trabajos */
+.trabajos{padding:92px 0 40px}
+.trabajos h2{margin-bottom:32px}
+.strip{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:18px}
+.strip figure{border-radius:18px;overflow:hidden;background:#d6d8d5;position:relative;height:440px}
+.strip img{width:100%;height:100%;object-fit:cover}
+.strip figcaption{position:absolute;left:12px;bottom:12px;background:rgba(250,250,248,.94);border-radius:8px;padding:4px 10px;font-size:13.5px;font-weight:600}
+.src{margin-top:14px;font-size:14px;color:var(--muted)}
+
+/* contacto */
+.contacto{padding:64px 0 104px}
+.orden{display:grid;grid-template-columns:.95fr 1.05fr;background:var(--cal);border:1px solid var(--line);border-radius:26px;overflow:hidden}
+.ficha{padding:44px}
+.ficha h2{font-size:clamp(32px,3.4vw,46px);margin-bottom:26px}
+.rows{border-top:2px solid var(--ink)}
+.row{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:13px 0;border-bottom:1px dashed var(--line);font-size:16px}
+.row dt{color:var(--muted);font-size:15px;font-weight:600}
+.row dd a{font-weight:700;text-decoration:none;border-bottom:2px solid var(--brick)}
+.ficha .cta{margin-top:28px}
+.mapa{min-height:540px;background:#d6d8d5;position:relative}
+.mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+footer{border-top:1px solid var(--line);padding:28px 0 36px;font-size:14.5px;color:var(--muted)}
+
+.float{position:fixed;right:16px;bottom:16px;z-index:60;width:60px;height:60px;border-radius:50%;background:var(--wa);display:none;place-items:center;box-shadow:0 12px 26px -8px rgba(0,0,0,.45);color:#fff}
+.float svg{width:32px;height:32px}
+
+@media (max-width:900px){
+  body{font-size:16px}
+  .top .wrap{height:60px}
+  .hero{padding:34px 0 56px}
+  .hero .grid{grid-template-columns:1fr;gap:40px}
+  .hero h1{font-size:clamp(48px,14vw,64px)}
+  .cta .btn{width:100%}
+  .btn-xl{font-size:18px;padding:18px 20px}
+  .sheet{height:470px}
+  .pol.a{width:68%;height:370px}
+  .pol.b{width:50%;height:170px}
+  .oficios,.porque,.resenas{padding:64px 0}
+  .o-aire,.o-pers,.o-elec{grid-template-columns:1fr}
+  .o-aire .txt,.o-pers .txt{padding:32px 24px}
+  .o-aire figure{min-height:260px}
+  .o-pers figure{order:2;padding:14px}
+  .o-pers figure img{min-height:0;height:260px}
+  .o-elec{padding:32px 24px;gap:22px}
+  .porque .head{grid-template-columns:1fr;gap:20px}
+  .nota{text-align:left}
+  .line{grid-template-columns:1fr;gap:0}
+  .line::before{left:11px;right:auto;top:0;bottom:0;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--ink) 0 10px,transparent 10px 18px)}
+  .hito{padding:0 0 28px 46px}
+  .wall{grid-template-columns:1fr}
+  .destacada{padding:28px}.destacada p{font-size:21px}
+  .trabajos{padding:64px 0 24px}
+  .strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -24px;padding:0 24px 8px}
+  .strip figure{flex:0 0 78%;height:380px;scroll-snap-align:start}
+  .orden{grid-template-columns:1fr}
+  .ficha{padding:28px 22px}
+  .row{grid-template-columns:1fr;gap:2px}
+  .mapa{min-height:340px}
+  .contacto{padding:48px 0 70px}
+  .float{display:grid}
+  footer{padding-bottom:100px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 21.5h-.01a9.45 9.45 0 0 1-4.82-1.32l-.35-.21-3.58.94.96-3.49-.23-.36a9.43 9.43 0 0 1-1.45-5.03c0-5.22 4.25-9.47 9.48-9.47 2.53 0 4.91.99 6.7 2.78a9.41 9.41 0 0 1 2.77 6.7c0 5.23-4.25 9.46-9.47 9.46zm8.06-17.53A11.33 11.33 0 0 0 12.04.63C5.76.63.65 5.74.65 12.02c0 2 .52 3.97 1.52 5.7L.55 23.62l6.04-1.58a11.4 11.4 0 0 0 5.44 1.39h.01c6.28 0 11.39-5.11 11.39-11.39 0-3.04-1.19-5.9-3.33-8.05z"/></symbol></svg>
+
+<div class="top">
+ <div class="wrap">
+  <a class="mono" href="#inicio"><i aria-hidden="true">LG</i>Leonardo González Reparaciones</a>
+  <a class="tel" href="tel:+5491169919768">11 6991-9768</a>
+ </div>
+</div>
+
+<main id="inicio">
+<section class="hero">
+ <div class="wrap grid">
+  <div>
+   <h1>Leonardo González <span>Reparaciones</span></h1>
+   <p class="prop">Aire acondicionado, persianas y electricidad: un solo técnico de confianza, con más de 35 años de oficio.</p>
+   <p class="lead">Reparación e instalación de aires acondicionados, reparación de cortinas y persianas, e instalaciones eléctricas. Trabaja desde Villa Urquiza en CABA y GBA norte.</p>
+   <div class="cta">
+    <a class="btn btn-wa btn-xl" href="https://wa.me/5491169919768?text=Hola%20Leonardo%2C%20te%20escribo%20desde%20tu%20p%C3%A1gina%20web.%20Necesito%20ayuda%20con%3A%20" target="_blank" rel="noopener"><svg class="wa-ico" aria-hidden="true"><use href="#wa"/></svg>Escribinos por WhatsApp</a>
+    <a class="btn btn-line" href="tel:+5491169919768">Llamar al 11 6991-9768</a>
+   </div>
+   <a class="rating" href="https://www.google.com/maps/place/?q=place_id:ChIJV6HPm7ixvJURLsi3rASM-Ok" target="_blank" rel="noopener"><span class="st" aria-hidden="true">★★★★★</span><b>5,0</b> · 181 reseñas en Google</a>
+  </div>
+  <div class="sheet">
+   <figure class="pol a"><span class="tape" aria-hidden="true"></span><img src="assets/persiana-1.webp" alt="Persiana de enrollar con la caja abierta durante una reparación" width="720" height="960"><figcaption>Persiana en reparación</figcaption></figure>
+   <figure class="pol b"><img src="assets/aire-medicion.webp" alt="Medición de temperatura de salida de un aire acondicionado split con termómetro digital" width="1000" height="563"><figcaption>Control de un split</figcaption></figure>
+  </div>
+ </div>
+</section>
+
+<section class="oficios" id="oficios">
+ <div class="wrap">
+  <div class="intro">
+   <h2>Los tres oficios de Leonardo</h2>
+   <p>Empezó arreglando persianas, después sumó electricidad y aire acondicionado porque se lo pedían sus propios clientes. Hoy hace los tres.</p>
+  </div>
+
+  <article class="oficio o-aire">
+   <div class="txt">
+    <svg class="motif" viewBox="0 0 150 44" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M4 10c20-8 34 8 54 0s34 8 54 0 22-2 34 0"/><path d="M4 24c20-8 34 8 54 0s34 8 54 0 22-2 34 0" opacity=".6"/><path d="M4 38c20-8 34 8 54 0s34 8 54 0 22-2 34 0" opacity=".3"/></svg>
+    <h3>Aire acondicionado</h3>
+    <p>Reparaciones e instalaciones de aires acondicionados.</p>
+    <p>Se capacitó en el IARA hace más de 28 años.</p>
+    <ul class="tags"><li>Reparación</li><li>Instalación</li></ul>
+   </div>
+   <figure><img src="assets/frente-equipo-aire.webp" alt="Unidad exterior de aire acondicionado instalada en un frente de ladrillo" width="800" height="1422" loading="lazy"></figure>
+  </article>
+
+  <article class="oficio o-pers">
+   <figure><img src="assets/persiana-2.webp" alt="Persiana de enrollar de aluminio abierta para su reparación" width="800" height="1067" loading="lazy"></figure>
+   <div class="txt">
+    <svg class="motif" viewBox="0 0 64 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="58" height="12" rx="3"/><path d="M8 24h48M8 32h48M8 40h48M8 48h48"/><path d="M32 52v6"/></svg>
+    <h3>Cortinas y persianas</h3>
+    <p>Reparación de cortinas y persianas domiciliarias: el oficio con el que empezó hace más de 35 años.</p>
+    <ul class="tags"><li>Persianas de enrollar</li><li>Cortinas</li></ul>
+   </div>
+  </article>
+
+  <article class="oficio o-elec">
+   <div>
+    <h3>Electricidad</h3>
+    <p>Realización de instalaciones eléctricas.</p>
+   </div>
+   <p class="big">Electricista formado en la UTN.<small>Lo que le piden sus clientes de persianas y aire, resuelto por la misma persona.</small></p>
+   <svg class="wire" viewBox="0 0 1100 46" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M0 23h420l18-18 22 36 22-36 22 36 18-18h578"/><circle cx="6" cy="23" r="5" fill="currentColor"/><circle cx="1094" cy="23" r="5" fill="currentColor"/></svg>
+  </article>
+ </div>
+</section>
+
+<section class="porque" id="por-que">
+ <div class="wrap">
+  <div class="head">
+   <h2>De arreglar persianas a resolver toda la casa</h2>
+   <div class="nota"><b>5,0</b><span class="st" aria-hidden="true">★★★★★</span><span>181 reseñas en Google Maps</span></div>
+  </div>
+  <div class="line">
+   <div class="hito"><b>Hace +35 años</b><p>Empieza reparando persianas domiciliarias.</p></div>
+   <div class="hito"><b>Electricidad</b><p>Sus clientes le piden electricistas de confianza, y se capacita como electricista en la UTN.</p></div>
+   <div class="hito"><b>Hace +28 años</b><p>Llegan las consultas de aire acondicionado y se capacita en el IARA.</p></div>
+   <div class="hito"><b>Hoy</b><p>Ofrece los tres servicios, con base en Villa Urquiza.</p></div>
+  </div>
+  <p class="fuente">Historia tomada de la sección “Sobre nosotros” de su web actual.</p>
+ </div>
+</section>
+
+<section class="resenas" id="resenas">
+ <div class="wrap">
+  <h2>Lo que dicen quienes ya lo llamaron</h2>
+  <div class="wall">
+   <blockquote class="destacada">
+    <p>Leonardo es de los profesionales que faltan, la verdad es que si necesitan alguien que arregle persianas, aires acondicionados o haga trabajos de electricidad no duden en contactarlo. 100% recomendable y de confianza, es sincero y expeditivo. Sin lugar a dudas si vuelvo a tener algún inconveniente, lo volveré a llamar. Gracias Leonardo por resolverme tan rápido el problema con mi persiana.</p>
+    <div class="who"><span class="st" aria-label="5 estrellas">★★★★★</span> <strong>Angeles J.</strong> · Google · hace 4 meses</div>
+   </blockquote>
+   <div class="stack">
+    <blockquote class="nota-r"><span class="st" aria-label="5 estrellas">★★★★★</span><p>Excelente Leonardo, me arreglo la persiana. Se comprometió a venir durante la mañana y así fue. Super profesional.</p><div class="who"><strong>Anita S.</strong> · Google · hace 2 semanas</div></blockquote>
+    <blockquote class="nota-r"><span class="st" aria-label="5 estrellas">★★★★★</span><p>Excelente Leonardo. Lo contacté en el día y en cuanto tuvo un hueco pasó a arreglarme la cortina. 100% recomendable, también arregla aire acondicionado y electricidad. Sin duda lo volveré a contactar. Gracias Leonardo</p><div class="who"><strong>Santiago M.</strong> · Google · hace 7 meses</div></blockquote>
+    <blockquote class="nota-r"><span class="st" aria-label="5 estrellas">★★★★★</span><p>Muy recomendado Leonardo! Arregló la persiana rápido y bien, lo contacté y al rato estaba en casa. Se nota que sabe. Volveré a llamarlo cuando tenga algo que resolver.</p><div class="who"><strong>Nico G.</strong> · Google · hace 5 meses</div></blockquote>
+   </div>
+  </div>
+  <p class="more">Reseñas textuales de su ficha de Google Maps. <a href="https://www.google.com/maps/place/?q=place_id:ChIJV6HPm7ixvJURLsi3rASM-Ok" target="_blank" rel="noopener">Ver las 181 reseñas en Google</a></p>
+ </div>
+</section>
+
+<section class="trabajos" id="trabajos">
+ <div class="wrap">
+  <h2>Así trabaja, en casas del barrio</h2>
+  <div class="strip">
+   <figure><img src="assets/persiana-caja.webp" alt="Caja de persiana abierta en una pared de ladrillo durante una reparación" width="700" height="1244" loading="lazy" style="object-position:center 40%"><figcaption>Caja de persiana abierta</figcaption></figure>
+   <figure><img src="assets/persiana-1.webp" alt="Persiana de enrollar con la caja superior abierta" width="720" height="960" loading="lazy"><figcaption>Persiana de enrollar</figcaption></figure>
+   <figure><img src="assets/aire-medicion.webp" alt="Control de temperatura de salida de un aire acondicionado" width="1000" height="563" loading="lazy"><figcaption>Control de un split</figcaption></figure>
+  </div>
+  <p class="src">Fotos publicadas en su ficha de Google Maps.</p>
+ </div>
+</section>
+
+<section class="contacto" id="contacto">
+ <div class="wrap">
+  <div class="orden">
+   <div class="ficha">
+    <h2>Contanos qué necesitás arreglar</h2>
+    <dl class="rows">
+     <div class="row"><dt>WhatsApp</dt><dd><a href="https://wa.me/5491169919768?text=Hola%20Leonardo%2C%20te%20escribo%20desde%20tu%20p%C3%A1gina%20web.%20Necesito%20ayuda%20con%3A%20" target="_blank" rel="noopener">+54 9 11 6991-9768</a></dd></div>
+     <div class="row"><dt>Teléfono</dt><dd><a href="tel:+5491169919768">11 6991-9768</a></dd></div>
+     <div class="row"><dt>Email</dt><dd><a href="mailto:leogonzalezreparaciones@gmail.com">leogonzalezreparaciones@gmail.com</a></dd></div>
+     <div class="row"><dt>Instagram</dt><dd><a href="https://www.instagram.com/leogonzalezreparaciones/" target="_blank" rel="noopener">@leogonzalezreparaciones</a></dd></div>
+     <div class="row"><dt>Dirección</dt><dd>Ceretti 2901, Villa Urquiza, CABA</dd></div>
+     <div class="row"><dt>Zona</dt><dd>CABA y GBA norte</dd></div>
+    </dl>
+    <div class="cta">
+     <a class="btn btn-wa btn-xl" href="https://wa.me/5491169919768?text=Hola%20Leonardo%2C%20te%20escribo%20desde%20tu%20p%C3%A1gina%20web.%20Necesito%20ayuda%20con%3A%20" target="_blank" rel="noopener"><svg class="wa-ico" aria-hidden="true"><use href="#wa"/></svg>Escribinos por WhatsApp</a>
+    </div>
+   </div>
+   <div class="mapa">
+    <iframe title="Mapa: Ceretti 2901, Villa Urquiza" src="https://www.google.com/maps?q=Ceretti%202901%2C%20Villa%20Urquiza%2C%20Ciudad%20Aut%C3%B3noma%20de%20Buenos%20Aires&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+   </div>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap">Leonardo H. González · Reparaciones · Villa Urquiza, CABA</div>
+</footer>
+
+<a class="float" href="https://wa.me/5491169919768?text=Hola%20Leonardo%2C%20te%20escribo%20desde%20tu%20p%C3%A1gina%20web.%20Necesito%20ayuda%20con%3A%20" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp a Leonardo"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+</body>
+</html>
