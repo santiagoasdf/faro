@@ -192,6 +192,8 @@ const realApi = {
   async cargarListas({ reintentarSiVacio = false } = {}) {
     const leer = () => Promise.all([this.pipeline(), this.seguimiento(), this.usuarios()]);
     let [pipeline, seguimiento, usuarios] = await leer();
+    // Los decisores no son críticos: si falla la lectura, la app sigue sin ellos.
+    const decisores = await this.decisores().catch(() => []);
     const vacio = (x) => !Array.isArray(x) || x.length === 0;
     if (reintentarSiVacio && (vacio(pipeline) || vacio(seguimiento))) {
       await new Promise((r) => setTimeout(r, 400));
@@ -201,8 +203,10 @@ const realApi = {
       if (vacio(seguimiento)) seguimiento = otra[1];
       if (vacio(usuarios)) usuarios = otra[2];
     }
-    return { pipeline, seguimiento, usuarios };
+    return { pipeline, seguimiento, usuarios, decisores };
   },
+  decisores: () =>
+    todas((c) => c.from('decisores').select('*').order('created_at')),
   seguimientoFila: (id) =>
     q((c) => c.from('v_seguimiento').select('*').eq('id', id).maybeSingle()),
 
@@ -216,8 +220,17 @@ const realApi = {
       q((c) => c.from('crm_notas').select('id,texto,autor_email,created_at')
         .eq('negocio_id', id).order('created_at', { ascending: false })),
     ]);
-    return { decisores, demos, interacciones, notas };
+    // pistas_decisor es una columna nueva: si todavía no existe, seguimos sin pistas.
+    const pistas = await q((c) => c.from('negocios').select('pistas_decisor').eq('id', id).maybeSingle())
+      .then((r) => r?.pistas_decisor ?? '').catch(() => null);
+    return { decisores, demos, interacciones, notas, pistas };
   },
+  crearDecisor: (fila) =>
+    q((c) => c.from('decisores').insert(fila).select('*').single()),
+  editarDecisor: (id, patch) =>
+    q((c) => c.from('decisores').update(patch).eq('id', id).select('*').single()),
+  guardarPistas: (negocioId, texto) =>
+    alMenosUna(q((c) => c.from('negocios').update({ pistas_decisor: texto }).eq('id', negocioId).select('id'))),
   notasLead: (id) =>
     q((c) => c.from('crm_notas').select('id,texto,autor_email,created_at')
       .eq('seguimiento_id', id).order('created_at', { ascending: false })),

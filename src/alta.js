@@ -151,3 +151,42 @@ export function etiquetaDuplicado(item, tipo) {
   const donde = item.grupo || '';
   return donde ? `${item.empresa} (${donde})` : item.empresa;
 }
+
+/** ¿El formulario trae datos de decisor? (alta de negocio) */
+export function hayDecisor(form) {
+  return !!String(form.decisor_nombre || '').trim();
+}
+
+/** Fila para INSERT/UPDATE en decisores a partir de un form plano (campos sin prefijo). */
+export function filaDecisor(f, { negocioId, email } = {}) {
+  const mail = limpio(f.email);
+  const fila = {
+    nombre: limpio(f.nombre),
+    cargo: limpio(f.cargo),
+    whatsapp: limpio(f.whatsapp),
+    email: mail,
+    email_etiqueta: mail ? (f.email_etiqueta || 'general') : null,
+    telefono: limpio(f.telefono),
+    instagram: limpio(f.instagram),
+    linkedin: limpio(f.linkedin),
+    fuente_url: limpio(f.fuente_url),
+    confirmado: !!f.confirmado,
+    notas: limpio(f.notas),
+  };
+  if (negocioId) {
+    fila.negocio_id = negocioId;
+    fila.editado_por = email || null;
+    fila.editado_web_at = new Date().toISOString();
+  }
+  return fila;
+}
+
+/** Errores de un decisor (objeto vacío si está bien). */
+export function erroresDecisor(f) {
+  const e = {};
+  if (!String(f.nombre || '').trim()) e.nombre = 'El nombre es obligatorio.';
+  if (!emailValido(f.email)) e.email = 'Revisá el mail.';
+  if (!telefonoValido(f.whatsapp) && !/^https?:\/\//i.test(String(f.whatsapp || '').trim())) e.whatsapp = 'Revisá el WhatsApp (8 a 15 dígitos o un link).';
+  if (!telefonoValido(f.telefono)) e.telefono = 'Revisá el teléfono (8 a 15 dígitos).';
+  return e;
+}

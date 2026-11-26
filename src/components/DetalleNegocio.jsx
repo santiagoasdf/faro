@@ -9,7 +9,8 @@ import { emailCanónico } from '../calendario.js';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Rating, SelectEtapa } from './Pipeline.jsx';
 import { SelectResponsable } from './Responsable.jsx';
-import { Cargando, Icon, mensajeError, toast } from './ui.jsx';
+import { Cargando, Icon, TextareaAuto, mensajeError, toast } from './ui.jsx';
+import { SeccionDecisores } from './Decisores.jsx';
 
 function Contactos({ n }) {
   const links = [
@@ -219,6 +220,8 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
 
         <Contactos n={n} />
 
+        <SeccionDecisores negocio={n} ctx={ctx} detalle={detalle} onDetalle={setDetalle} />
+
         <section class="detalle-sec" aria-labelledby="sec-seg">
           <h3 id="sec-seg">Próximo paso</h3>
           <form class="form-seg" onSubmit={guardarSeg}>
@@ -242,9 +245,10 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
             ) : (
               <SelectResponsable valor="" onCambiar={() => {}} disabled />
             )}
-            <label class="campo">
-              <span class="campo-label">Notas del negocio</span>
-              <textarea rows={3} value={seg.notas} onInput={(e) => setSeg({ ...seg, notas: e.currentTarget.value })} />
+            <label class="campo campo-notas">
+              <span class="campo-label campo-label-grande">Notas del negocio</span>
+              <TextareaAuto class="notas-grande" minRows={10} value={seg.notas}
+                onInput={(e) => setSeg({ ...seg, notas: e.currentTarget.value })} />
             </label>
             <div class="form-acciones">
               {sucio && (
@@ -296,12 +300,6 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
         <section class="detalle-sec" aria-labelledby="sec-datos">
           <h3 id="sec-datos">Datos</h3>
           <dl class="datos">
-            <Dato label="Decisor">
-              {n.decisor_nombre ? `${n.decisor_nombre}${n.decisor_cargo ? `, ${n.decisor_cargo}` : ''}` : null}
-            </Dato>
-            {decisores.slice(1).map((d) => (
-              <Dato key={d.id} label="Otro contacto">{`${d.nombre}${d.cargo ? `, ${d.cargo}` : ''}`}</Dato>
-            ))}
             <Dato label="Demo">
               {n.demo_id || demo || urlDemo(n) ? (
                 <span class="dato-demo">

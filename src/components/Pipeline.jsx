@@ -1,6 +1,7 @@
+import { ESTADO_TEXTO, decisorConWhatsapp, estadoDecisores } from '../decisores.js';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { COLUMNAS, COLUMNA, CANAL_LABEL, ESTADO_INTERACCION, urlDemo, urlsPdf } from '../constants.js';
-import { cuando, fechaCorta, haceCuanto, hoyBA, linkUrl, norm, numero, plural, rating } from '../format.js';
+import { cuando, fechaCorta, haceCuanto, hoyBA, linkUrl, linkWhatsapp, norm, numero, plural, rating } from '../format.js';
 import { FormularioNuevoLead } from './FormularioNuevoLead.jsx';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Icon, Vacio } from './ui.jsx';
@@ -43,6 +44,10 @@ function Tarjeta({ n, ctx, onArrastrar }) {
   const ultimo = n.ultima_interaccion_at
     ? `${CANAL_LABEL[n.ultima_interaccion_canal] || 'Contacto'} ${haceCuanto(n.ultima_interaccion_at)}`
     : 'Sin contactos';
+  const decs = ctx.decisoresPorNegocio?.[n.id] || [];
+  const estadoDec = estadoDecisores(decs);
+  const decWa = decisorConWhatsapp(decs);
+  const decTitulo = decs.length ? decs.map((d) => d.nombre).join(', ') : 'No hay decisores cargados';
   return (
     <li
       class={`tarjeta${n.vencido ? ' es-vencido' : ''}`}
@@ -101,6 +106,22 @@ function Tarjeta({ n, ctx, onArrastrar }) {
                 PDF mobile
               </a>
             </>
+          )}
+        </span>
+        <span class="tarjeta-decisor">
+          <span class={`chip chip-estado-${estadoDec}`} title={decTitulo}>{ESTADO_TEXTO[estadoDec]}</span>
+          {decWa && (
+            <a
+              class="enlace-demo enlace-wa"
+              href={linkWhatsapp(decWa.whatsapp)}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={`WhatsApp de ${decWa.nombre}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Icon name="whatsapp" size={13} />
+              WhatsApp
+            </a>
           )}
         </span>
         <span class="tarjeta-pie">

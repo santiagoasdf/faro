@@ -1938,6 +1938,7 @@ summary.grupo-cabeza {
     overflow-y: auto;
     padding: 0 8px 10px;
     align-content: start;
+    grid-auto-rows: max-content; /* sin esto, con muchas tarjetas se aplastan y se cortan */
   }
   .columna-vacia {
     margin: 0 8px 10px;
@@ -2469,4 +2470,134 @@ select[aria-invalid='true'] {
   .webs-resumen .escalon { min-height: 30px; padding: 3px 10px; }
   .webs-resumen .escalon-num { font-size: 1.05rem; }
   .webs-resumen .escalon-label { overflow: visible; text-overflow: unset; white-space: normal; }
+}
+
+/* ---------- Decisores ---------- */
+.chip-estado-con_contacto { background: var(--accent-soft); color: var(--accent); }
+.chip-estado-sin_contacto,
+.chip-estado-solo_telefono { background: #fdf0dc; color: var(--warn); }
+.chip-estado-sin_decisor { background: var(--surface-2); color: var(--muted); }
+.chip-ok { background: var(--accent-soft); color: var(--accent); }
+.chip-pendiente { background: var(--surface-2); color: var(--muted); }
+.tarjeta-decisor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.enlace-wa { background: var(--accent); color: #fff; }
+.enlace-wa:hover { filter: brightness(1.08); }
+.decisores {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.decisor {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  background: var(--surface);
+}
+.decisor-cabeza {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.decisor-quien { display: grid; gap: 1px; min-width: 0; }
+.decisor-nombre { font-size: 1rem; line-height: 1.3; overflow-wrap: anywhere; }
+.decisor-cargo { color: var(--ink-2); font-size: 0.875rem; }
+.decisor .contactos.decisor-contactos {
+  margin: 0;
+  padding: 2px 0;
+  flex-wrap: wrap;
+  overflow: visible;
+  list-style: none;
+}
+.decisor-contactos .contacto-whatsapp {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.decisor-contactos .contacto-whatsapp .icon { color: #fff; }
+.decisor-datos { display: grid; gap: 4px; margin: 0; font-size: 0.875rem; }
+.decisor-datos > div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 8px; }
+.decisor-datos dt { color: var(--muted); }
+.decisor-datos dd { margin: 0; overflow-wrap: anywhere; }
+.decisor-etiqueta { color: var(--muted); }
+.decisor-notas { font-size: 0.875rem; color: var(--ink-2); }
+.decisor-notas summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+.decisor-notas p { margin: 4px 0 0; white-space: pre-wrap; line-height: 1.5; }
+.decisor-editar { justify-self: start; }
+.decisor-edicion { background: var(--surface-2); }
+.form-decisor { display: grid; gap: 12px; }
+.form-decisor .campo-ancho,
+.form-decisor .form-decisor-check,
+.form-decisor .form-acciones { grid-column: 1 / -1; }
+.decisor-pistas, .decisor-busqueda {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-m);
+}
+.decisor-busqueda-titulo { font-weight: 700; font-size: 0.9375rem; margin: 0; }
+.decisor-busqueda-texto { margin: 0; color: var(--ink-2); font-size: 0.875rem; line-height: 1.45; }
+.decisor-pistas-texto { margin: 0; white-space: pre-wrap; line-height: 1.55; font-size: 0.9375rem; }
+.decisor-herramientas { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.herramienta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.herramienta .icon { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .herramienta:hover { border-color: var(--muted); }
+}
+.alta-decisor {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 4px 0 0;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  min-width: 0;
+}
+.alta-decisor legend { padding: 0 6px; font-weight: 700; font-size: 0.9375rem; }
+.alta-decisor .check { grid-column: 1 / -1; }
+@media (min-width: 560px) {
+  .alta-decisor, .form-decisor { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- Notas del negocio: grandes y legibles ---------- */
+.campo-label-grande { font-size: 1rem; font-weight: 700; color: var(--ink); }
+.textarea-auto { overflow-y: auto; }
+textarea.notas-grande {
+  min-height: 15rem;
+  max-height: 75vh;
+  padding: 14px 16px;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 4;
+  resize: vertical;
+}
+@media (max-width: 600px) {
+  textarea.notas-grande { min-height: 17rem; max-height: 70vh; font-size: 1.0625rem; }
 }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { api } from './api.js';
 import { PERFIL_DEFAULT } from './config.js';
-import { filaLead, filaNegocio } from './alta.js';
+import { filaDecisor, filaLead, filaNegocio, hayDecisor } from './alta.js';
 import { COLUMNA, ETAPAS_CERRADAS, grupoOrden } from './constants.js';
 import { hoyBA, primerNombre } from './format.js';
 import { Login } from './components/Login.jsx';
@@ -66,6 +66,8 @@ export function App() {
   const [errorSesion, setErrorSesion] = useState('');
   const [yo, setYo] = useState(null);
   const [usuarios, setUsuarios] = useState({});
+  const [roles, setRoles] = useState({});
+  const [decisores, setDecisores] = useState([]);
   const [pipeline, setPipeline] = useState(null);
   const [seguimiento, setSeguimiento] = useState(null);
   const [errorCarga, setErrorCarga] = useState('');
@@ -91,12 +93,14 @@ export function App() {
     setActualizando(true);
     try {
       // Las lecturas van acá, nunca antes de que el caller haya visto esUsuario() === true.
-      const { pipeline: p, seguimiento: s, usuarios: u } = await api.cargarListas({
+      const { pipeline: p, seguimiento: s, usuarios: u, decisores: dec } = await api.cargarListas({
         reintentarSiVacio: primera,
       });
+      setDecisores(dec || []);
       setPipeline(p || []);
       setSeguimiento(s || []);
       setUsuarios(Object.fromEntries((u || []).map((x) => [x.email, x.nombre])));
+      setRoles(Object.fromEntries((u || []).map((x) => [String(x.email || '').toLowerCase(), x.rol])));
       ultimaCarga.current = Date.now();
     } catch (e) {
       if (e?.name !== 'SesionVencida') {
@@ -168,6 +172,7 @@ export function App() {
     await api.signOut();
     setPipeline(null);
     setSeguimiento(null);
+    setDecisores([]);
     setYo(null);
     setAviso('');
     history.replaceState(null, '', location.pathname + location.search);
@@ -264,7 +269,21 @@ export function App() {
       const row = derivarNegocio(creado);
       setPipeline((lista) => [row, ...(lista || []).filter((n) => n.id !== row.id)]);
       setColActiva(row.columna || fila.etapa || 'candidato');
-      toast('Negocio creado');
+      if (hayDecisor(form)) {
+        try {
+          const dec = await api.crearDecisor(filaDecisor({
+            nombre: form.decisor_nombre, cargo: form.decisor_cargo, whatsapp: form.decisor_whatsapp,
+            email: form.decisor_email, email_etiqueta: form.decisor_email_etiqueta,
+            fuente_url: form.decisor_fuente_url, confirmado: form.decisor_confirmado,
+          }, { negocioId: row.id, email: yo?.email }));
+          setDecisores((l) => [...(l || []), dec]);
+          toast('Negocio y decisor creados');
+        } catch (e) {
+          toast(`Negocio creado, pero no se pudo guardar el decisor: ${mensajeError(e, 'guardar el decisor')}`, 'error');
+        }
+      } else {
+        toast('Negocio creado');
+      }
       return row;
     } catch (e) {
       toast(mensajeError(e, 'crear el negocio'), 'error');
@@ -301,12 +320,26 @@ export function App() {
     [usuarios],
   );
 
+  const decisoresPorNegocio = useMemo(() => {
+    const m = {};
+    for (const d of decisores) (m[d.negocio_id] || (m[d.negocio_id] = [])).push(d);
+    return m;
+  }, [decisores]);
+  /** Reemplaza los decisores de un negocio (después de crear/editar en el detalle). */
+  const actualizarDecisores = useCallback((negocioId, lista) => {
+    setDecisores((todos) => [...todos.filter((d) => d.negocio_id !== negocioId), ...lista]);
+  }, []);
+  // Solo los editores ven los controles de edición de decisores (la base igual lo exige con RLS).
+  const puedeEditar = roles[String(yo?.email || '').toLowerCase()] === 'editor';
+
   const ctx = useMemo(() => ({
     yo, usuarios, nombreDe, pipeline, seguimiento, filtrosSeg, setFiltrosSeg,
     colActiva, setColActiva, ir, abrir, moverNegocio, editarNegocio, refrescarNegocio,
     editarLead, refrescarLead, crearNegocio, crearLead,
+    decisoresPorNegocio, actualizarDecisores, puedeEditar,
   }), [yo, usuarios, nombreDe, pipeline, seguimiento, filtrosSeg, setFiltrosSeg, colActiva, ir, abrir,
-    moverNegocio, editarNegocio, refrescarNegocio, editarLead, refrescarLead, crearNegocio, crearLead]);
+    moverNegocio, editarNegocio, refrescarNegocio, editarLead, refrescarLead, crearNegocio, crearLead,
+    decisoresPorNegocio, actualizarDecisores, puedeEditar]);
 
   // ---------- Render ----------
   if (estado === 'cargando') {

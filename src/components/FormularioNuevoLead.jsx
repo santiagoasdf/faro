@@ -4,6 +4,7 @@ import {
   duplicadosLead,
   duplicadosNegocio,
   emailValido,
+  hayDecisor,
   etiquetaDuplicado,
   telefonoValido,
 } from '../alta.js';
@@ -12,6 +13,8 @@ import { Icon } from './ui.jsx';
 const VACIO_PIPE = {
   nombre: '', rubro: '', barrio: '', telefono: '', instagram: '',
   web_url: '', nicho: 'landing', etapa: 'candidato', url_google_maps: '', notas: '',
+  decisor_nombre: '', decisor_cargo: '', decisor_whatsapp: '', decisor_email: '',
+  decisor_email_etiqueta: 'general', decisor_fuente_url: '', decisor_confirmado: false,
 };
 const VACIO_SEG = {
   empresa: '', contacto: '', email: '', perfil: '', area: '',
@@ -89,6 +92,13 @@ export function FormularioNuevoLead({ tipo, abierto, onCerrar, onGuardar, ctx })
     if (pipeline) {
       if (!form.nombre.trim()) e.nombre = 'El nombre es obligatorio.';
       if (!telefonoValido(form.telefono)) e.telefono = 'Revisá el teléfono (8 a 15 dígitos).';
+      if (hayDecisor(form)) {
+        if (!emailValido(form.decisor_email)) e.decisor_email = 'Revisá el mail del decisor.';
+        const w = String(form.decisor_whatsapp || '').trim();
+        if (!telefonoValido(w) && !/^https?:\/\//i.test(w)) e.decisor_whatsapp = 'Revisá el WhatsApp (8 a 15 dígitos o un link).';
+      } else if (String(form.decisor_whatsapp || form.decisor_email || '').trim()) {
+        e.decisor_nombre = 'Poné el nombre del decisor para guardar su contacto.';
+      }
     } else {
       if (!form.empresa.trim()) e.empresa = 'La empresa es obligatoria.';
       if (!emailValido(form.email)) e.email = 'Revisá el mail.';
@@ -206,6 +216,43 @@ export function FormularioNuevoLead({ tipo, abierto, onCerrar, onGuardar, ctx })
               <Campo label="Notas">
                 <textarea rows={3} value={form.notas} onInput={(e) => set('notas', e.currentTarget.value)} />
               </Campo>
+              <fieldset class="alta-decisor">
+                <legend>Decisor (opcional)</legend>
+                <Campo label="Nombre del decisor" error={errores.decisor_nombre}>
+                  <input type="text" value={form.decisor_nombre} aria-invalid={!!errores.decisor_nombre}
+                    onInput={(e) => set('decisor_nombre', e.currentTarget.value)} autoComplete="off" />
+                </Campo>
+                <Campo label="Cargo">
+                  <input type="text" value={form.decisor_cargo} placeholder="Dueño, titular…"
+                    onInput={(e) => set('decisor_cargo', e.currentTarget.value)} />
+                </Campo>
+                <Campo label="WhatsApp del decisor" error={errores.decisor_whatsapp}>
+                  <input type="text" inputMode="tel" value={form.decisor_whatsapp} placeholder="11 1234-5678"
+                    onInput={(e) => set('decisor_whatsapp', e.currentTarget.value)} />
+                </Campo>
+                <Campo label="Mail del decisor" error={errores.decisor_email}>
+                  <input type="email" value={form.decisor_email}
+                    onInput={(e) => set('decisor_email', e.currentTarget.value)} />
+                </Campo>
+                {form.decisor_email.trim() && (
+                  <Campo label="Ese mail es…">
+                    <select value={form.decisor_email_etiqueta} onChange={(e) => set('decisor_email_etiqueta', e.currentTarget.value)}>
+                      <option value="del_decisor">Mail del decisor</option>
+                      <option value="general">Mail general del negocio</option>
+                      <option value="directorio_sin_verificar">Mail de directorio (sin verificar)</option>
+                    </select>
+                  </Campo>
+                )}
+                <Campo label="Fuente (URL)">
+                  <input type="text" inputMode="url" value={form.decisor_fuente_url} placeholder="https://"
+                    onInput={(e) => set('decisor_fuente_url', e.currentTarget.value)} />
+                </Campo>
+                <label class="check">
+                  <input type="checkbox" checked={form.decisor_confirmado}
+                    onChange={(e) => set('decisor_confirmado', e.currentTarget.checked)} />
+                  <span>Confirmado en una fuente propia</span>
+                </label>
+              </fieldset>
             </>
           ) : (
             <>

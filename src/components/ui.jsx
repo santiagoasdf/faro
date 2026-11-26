@@ -221,3 +221,27 @@ export function BotonMas({ vistos, total, onMas, pagina = PAGINA }) {
     </button>
   );
 }
+
+/** Textarea que crece con el contenido (hasta el max-height del CSS, después hace scroll). */
+export function TextareaAuto({ value, onInput, minRows = 3, class: cls = '', ...rest }) {
+  const ref = useRef(null);
+  const ajustar = () => {
+    const el = ref.current;
+    if (!el || !el.offsetParent) return;
+    el.style.height = 'auto';
+    if (el.scrollHeight > 0) el.style.height = `${el.scrollHeight + 2}px`;
+  };
+  useEffect(() => {
+    ajustar();
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return undefined;
+    let ancho = el.offsetWidth;
+    const ro = new ResizeObserver(() => {
+      if (el.offsetWidth !== ancho) { ancho = el.offsetWidth; ajustar(); }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  useEffect(ajustar, [value]);
+  return <textarea ref={ref} rows={minRows} class={`textarea-auto ${cls}`} value={value} onInput={onInput} {...rest} />;
+}
