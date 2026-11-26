@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { api } from '../api.js';
-import { CANALES, COLUMNA, RESULTADOS, urlDemo } from '../constants.js';
+import { CANALES, COLUMNA, RESULTADOS, urlDemo, urlsPdf } from '../constants.js';
 import {
   cuando, fecha, fechaHora, haceCuanto, linkInstagram, linkTel, linkUrl, linkWhatsapp,
 } from '../format.js';
@@ -310,6 +310,14 @@ export function DetalleNegocio({ negocio: n, ctx, onCerrar }) {
                     <a href={linkUrl(urlDemo(n))} target="_blank" rel="noopener noreferrer" class="link-ext">
                       Ver demo <Icon name="externo" size={14} />
                     </a>
+                  )}
+                  {urlsPdf(n) && (
+                    <>
+                      {' · '}
+                      <a href={urlsPdf(n).web} target="_blank" rel="noopener noreferrer" class="link-ext">PDF web</a>
+                      {' · '}
+                      <a href={urlsPdf(n).mobile} target="_blank" rel="noopener noreferrer" class="link-ext">PDF mobile</a>
+                    </>
                   )}
                 </span>
               ) : null}

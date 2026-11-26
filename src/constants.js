@@ -48,8 +48,22 @@ export const ESTADO_INTERACCION = {
 /** URLs de demos publicadas, por slug. Preferimos demos.url_publicada (demo_url en v_pipeline). */
 export const DEMO_URLS = {
   'kinesio-urquiza': 'https://santiagoasdf.github.io/faro/demos/kinesio-urquiza/',
+  'decor-arte-cortinas': 'https://santiagoasdf.github.io/faro/demos/decor-arte-cortinas/',
+  'afinador-pianos-morita': 'https://santiagoasdf.github.io/faro/demos/afinador-pianos-morita/',
   'ahl-service-tecnico': 'https://santiagoasdf.github.io/ahl-service-tecnico/',
 };
+
+/** Demos alojadas en Faro que tienen PDF (web 1440 y mobile 390): <slug>/<slug>-desktop.pdf y -mobile.pdf. */
+export const DEMOS_CON_PDF = ['kinesio-urquiza', 'decor-arte-cortinas', 'afinador-pianos-morita'];
+const BASE_DEMOS = 'https://santiagoasdf.github.io/faro/demos';
+export function urlsPdf(n) {
+  const s = n?.slug;
+  if (!s || !DEMOS_CON_PDF.includes(s)) return null;
+  return {
+    web: `${BASE_DEMOS}/${s}/${s}-desktop.pdf`,
+    mobile: `${BASE_DEMOS}/${s}/${s}-mobile.pdf`,
+  };
+}
 
 export function urlDemo(n) {
   if (!n) return null;

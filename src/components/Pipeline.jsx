@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { COLUMNAS, CANAL_LABEL, urlDemo } from '../constants.js';
+import { COLUMNAS, CANAL_LABEL, urlDemo, urlsPdf } from '../constants.js';
 import { cuando, haceCuanto, linkUrl, norm, numero, rating } from '../format.js';
 import { FormularioNuevoLead } from './FormularioNuevoLead.jsx';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
@@ -77,6 +77,30 @@ function Tarjeta({ n, ctx, onArrastrar }) {
               <Icon name="externo" size={13} />
               Ver demo
             </a>
+          )}
+          {urlsPdf(n) && (
+            <>
+              <a
+                class="enlace-demo enlace-pdf"
+                href={urlsPdf(n).web}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Abrir el PDF de la versión web (1440 px)"
+                onClick={(e) => e.stopPropagation()}
+              >
+                PDF web
+              </a>
+              <a
+                class="enlace-demo enlace-pdf"
+                href={urlsPdf(n).mobile}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Abrir el PDF de la versión mobile (390 px)"
+                onClick={(e) => e.stopPropagation()}
+              >
+                PDF mobile
+              </a>
+            </>
           )}
         </span>
         <span class="tarjeta-pie">

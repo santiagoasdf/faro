@@ -2086,6 +2086,7 @@ summary.grupo-cabeza {
   text-decoration: none;
 }
 .enlace-demo:hover { filter: brightness(0.96); }
+.enlace-pdf { background: var(--surface-2); color: var(--ink-2); }
 .enlaces-detalle { margin-top: 8px; }
 .enlaces-en-lead { margin-top: 6px; }
 .chip-persona {
