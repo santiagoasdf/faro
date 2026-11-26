@@ -8,7 +8,7 @@ import {
 const ICONOS = {
   flecha: ArrowRight, linkedin: Briefcase, instagram: Camera, ok: Check, volver: ChevronLeft,
   adelante: ChevronRight, alerta: CircleAlert, reloj: Clock, externo: ExternalLink, urgente: Flame,
-  web: Globe, inicio: House, seguimiento: ListChecks, salir: LogOut, email: Mail, mapa: MapPin,
+  webs: Globe, web: Globe, inicio: House, seguimiento: ListChecks, salir: LogOut, email: Mail, mapa: MapPin,
   whatsapp: MessageCircle, llamada: Phone, mas: Plus, actualizar: RefreshCw, buscar: Search,
   pipeline: SquareKanban, estrella: Star, nota: StickyNote, borrar: Trash2, cerrar: X,
   perfil: CircleUser, ver: Eye, ocultar: EyeOff, calendario: CalendarDays, lista: List, kanban: Columns3,

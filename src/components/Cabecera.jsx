@@ -2,7 +2,7 @@ import { Icon, Wordmark } from './ui.jsx';
 
 const NAV = [
   { key: 'inicio', label: 'Inicio' },
-  { key: 'pipeline', label: 'Pipeline' },
+  { key: 'webs', label: 'Páginas web' },
   { key: 'seguimiento', label: 'Seguimiento' },
   { key: 'calendario', label: 'Calendario' },
   { key: 'perfil', label: 'Perfil' },

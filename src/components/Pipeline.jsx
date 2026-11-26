@@ -158,12 +158,16 @@ export function Pipeline({ ctx }) {
     <div class="pipeline">
       <div class="barra">
         <div class="barra-titulo-fila">
-          <h1 class="barra-titulo">Pipeline</h1>
+          <h1 class="barra-titulo">Páginas web</h1>
           <button type="button" class="btn btn-primario btn-chico" onClick={() => setAlta(true)}>
             <Icon name="mas" size={16} />
-            Nuevo lead
+            Nuevo lead web
           </button>
         </div>
+        <p class="barra-nota barra-nota-seccion">
+          Negocios a los que les ofrecemos una página. Los leads de Provaider y LevelUp están en{' '}
+          <a href="#/seguimiento" onClick={(e) => { e.preventDefault(); ctx.ir('seguimiento'); }}>Seguimiento</a>.
+        </p>
         <label class="buscador">
           <Icon name="buscar" size={16} />
           <span class="sr-only">Buscar negocio</span>
@@ -258,7 +262,7 @@ export function Pipeline({ ctx }) {
         })}
       </div>
       {pipeline.length === 0 && (
-        <Vacio titulo="Todavía no hay negocios en el pipeline.">Cuando Mapin cargue candidatos, aparecen acá.</Vacio>
+        <Vacio titulo="Todavía no hay negocios en Páginas web.">Cuando Mapin cargue candidatos, aparecen acá.</Vacio>
       )}
       <FormularioNuevoLead
         tipo="pipeline"

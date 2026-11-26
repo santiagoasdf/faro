@@ -26,6 +26,7 @@ function TarjetaTarea({ t, abrir }) {
         onClick={() => abrir(t.tipo, t.id)}
       >
         <span class="cal-card-cabeza">
+          {t.origen && <span class="fila-hoy-tipo cal-card-origen">{t.origen}</span>}
           <span class="cal-card-titulo">{t.titulo}</span>
           {t.urgente && <span class="chip chip-urgente"><Icon name="urgente" size={12} />Urgente</span>}
           <ChipResponsable email={t.responsable_email} />

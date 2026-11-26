@@ -71,3 +71,11 @@ export function urlDemo(n) {
   if (directa) return /^https?:\/\//i.test(directa) ? directa : `https://${directa}`;
   return (n.slug && DEMO_URLS[n.slug]) || null;
 }
+
+/** Etiqueta corta del origen de un lead de Seguimiento (su área). */
+export function origenLead(l) {
+  const a = l?.area || '';
+  if (/provaider/i.test(a)) return 'Provaider';
+  if (/levelup/i.test(a)) return 'LevelUp';
+  return a || 'Seguimiento';
+}

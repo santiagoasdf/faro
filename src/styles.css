@@ -1867,7 +1867,7 @@ summary.grupo-cabeza {
   }
 
   /* Tablero kanban */
-  .contenido-pipeline {
+  .contenido-webs {
     padding-bottom: 0;
   }
   .pipeline {
@@ -2436,3 +2436,10 @@ select[aria-invalid='true'] {
   }
   .alta-acciones { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 }
+
+/* Separación Páginas web / Provaider y LevelUp */
+.barra-nota-seccion { margin: 2px 0 0; font-size: 0.8125rem; color: var(--muted); }
+.barra-nota-seccion a { color: var(--ink-2); font-weight: 650; text-decoration: underline; }
+.barra > .barra-nota-seccion { grid-column: 1 / -1; }
+.fila-mov-tipo { margin-right: 8px; margin-top: 0; vertical-align: 1px; }
+.cal-card-origen { margin-right: 6px; flex: none; }

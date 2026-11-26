@@ -1,5 +1,5 @@
 // Calendario y kanban por fecha. Fechas en America/Argentina/Buenos_Aires (hoyBA).
-import { COLUMNA, ETAPAS_CERRADAS } from './constants.js';
+import { COLUMNA, ETAPAS_CERRADAS, origenLead } from './constants.js';
 import { cuando, fecha, fechaHora, hoyBA } from './format.js';
 
 /** Suma (o resta) días a un 'aaaa-mm-dd' sin correr el huso. */
@@ -115,6 +115,7 @@ export function tareasDesdeListas(pipeline, seguimiento) {
       fecha: String(n.proxima_fecha).slice(0, 10),
       vencido: !!n.vencido,
       area: COLUMNA[n.columna]?.label || n.columna,
+      origen: 'Página web',
       responsable_email: n.responsable_email || null,
       celebe_url: urlCelebe(n),
       linkedin_url: urlLinkedin(n),
@@ -132,6 +133,7 @@ export function tareasDesdeListas(pipeline, seguimiento) {
       fecha: l.proxima_fecha ? String(l.proxima_fecha).slice(0, 10) : null,
       vencido: !!l.vencido,
       area: l.grupo || '',
+      origen: origenLead(l),
       responsable_email: l.responsable_email || null,
       celebe_url: urlCelebe(l),
       linkedin_url: urlLinkedin(l),

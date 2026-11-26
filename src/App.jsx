@@ -15,11 +15,14 @@ import { DetalleNegocio } from './components/DetalleNegocio.jsx';
 import { DetalleLead } from './components/DetalleLead.jsx';
 import { Cargando, Marca, Panel, Toaster, mensajeError, toast } from './components/ui.jsx';
 
-const VISTAS = ['inicio', 'pipeline', 'seguimiento', 'calendario', 'perfil'];
+const VISTAS = ['inicio', 'webs', 'seguimiento', 'calendario', 'perfil'];
+// '#/pipeline' era el nombre anterior de la sección de páginas web: los enlaces viejos siguen andando.
+const ALIAS = { pipeline: 'webs' };
 
-/** '#/pipeline/n/<id>' -> { vista: 'pipeline', tipo: 'n', id } */
+/** '#/webs/n/<id>' -> { vista: 'webs', tipo: 'n', id } */
 function leerRuta() {
-  const [vista, tipo, id] = location.hash.replace(/^#\/?/, '').split('/');
+  const [vistaRaw, tipo, id] = location.hash.replace(/^#\/?/, '').split('/');
+  const vista = ALIAS[vistaRaw] || vistaRaw;
   return {
     vista: VISTAS.includes(vista) ? vista : 'inicio',
     tipo: tipo === 'n' || tipo === 'l' ? tipo : null,
@@ -381,7 +384,7 @@ export function App() {
           </div>
         ) : !datosListos ? (
           <Cargando texto="Trayendo los datos…" />
-        ) : ruta.vista === 'pipeline' ? (
+        ) : ruta.vista === 'webs' ? (
           <Pipeline ctx={ctx} />
         ) : ruta.vista === 'seguimiento' ? (
           <Seguimiento ctx={ctx} />

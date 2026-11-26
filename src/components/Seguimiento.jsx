@@ -94,6 +94,10 @@ export function Seguimiento({ ctx }) {
               Nuevo lead
             </button>
           </div>
+          <p class="barra-nota barra-nota-seccion">
+            Leads de Provaider y LevelUp. Las páginas web tienen su propia sección:{' '}
+            <a href="#/webs" onClick={(e) => { e.preventDefault(); ctx.ir('webs'); }}>Páginas web</a>.
+          </p>
           {snapshot && <p class="barra-nota">Datos de cele.be al {fechaHoraCorta(snapshot)}</p>}
         </div>
         <label class="buscador">

@@ -1,5 +1,5 @@
 import { useMemo } from 'preact/hooks';
-import { CANAL_LABEL, COLUMNA, COLUMNAS, ESTADO_INTERACCION, GRUPOS } from '../constants.js';
+import { CANAL_LABEL, COLUMNA, COLUMNAS, ESTADO_INTERACCION, GRUPOS, origenLead } from '../constants.js';
 import { cuando, fechaCorta, haceCuanto, hoyBA, hoyLargo, numero, plural, primerNombre } from '../format.js';
 import { Icon, Vacio } from './ui.jsx';
 import { filtrarSeguimiento } from './Seguimiento.jsx';
@@ -27,7 +27,7 @@ export function Inicio({ ctx }) {
       if (l.vencido || l.proxima_fecha === hoy) {
         items.push({
           tipo: 'l', id: l.id, titulo: l.empresa, sub: l.contacto, accion: l.proxima_accion,
-          fecha: l.proxima_fecha, vencido: l.vencido, area: l.grupo, urgente: l.urgente,
+          fecha: l.proxima_fecha, vencido: l.vencido, area: l.grupo, urgente: l.urgente, origen: origenLead(l),
         });
       }
     }
@@ -66,13 +66,13 @@ export function Inicio({ ctx }) {
       if (n.ultima_nota_at && n.ultima_nota_at === at) detalle = `Nota: ${n.ultima_nota}`;
       else if (n.ultima_interaccion_at && n.ultima_interaccion_at === at) detalle = `${CANAL_LABEL[n.ultima_interaccion_canal] || 'Contacto'}: ${ESTADO_INTERACCION[n.ultima_interaccion_estado] || 'registrado'}`;
       else if (n.editado_web_at && n.editado_por) detalle = `${nombreDe(n.editado_por)} lo editó (etapa: ${COLUMNA[n.columna]?.label})`;
-      items.push({ tipo: 'n', id: n.id, titulo: n.nombre, detalle, at });
+      items.push({ tipo: 'n', id: n.id, titulo: n.nombre, detalle, at, origen: 'Página web' });
     }
     for (const l of leads) {
       const at = l.editado_web_at;
       if (!at) continue;
       items.push({
-        tipo: 'l', id: l.id, titulo: l.empresa,
+        tipo: 'l', id: l.id, titulo: l.empresa, origen: origenLead(l),
         detalle: `${nombreDe(l.editado_por) || 'Editado'}: ${l.grupo || 'sin grupo'}${l.proxima_accion ? `, ${l.proxima_accion}` : ''}`,
         at,
       });
@@ -103,14 +103,14 @@ export function Inicio({ ctx }) {
         </div>
         {paraHoy.length === 0 ? (
           <Vacio titulo="Nada vencido ni agendado para hoy.">
-            Buen momento para mover el pipeline o agendar próximos pasos.
+            Buen momento para mover las páginas web o agendar próximos pasos.
           </Vacio>
         ) : (
           <ul class="lista-hoy">
             {paraHoy.map((x) => (
               <li key={x.tipo + x.id}>
                 <button class={`fila-hoy${x.vencido ? ' es-vencido' : ''}`} onClick={() => abrir(x.tipo, x.id)}>
-                  <span class="fila-hoy-tipo">{x.tipo === 'n' ? 'Web' : 'Lead'}</span>
+                  <span class="fila-hoy-tipo">{x.tipo === 'n' ? 'Página web' : x.origen}</span>
                   <span class="fila-hoy-cuerpo">
                     <span class="fila-hoy-titulo">
                       {x.titulo}
@@ -130,7 +130,7 @@ export function Inicio({ ctx }) {
 
       <section class="bloque bloque-escalera" aria-labelledby="t-pipe">
         <div class="bloque-cabeza">
-          <h2 id="t-pipe">Pipeline de webs</h2>
+          <h2 id="t-pipe">Páginas web</h2>
           <p class="bloque-nota">{plural(totalAbiertos, 'negocio abierto', 'negocios abiertos')}</p>
         </div>
         <ol class="escalera">
@@ -140,8 +140,8 @@ export function Inicio({ ctx }) {
               <li key={c.key} style={{ '--i': i, '--c': c.color }}>
                 <button
                   class={`escalon${e.total === 0 ? ' es-cero' : ''}`}
-                  onClick={() => { setColActiva(c.key); ir('pipeline'); }}
-                  aria-label={`${c.label}: ${e.total}${e.vencidos ? `, ${e.vencidos} vencidos` : ''}. Ver en el pipeline`}
+                  onClick={() => { setColActiva(c.key); ir('webs'); }}
+                  aria-label={`${c.label}: ${e.total}${e.vencidos ? `, ${e.vencidos} vencidos` : ''}. Ver en Páginas web`}
                 >
                   <span class="escalon-num">{numero(e.total)}</span>
                   <span class="escalon-label">{c.label}</span>
@@ -155,7 +155,7 @@ export function Inicio({ ctx }) {
 
       <section class="bloque bloque-grupos" aria-labelledby="t-seg">
         <div class="bloque-cabeza">
-          <h2 id="t-seg">Seguimiento {perfil ? `de ${primerNombre(perfil)}` : 'de todos'}</h2>
+          <h2 id="t-seg">Provaider y LevelUp <span class="bloque-nota">· {perfil ? primerNombre(perfil) : 'todos'}</span></h2>
           <a href="#/seguimiento" class="link-ver" onClick={(e) => { e.preventDefault(); ir('seguimiento'); }}>
             Ver leads <Icon name="flecha" size={16} />
           </a>
@@ -184,7 +184,7 @@ export function Inicio({ ctx }) {
             {movimientos.map((m) => (
               <li key={m.tipo + m.id}>
                 <button class="fila-mov" onClick={() => abrir(m.tipo, m.id)}>
-                  <span class="fila-mov-titulo">{m.titulo}</span>
+                  <span class="fila-mov-titulo"><span class="fila-hoy-tipo fila-mov-tipo">{m.origen}</span>{m.titulo}</span>
                   <span class="fila-mov-det">{m.detalle}</span>
                   <time class="fila-mov-cuando" dateTime={m.at} title={fechaCorta(m.at)}>{haceCuanto(m.at)}</time>
                 </button>
