@@ -1,11 +1,11 @@
 import { useMemo } from 'preact/hooks';
-import { CANAL_LABEL, COLUMNA, COLUMNAS, ESTADO_INTERACCION, GRUPOS, origenLead } from '../constants.js';
+import { GRUPOS, origenLead } from '../constants.js';
 import { cuando, fechaCorta, haceCuanto, hoyBA, hoyLargo, numero, plural, primerNombre } from '../format.js';
 import { Icon, Vacio } from './ui.jsx';
 import { filtrarSeguimiento } from './Seguimiento.jsx';
 
 export function Inicio({ ctx }) {
-  const { pipeline, seguimiento, filtrosSeg, yo, usuarios, abrir, ir, setColActiva, nombreDe } = ctx;
+  const { seguimiento, filtrosSeg, yo, usuarios, abrir, ir, nombreDe } = ctx;
   const hoy = hoyBA();
   const perfil = filtrosSeg.perfil;
   const leads = useMemo(
@@ -15,36 +15,18 @@ export function Inicio({ ctx }) {
 
   const paraHoy = useMemo(() => {
     const items = [];
-    for (const n of pipeline) {
-      if (n.vencido || (n.proxima_fecha === hoy && n.columna !== 'descartado' && n.columna !== 'ganado')) {
-        items.push({
-          tipo: 'n', id: n.id, titulo: n.nombre, accion: n.proxima_accion, fecha: n.proxima_fecha,
-          vencido: n.vencido, area: COLUMNA[n.columna]?.label,
-        });
-      }
-    }
     for (const l of leads) {
       if (l.vencido || l.proxima_fecha === hoy) {
         items.push({
           tipo: 'l', id: l.id, titulo: l.empresa, sub: l.contacto, accion: l.proxima_accion,
-          fecha: l.proxima_fecha, vencido: l.vencido, area: l.grupo, urgente: l.urgente, origen: origenLead(l),
+          fecha: l.proxima_fecha, vencido: l.vencido, urgente: l.urgente, origen: origenLead(l),
         });
       }
     }
     return items.sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
-  }, [pipeline, leads, hoy]);
+  }, [leads, hoy]);
 
   const vencidos = paraHoy.filter((x) => x.vencido).length;
-
-  const escalones = useMemo(() => {
-    const c = Object.fromEntries(COLUMNAS.map((x) => [x.key, { total: 0, vencidos: 0 }]));
-    for (const n of pipeline) {
-      if (!c[n.columna]) continue;
-      c[n.columna].total++;
-      if (n.vencido) c[n.columna].vencidos++;
-    }
-    return c;
-  }, [pipeline]);
 
   const grupos = useMemo(() => {
     const c = Object.fromEntries(GRUPOS.map((g) => [g.key, { total: 0, vencidos: 0 }]));
@@ -59,15 +41,6 @@ export function Inicio({ ctx }) {
 
   const movimientos = useMemo(() => {
     const items = [];
-    for (const n of pipeline) {
-      const at = n.ultimo_movimiento_at;
-      if (!at) continue;
-      let detalle = `Etapa: ${COLUMNA[n.columna]?.label || n.columna}`;
-      if (n.ultima_nota_at && n.ultima_nota_at === at) detalle = `Nota: ${n.ultima_nota}`;
-      else if (n.ultima_interaccion_at && n.ultima_interaccion_at === at) detalle = `${CANAL_LABEL[n.ultima_interaccion_canal] || 'Contacto'}: ${ESTADO_INTERACCION[n.ultima_interaccion_estado] || 'registrado'}`;
-      else if (n.editado_web_at && n.editado_por) detalle = `${nombreDe(n.editado_por)} lo editó (etapa: ${COLUMNA[n.columna]?.label})`;
-      items.push({ tipo: 'n', id: n.id, titulo: n.nombre, detalle, at, origen: 'Página web' });
-    }
     for (const l of leads) {
       const at = l.editado_web_at;
       if (!at) continue;
@@ -78,11 +51,9 @@ export function Inicio({ ctx }) {
       });
     }
     return items.sort((a, b) => (b.at || '').localeCompare(a.at || '')).slice(0, 8);
-  }, [pipeline, leads, nombreDe]);
+  }, [leads, nombreDe]);
 
   const nombre = primerNombre(usuarios[yo?.email] || yo?.nombre, yo?.email);
-  const totalAbiertos = COLUMNAS.filter((c) => !['ganado', 'descartado'].includes(c.key))
-    .reduce((a, c) => a + escalones[c.key].total, 0);
 
   return (
     <div class="inicio">
@@ -103,14 +74,14 @@ export function Inicio({ ctx }) {
         </div>
         {paraHoy.length === 0 ? (
           <Vacio titulo="Nada vencido ni agendado para hoy.">
-            Buen momento para mover las páginas web o agendar próximos pasos.
+            Buen momento para avanzar los leads o agendar próximos pasos.
           </Vacio>
         ) : (
           <ul class="lista-hoy">
             {paraHoy.map((x) => (
               <li key={x.tipo + x.id}>
                 <button class={`fila-hoy${x.vencido ? ' es-vencido' : ''}`} onClick={() => abrir(x.tipo, x.id)}>
-                  <span class="fila-hoy-tipo">{x.tipo === 'n' ? 'Página web' : x.origen}</span>
+                  <span class="fila-hoy-tipo">{x.origen}</span>
                   <span class="fila-hoy-cuerpo">
                     <span class="fila-hoy-titulo">
                       {x.titulo}
@@ -126,31 +97,6 @@ export function Inicio({ ctx }) {
             ))}
           </ul>
         )}
-      </section>
-
-      <section class="bloque bloque-escalera" aria-labelledby="t-pipe">
-        <div class="bloque-cabeza">
-          <h2 id="t-pipe">Páginas web</h2>
-          <p class="bloque-nota">{plural(totalAbiertos, 'negocio abierto', 'negocios abiertos')}</p>
-        </div>
-        <ol class="escalera">
-          {COLUMNAS.map((c, i) => {
-            const e = escalones[c.key];
-            return (
-              <li key={c.key} style={{ '--i': i, '--c': c.color }}>
-                <button
-                  class={`escalon${e.total === 0 ? ' es-cero' : ''}`}
-                  onClick={() => { setColActiva(c.key); ir('webs'); }}
-                  aria-label={`${c.label}: ${e.total}${e.vencidos ? `, ${e.vencidos} vencidos` : ''}. Ver en Páginas web`}
-                >
-                  <span class="escalon-num">{numero(e.total)}</span>
-                  <span class="escalon-label">{c.label}</span>
-                  {e.vencidos > 0 && <span class="escalon-venc">{e.vencidos} venc.</span>}
-                </button>
-              </li>
-            );
-          })}
-        </ol>
       </section>
 
       <section class="bloque bloque-grupos" aria-labelledby="t-seg">

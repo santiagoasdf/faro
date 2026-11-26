@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { COLUMNAS, CANAL_LABEL, urlDemo, urlsPdf } from '../constants.js';
-import { cuando, haceCuanto, linkUrl, norm, numero, rating } from '../format.js';
+import { COLUMNAS, COLUMNA, CANAL_LABEL, ESTADO_INTERACCION, urlDemo, urlsPdf } from '../constants.js';
+import { cuando, fechaCorta, haceCuanto, hoyBA, linkUrl, norm, numero, plural, rating } from '../format.js';
 import { FormularioNuevoLead } from './FormularioNuevoLead.jsx';
 import { EnlacesFaro } from './EnlacesFaro.jsx';
 import { Icon, Vacio } from './ui.jsx';
@@ -120,7 +120,7 @@ function Tarjeta({ n, ctx, onArrastrar }) {
 }
 
 export function Pipeline({ ctx }) {
-  const { pipeline, colActiva, setColActiva } = ctx;
+  const { pipeline, colActiva, setColActiva, abrir, nombreDe } = ctx;
   const [texto, setTexto] = useState('');
   const [nicho, setNicho] = useState('');
   const [arrastrando, setArrastrando] = useState(null);
@@ -149,6 +149,47 @@ export function Pipeline({ ctx }) {
     return m;
   }, [filtrados]);
 
+  const hoy = hoyBA();
+  const paraHoy = useMemo(() => {
+    const items = [];
+    for (const n of pipeline) {
+      if (n.vencido || (n.proxima_fecha === hoy && n.columna !== 'descartado' && n.columna !== 'ganado')) {
+        items.push(n);
+      }
+    }
+    return items.sort((a, b) => (a.proxima_fecha || '').localeCompare(b.proxima_fecha || ''));
+  }, [pipeline, hoy]);
+  const vencidosHoy = paraHoy.filter((n) => n.vencido).length;
+
+  const escalones = useMemo(() => {
+    const c = Object.fromEntries(COLUMNAS.map((x) => [x.key, { total: 0, vencidos: 0 }]));
+    for (const n of pipeline) {
+      if (!c[n.columna]) continue;
+      c[n.columna].total++;
+      if (n.vencido) c[n.columna].vencidos++;
+    }
+    return c;
+  }, [pipeline]);
+  const totalAbiertos = COLUMNAS.filter((c) => !['ganado', 'descartado'].includes(c.key))
+    .reduce((a, c) => a + escalones[c.key].total, 0);
+
+  const movimientos = useMemo(() => {
+    const items = [];
+    for (const n of pipeline) {
+      const at = n.ultimo_movimiento_at;
+      if (!at) continue;
+      let detalle = `Etapa: ${COLUMNA[n.columna]?.label || n.columna}`;
+      if (n.ultima_nota_at && n.ultima_nota_at === at) detalle = `Nota: ${n.ultima_nota}`;
+      else if (n.ultima_interaccion_at && n.ultima_interaccion_at === at) {
+        detalle = `${CANAL_LABEL[n.ultima_interaccion_canal] || 'Contacto'}: ${ESTADO_INTERACCION[n.ultima_interaccion_estado] || 'registrado'}`;
+      } else if (n.editado_web_at && n.editado_por) {
+        detalle = `${nombreDe(n.editado_por)} lo editó (etapa: ${COLUMNA[n.columna]?.label})`;
+      }
+      items.push({ id: n.id, titulo: n.nombre, detalle, at });
+    }
+    return items.sort((a, b) => (b.at || '').localeCompare(a.at || '')).slice(0, 8);
+  }, [pipeline, nombreDe]);
+
   // En mobile, que la pestaña activa quede visible.
   useEffect(() => {
     tabsRef.current?.querySelector('[aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
@@ -164,10 +205,7 @@ export function Pipeline({ ctx }) {
             Nuevo lead web
           </button>
         </div>
-        <p class="barra-nota barra-nota-seccion">
-          Negocios a los que les ofrecemos una página. Los leads de Provaider y LevelUp están en{' '}
-          <a href="#/seguimiento" onClick={(e) => { e.preventDefault(); ctx.ir('seguimiento'); }}>Seguimiento</a>.
-        </p>
+        <p class="barra-nota barra-nota-seccion">Negocios a los que les ofrecemos una página.</p>
         <label class="buscador">
           <Icon name="buscar" size={16} />
           <span class="sr-only">Buscar negocio</span>
@@ -186,6 +224,89 @@ export function Pipeline({ ctx }) {
           </select>
         </label>
         <p class="barra-cuenta">{numero(filtrados.length)} de {numero(pipeline.length)}</p>
+      </div>
+
+      <div class="webs-resumen">
+        <section class="bloque bloque-escalera" aria-labelledby="t-pipe">
+          <div class="bloque-cabeza">
+            <h2 id="t-pipe">Por etapa</h2>
+            <p class="bloque-nota">{plural(totalAbiertos, 'negocio abierto', 'negocios abiertos')}</p>
+          </div>
+          <ol class="escalera">
+            {COLUMNAS.map((c, i) => {
+              const e = escalones[c.key];
+              return (
+                <li key={c.key} style={{ '--i': i, '--c': c.color }}>
+                  <button
+                    type="button"
+                    class={`escalon${e.total === 0 ? ' es-cero' : ''}`}
+                    onClick={() => setColActiva(c.key)}
+                    aria-label={`${c.label}: ${e.total}${e.vencidos ? `, ${e.vencidos} vencidos` : ''}`}
+                  >
+                    <span class="escalon-num">{numero(e.total)}</span>
+                    <span class="escalon-label">{c.label}</span>
+                    {e.vencidos > 0 && <span class="escalon-venc">{e.vencidos} venc.</span>}
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        <section class="bloque bloque-hoy" aria-labelledby="t-hoy-web">
+          <div class="bloque-cabeza">
+            <h2 id="t-hoy-web">Para hoy</h2>
+            {paraHoy.length > 0 && (
+              <p class="hoy-resumen">
+                {vencidosHoy > 0 && <span class="num-vencidos">{plural(vencidosHoy, 'vencido', 'vencidos')}</span>}
+                {paraHoy.length - vencidosHoy > 0 && <span>{plural(paraHoy.length - vencidosHoy, 'para hoy', 'para hoy')}</span>}
+              </p>
+            )}
+          </div>
+          {paraHoy.length === 0 ? (
+            <Vacio titulo="Nada vencido ni agendado para hoy.">
+              Cuando un negocio tenga próxima fecha, aparece acá.
+            </Vacio>
+          ) : (
+            <ul class="lista-hoy">
+              {paraHoy.map((n) => (
+                <li key={n.id}>
+                  <button class={`fila-hoy${n.vencido ? ' es-vencido' : ''}`} onClick={() => abrir('n', n.id)}>
+                    <span class="fila-hoy-tipo">{COLUMNA[n.columna]?.label || n.columna}</span>
+                    <span class="fila-hoy-cuerpo">
+                      <span class="fila-hoy-titulo">{n.nombre}</span>
+                      <span class="fila-hoy-accion">{n.proxima_accion || 'Sin próxima acción escrita'}</span>
+                    </span>
+                    <span class="fila-hoy-fecha">
+                      {n.vencido ? <><Icon name="alerta" size={14} /> {cuando(n.proxima_fecha)}</> : 'Hoy'}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section class="bloque bloque-mov" aria-labelledby="t-mov-web">
+          <div class="bloque-cabeza">
+            <h2 id="t-mov-web">Últimos movimientos</h2>
+          </div>
+          {movimientos.length === 0 ? (
+            <Vacio titulo="Todavía no hay movimientos registrados." />
+          ) : (
+            <ul class="lista-mov">
+              {movimientos.map((m) => (
+                <li key={m.id}>
+                  <button class="fila-mov" onClick={() => abrir('n', m.id)}>
+                    <span class="fila-mov-titulo">{m.titulo}</span>
+                    <span class="fila-mov-det">{m.detalle}</span>
+                    <time class="fila-mov-cuando" dateTime={m.at} title={fechaCorta(m.at)}>{haceCuanto(m.at)}</time>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
 
       <div class="tabs-etapas" ref={tabsRef} role="group" aria-label="Etapa">
